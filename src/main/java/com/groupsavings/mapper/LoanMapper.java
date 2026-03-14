@@ -1,12 +1,16 @@
 package com.groupsavings.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import com.groupsavings.model.dto.LoanContributorDto;
 import com.groupsavings.model.dto.LoanResponseDto;
 import com.groupsavings.model.dto.MemberResponseDto;
 import com.groupsavings.model.entity.Loan;
+import com.groupsavings.model.entity.LoanMemberAllocation;
 import com.groupsavings.model.entity.Member;
 
 @Mapper(componentModel = "spring", uses = { MemberMapper.class })
@@ -25,8 +29,20 @@ public interface LoanMapper {
 	@Mapping(target = "totalAmount", source = "totalAmount")
 	@Mapping(target = "dueDate", source = "dueDate")
 	@Mapping(target = "amortization", source = "amortization")
-	@Mapping(target = "loanContributors", ignore = true)
+	@Mapping(target = "loanContributors", source = "loanMembersAllocation", qualifiedByName = "toLoanContributors")
 	LoanResponseDto toDto(Loan loan);
+
+	@Named("toLoanContributors")
+	default List<LoanContributorDto> toLoanContributors(List<LoanMemberAllocation> contributors) {
+		return contributors.stream().map(item -> {
+			LoanContributorDto dto = new LoanContributorDto();
+			dto.setFullname(item.getMember().getFirstname() + " " + item.getMember().getLastname());
+			dto.setAmount(item.getContributionAmount());
+			dto.setMemberCode(item.getMember().getMemberCode());
+			dto.setPercentage(item.getContributionPercentage());
+			return dto;
+		}).toList();
+	}
 
 	@Named("toMemberResponseDto")
 	default MemberResponseDto toMemberResponseDto(Member member) {

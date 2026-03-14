@@ -1,212 +1,827 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Loan Savings</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" th:href="@{/assets/vendors/mdi/css/materialdesignicons.min.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/ti-icons/css/themify-icons.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/css/vendor.bundle.base.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/font-awesome/css/font-awesome.min.css}">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" th:href="@{/assets/vendors/select2/select2.min.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css}">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
-    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
-    <!-- End layout styles -->
-    <link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
-    
-    <!-- Add this CSS -->
-	<style>
-	    .spinner-border-sm {
-	        width: 1rem;
-	        height: 1rem;
-	        border-width: 0.2em;
-	        margin-right: 0.5rem;
-	    }
-	</style>
-  </head>
-  <body>
-    <div class="container-scroller">
-      <div th:replace="~{fragments/header_menu :: headerMenu}"></div>
-      
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <div th:replace="~{fragments/nav_menu :: navMenu}"></div>
-        
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Loan Information Details </h3>
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Loan Form</li>
-                </ol>
-              </nav>
-            </div>
-            <div class="row">
-              <div class="col-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Loan</h4>
-                    <p class="card-description">Loans Pending Status</p>
-	                            
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th> Full Name </th>
-                          <th> Loan Amount </th>
-                          <th> Terms </th>
-                          <th> Amortization </th>
-                          <th> Date Applied </th>
-                          <th> Loan Status </th>
-                          <th> Action </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                    </table>
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:../../partials/_footer.html -->
-          <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
-            </div>
-          </footer>
-          <!-- partial -->
-        </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
-    <script th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script th:src="@{/assets/js/off-canvas.js}"></script>
-    <script th:src="@{/assets/js/misc.js}"></script>
-    <script th:src="@{/assets/js/settings.js}"></script>
-    <script th:src="@{/assets/js/todolist.js}"></script>
-    <script th:src="@{/assets/js/jquery.cookie.js}"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script th:src="@{/assets/js/file-upload.js}"></script>
-    <script th:src="@{/assets/js/typeahead.js}"></script>
-    <script th:src="@{/assets/js/select2.js}"></script>
-    <!-- End custom js for this page -->
-    
-    <script type="text/javascript">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Loan Savings</title>
+<!-- plugins:css -->
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/mdi/css/materialdesignicons.min.css}">
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/css/vendor.bundle.base.css}">
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/font-awesome/css/font-awesome.min.css}">
+<!-- endinject -->
+<!-- Plugin css for this page -->
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/select2/select2.min.css}">
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css}">
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<!-- endinject -->
+<!-- Layout styles -->
+<link rel="stylesheet" th:href="@{/assets/css/style.css}">
+<!-- End layout styles -->
+<link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
+
+<!-- Add this CSS -->
+<style>
+.spinner-border-sm {
+	width: 1rem;
+	height: 1rem;
+	border-width: 0.2em;
+	margin-right: 0.5rem;
+}
+
+/* Modal animations */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: scale(0.8);
+}
+.modal.fade.show .modal-dialog {
+    transform: scale(1);
+}
+
+.modal-content {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+}
+
+.modal-body {
+    padding: 1rem 1.5rem;
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+}
+
+/* Icon animations */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-20px);}
+    60% {transform: translateY(-10px);}
+}
+
+.animate-bounce {
+    animation: bounce 1s ease infinite;
+}
+
+@keyframes pulse {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.1);}
+    100% {transform: scale(1);}
+}
+
+.animate-pulse {
+    animation: pulse 0.5s ease 2;
+}
+
+/* Icon circle background */
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px auto;
+}
+
+.icon-circle i {
+    font-size: 35px;
+}
+
+.icon-circle.success {
+    background: linear-gradient(135deg, #84d9d2 0%, #07cdae 100%);
+    color: white;
+}
+
+.icon-circle.error {
+    background: linear-gradient(135deg, #f86a6a 0%, #f83b3b 100%);
+    color: white;
+}
+
+.icon-circle.warning {
+    background: linear-gradient(135deg, #ffb64d 0%, #ff9f1a 100%);
+    color: white;
+}
+
+.icon-circle.info {
+    background: linear-gradient(135deg, #6ab0f8 0%, #2f80ed 100%);
+    color: white;
+}
+
+/* Confirmation modal specific */
+.confirm-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+    font-size: 40px;
+    box-shadow: 0 10px 30px rgba(255, 82, 82, 0.4);
+}
+
+.confirm-icon.warning {
+    background: linear-gradient(135deg, #ffb64d 0%, #ff9f1a 100%);
+    box-shadow: 0 10px 30px rgba(255, 159, 26, 0.4);
+}
+
+.confirm-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.confirm-message {
+    font-size: 16px;
+    color: #6c757d;
+    margin-bottom: 25px;
+}
+</style>
+</head>
+<body>
+	<div class="container-scroller">
+		<div th:replace="~{fragments/header_menu :: headerMenu}"></div>
+
+		<!-- partial -->
+		<div class="container-fluid page-body-wrapper">
+			<div th:replace="~{fragments/nav_menu :: navMenu}"></div>
+
+			<!-- partial -->
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="page-header">
+						<h3 class="page-title">Loan Information Details</h3>
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item"><a href="#">Forms</a></li>
+								<li class="breadcrumb-item active" aria-current="page">Loan
+									Form</li>
+							</ol>
+						</nav>
+					</div>
+					<div class="row">
+						<div class="col-12 grid-margin stretch-card">
+							<div class="card">
+								<div class="card-body">
+									<h4 class="card-title">Loan</h4>
+									<p class="card-description">Loan Status Details</p>
+									<div class="form-group">
+				                        <label for="forLoanStatus">Loan Status</label>
+				                        <select class="form-select" style="width: 312px;" id="loanStatus">
+				                          <option selected>PENDING</option>
+				                          <option>CANCELLED</option>
+				                          <option>APPROVED</option>
+				                          <option>REJECTED</option>
+				                          <option>ACTIVE</option>
+				                          <option>FULLY_PAID</option>
+				                        </select>
+				                    </div>
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<!-- Header will be dynamically updated by JavaScript -->
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+				<!-- partial:../../partials/_footer.html -->
+				<footer class="footer">
+					<div
+						class="d-sm-flex justify-content-center justify-content-sm-between">
+						<span
+							class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright
+							© 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>.
+							All rights reserved.
+						</span> <span
+							class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted
+							& made with <i class="mdi mdi-heart text-danger"></i>
+						</span>
+					</div>
+				</footer>
+				<!-- partial -->
+			</div>
+			<!-- main-panel ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	<!-- container-scroller -->
+	
+	<!-- ========== MODALS ========== -->
+	
+	<!-- Success Modal -->
+	<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered modal-sm">
+	    <div class="modal-content text-center">
+	      <div class="modal-header justify-content-center border-0">
+	        <div class="icon-circle success animate-bounce">
+	          <i class="mdi mdi-check"></i>
+	        </div>
+	      </div>
+	      <div class="modal-body pt-0">
+	        <h4 class="mb-3">Success!</h4>
+	        <p class="mb-0" id="successMessage">Loan approved successfully!</p>
+	      </div>
+	      <div class="modal-footer justify-content-center border-0">
+	        <button type="button" class="btn btn-gradient-success btn-rounded" data-bs-dismiss="modal">OK</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- Error Modal -->
+	<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered modal-sm">
+	    <div class="modal-content text-center">
+	      <div class="modal-header justify-content-center border-0">
+	        <div class="icon-circle error animate-pulse">
+	          <i class="mdi mdi-close"></i>
+	        </div>
+	      </div>
+	      <div class="modal-body pt-0">
+	        <h4 class="mb-3">Oops!</h4>
+	        <p class="mb-0" id="errorMessage">Something went wrong.</p>
+	      </div>
+	      <div class="modal-footer justify-content-center border-0">
+	        <button type="button" class="btn btn-gradient-danger btn-rounded" data-bs-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- Warning Modal -->
+	<div class="modal fade" id="warningModal" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered modal-sm">
+	    <div class="modal-content text-center">
+	      <div class="modal-header justify-content-center border-0">
+	        <div class="icon-circle warning animate-pulse">
+	          <i class="mdi mdi-alert"></i>
+	        </div>
+	      </div>
+	      <div class="modal-body pt-0">
+	        <h4 class="mb-3">Warning!</h4>
+	        <p class="mb-0" id="warningMessage">Please check your input.</p>
+	      </div>
+	      <div class="modal-footer justify-content-center border-0">
+	        <button type="button" class="btn btn-gradient-warning btn-rounded" data-bs-dismiss="modal">OK</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- Info Modal -->
+	<div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered modal-sm">
+	    <div class="modal-content text-center">
+	      <div class="modal-header justify-content-center border-0">
+	        <div class="icon-circle info">
+	          <i class="mdi mdi-information"></i>
+	        </div>
+	      </div>
+	      <div class="modal-body pt-0">
+	        <h4 class="mb-3">Information</h4>
+	        <p class="mb-0" id="infoMessage">Loan information loaded.</p>
+	      </div>
+	      <div class="modal-footer justify-content-center border-0">
+	        <button type="button" class="btn btn-gradient-info btn-rounded" data-bs-dismiss="modal">OK</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- Confirmation Modal -->
+	<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content text-center">
+	      <div class="modal-header justify-content-center border-0">
+	        <div class="confirm-icon warning">
+	          <i class="mdi mdi-help"></i>
+	        </div>
+	      </div>
+	      <div class="modal-body pt-0">
+	        <h4 class="confirm-title" id="confirmTitle">Are you sure?</h4>
+	        <p class="confirm-message" id="confirmMessage">Do you want to proceed with this action?</p>
+	      </div>
+	      <div class="modal-footer justify-content-center border-0">
+	        <button type="button" class="btn btn-outline-secondary btn-rounded me-2" data-bs-dismiss="modal" id="confirmCancelBtn">Cancel</button>
+	        <button type="button" class="btn btn-gradient-primary btn-rounded" id="confirmOkBtn">Yes, Proceed</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- plugins:js -->
+	<script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
+	<script
+		th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/assets/js/off-canvas.js}"></script>
+	<script th:src="@{/assets/js/misc.js}"></script>
+	<script th:src="@{/assets/js/settings.js}"></script>
+	<script th:src="@{/assets/js/todolist.js}"></script>
+	<script th:src="@{/assets/js/jquery.cookie.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page -->
+	<script th:src="@{/assets/js/file-upload.js}"></script>
+	<script th:src="@{/assets/js/typeahead.js}"></script>
+	<script th:src="@{/assets/js/select2.js}"></script>
+	<!-- End custom js for this page -->
+
+	<script type="text/javascript">
 	    $(document).ready(function() {
 	        const MemberInfo = {
 	            init: function() {
-	                this.loadLoansInfo();
+	                this.bindEvents();
+	                this.loadLoansInfo('PENDING'); // Default load PENDING
 	            },
 	            
-	            loadLoansInfo: function() {
-	                $.ajax({
-	                    url: 'http://localhost:8080/groupsavings/api/v1/loan/manage',
-	                    type: 'GET',
-	                    contentType: 'application/json',
-	                    dataType: 'json',
-	                    success: $.proxy(this.handleSuccess, this),
-	                    error: $.proxy(this.handleError, this)
-	                });
+	            bindEvents: function() {
+	                // Status dropdown change event
+	                $('#loanStatus').on('change', $.proxy(function(e) {
+	                    const selectedStatus = $(e.currentTarget).val();
+	                    console.log('Selected status:', selectedStatus);
+	                    this.loadLoansInfo(selectedStatus);
+	                }, this));
 	            },
 	            
-	            handleSuccess: function(response) {
-	                console.log('Member loaded:', response);
+	            // ========== TABLE HEADER ADJUSTMENT ==========
+	            adjustTableHeader: function(status) {
+	                const thead = $('.table thead tr');
+	                thead.empty();
 	                
-	                this.loadLoans(response);
-	                
-	                this.showAlert('success', 'Member information loaded!');
-	            },
-	            
-	            handleError: function(xhr) {
-	                console.error('Error:', xhr.responseText);
-	                
-	                if (xhr.status === 404) {
-	                    this.showAlert('warning', 'Member not found.');
+	                // MAY ACTION COLUMN para sa PENDING, ACTIVE, at APPROVED
+	                if (status === 'PENDING' || status === 'ACTIVE' || status === 'APPROVED') {
+	                    thead.html(`
+	                        <th hidden="true">Loan Code</th>
+	                        <th>Full Name</th>
+	                        <th>Loan Amount</th>
+	                        <th>Terms</th>
+	                        <th>Amortization</th>
+	                        <th>Date Applied</th>
+	                        <th>Loan Status</th>
+	                        <th>Action</th>
+	                    `);
 	                } else {
-	                    this.showAlert('danger', 'Failed to load member information.');
+	                    // WALANG ACTION COLUMN - para sa lahat ng ibang status
+	                    thead.html(`
+	                        <th hidden="true">Loan Code</th>
+	                        <th>Full Name</th>
+	                        <th>Loan Amount</th>
+	                        <th>Terms</th>
+	                        <th>Amortization</th>
+	                        <th>Date Applied</th>
+	                        <th>Loan Status</th>
+	                    `);
 	                }
 	            },
 	            
-	            loadLoans: function(loans) {
+	            // ========== LOAD LOANS FROM API ==========
+	            loadLoansInfo: function(status) {
+	                // Adjust table header based on selected status
+	                this.adjustTableHeader(status);
+	                
+	                // Show loading indicator
+	                const tbody = $('.table tbody');
+	                const colspan = (status === 'PENDING' || status === 'ACTIVE' || status === 'APPROVED') ? 8 : 7;
+	                tbody.html(`
+	                    <tr>
+	                        <td colspan="${colspan}" class="text-center">
+	                            <div class="spinner-border text-primary" role="status">
+	                                <span class="visually-hidden">Loading...</span>
+	                            </div>
+	                            <br>Loading loans...
+	                        </td>
+	                    </tr>
+	                `);
+	                
+	                $.ajax({
+	                    url: 'http://localhost:8080/groupsavings/api/v1/loan/manage/' + status,
+	                    type: 'GET',
+	                    contentType: 'application/json',
+	                    dataType: 'json',
+	                    success: $.proxy(function(response) {
+	                        console.log('Loans loaded for status', status, ':', response);
+	                        this.loadLoans(response, status);
+	                        this.showModal('success', 'Loans with status ' + status + ' loaded successfully!');
+	                    }, this),
+	                    error: $.proxy(function(xhr) {
+	                        console.error('Error:', xhr.responseText);
+	                        
+	                        const colspan = (status === 'PENDING' || status === 'ACTIVE' || status === 'APPROVED') ? 8 : 7;
+	                        
+	                        if (xhr.status === 404) {
+	                            this.showModal('warning', 'No loans found for status: ' + status);
+	                            $('.table tbody').html(`
+	                                <tr>
+	                                    <td colspan="${colspan}" class="text-center">No loans found for status: ${status}</td>
+	                                </tr>
+	                            `);
+	                        } else {
+	                            this.showModal('error', 'Failed to load loan information. Please try again.');
+	                        }
+	                    }, this)
+	                });
+	            },
+	            
+	            // ========== DISPLAY LOANS IN TABLE ==========
+	            loadLoans: function(loans, status) {
 	                const tbody = $('.table tbody');
 	                tbody.empty();
+	                
+	                const hasActionColumn = (status === 'PENDING' || status === 'ACTIVE' || status === 'APPROVED');
+	                const colspan = hasActionColumn ? 8 : 7;
 	                
 	                if (!loans || loans.length === 0) {
 	                    tbody.append(`
 	                        <tr>
-	                            <td colspan="3" class="text-center">No contributors found</td>
+	                            <td colspan="${colspan}" class="text-center">No loans found</td>
 	                        </tr>
 	                    `);
 	                    return;
 	                }
 	                
 	                $.each(loans, function(index, loan) {
-	                    const row = `
-	                        <tr>
-	                            <td>${loan.member.firstname + ' ' + loan.member.lastname}</td>
-	                            <td>Php ${loan.loanAmount}</td>
-	                            <td>${loan.terms}</td>
-	                            <td>Php ${loan.amortization}</td>
-	                            <td>${loan.dateApplied}</td>
-	                            <td>${loan.loanStatus}</td>
-	                            <td>
-	                            	<button type="button" class="btn btn-gradient-info btn-rounded btn-fw">Approve</button>
-	                            	<button type="button" class="btn btn-gradient-danger btn-rounded btn-fw">Reject</button>
-	                            </td>
-	                        </tr>
-	                    `;
+	                    let row = '';
+	                    
+	                    if (hasActionColumn) {
+	                        // ===== MAY ACTION COLUMN (PENDING, ACTIVE, or APPROVED) =====
+	                        let actionButtons = '';
+	                        
+	                        if (loan.loanStatus === 'PENDING') {
+	                            // PENDING status - Approve, Reject, Cancel buttons
+	                            actionButtons = `
+	                                <button type="button" class="btn btn-gradient-info btn-rounded btn-fw btn-approve" 
+	                                        data-loan-code="${loan.loanCode}">
+	                                    Approve
+	                                </button>
+	                                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw btn-reject" 
+	                                        data-loan-code="${loan.loanCode}">
+	                                    Reject
+	                                </button>
+	                                <button type="button" class="btn btn-gradient-dark btn-rounded btn-fw btn-cancel" 
+	                                        data-loan-code="${loan.loanCode}">
+	                                    Cancel
+	                                </button>
+	                            `;
+	                        } else if (loan.loanStatus === 'APPROVED') {
+	                            // APPROVED status - RELEASE button only
+	                            actionButtons = `
+	                                <button type="button" class="btn btn-gradient-warning btn-rounded btn-fw btn-release" 
+	                                        data-loan-code="${loan.loanCode}">
+	                                    <i class="mdi mdi-cash"></i> Release
+	                                </button>
+	                            `;
+	                        } else if (loan.loanStatus === 'ACTIVE') {
+	                            // ACTIVE status - Fully Paid button only
+	                            actionButtons = `
+	                                <button type="button" class="btn btn-gradient-success btn-rounded btn-fw btn-fully-paid" 
+	                                        data-loan-code="${loan.loanCode}">
+	                                    <i class="mdi mdi-check-circle"></i> Fully Paid
+	                                </button>
+	                            `;
+	                        }
+	                        
+	                        // Row na may 8 columns (may Action)
+	                        row = `
+	                            <tr data-loan-code="${loan.loanCode}" data-loan-status="${loan.loanStatus}">
+	                        		<td hidden="true">${loan.loanCode}</td>
+	                                <td>${loan.member.firstname + ' ' + loan.member.lastname}</td>
+	                                <td>Php ${this.formatNumber(loan.loanAmount)}</td>
+	                                <td>${loan.terms}</td>
+	                                <td>Php ${this.formatNumber(loan.amortization)}</td>
+	                                <td>${loan.dateApplied}</td>
+	                                <td><span class="badge badge-${this.getStatusBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td>
+	                                <td>${actionButtons}</td>
+	                            </tr>
+	                        `;
+	                    } else {
+	                        // ===== WALANG ACTION COLUMN (Other statuses) =====
+	                        row = `
+	                            <tr data-loan-code="${loan.loanCode}" data-loan-status="${loan.loanStatus}">
+	                        		<td hidden="true">${loan.loanCode}</td>
+	                                <td>${loan.member.firstname + ' ' + loan.member.lastname}</td>
+	                                <td>Php ${this.formatNumber(loan.loanAmount)}</td>
+	                                <td>${loan.terms}</td>
+	                                <td>Php ${this.formatNumber(loan.amortization)}</td>
+	                                <td>${loan.dateApplied}</td>
+	                                <td><span class="badge badge-${this.getStatusBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td>
+	                            </tr>
+	                        `;
+	                    }
+	                    
 	                    tbody.append(row);
+	                }.bind(this));
+	                
+	                // Bind click events ONLY if may action column
+	                if (hasActionColumn) {
+	                    this.bindActionButtons();
+	                }
+	            },
+	            
+	            // ========== FORMAT NUMBERS ==========
+	            formatNumber: function(number) {
+	                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	            },
+	            
+	            // ========== STATUS BADGE COLORS ==========
+	            getStatusBadgeClass: function(status) {
+	                const badges = {
+	                    'PENDING': 'warning',
+	                    'APPROVED': 'success',
+	                    'REJECTED': 'danger',
+	                    'CANCELLED': 'secondary',
+	                    'ACTIVE': 'info',
+	                    'FULLY_PAID': 'primary'
+	                };
+	                return badges[status] || 'info';
+	            },
+	            
+	            // ========== BUTTON CLICK HANDLERS ==========
+	            bindActionButtons: function() {
+	                // Approve button
+	                $('.btn-approve').on('click', $.proxy(function(e) {
+	                    e.preventDefault();
+	                    const button = $(e.currentTarget);
+	                    
+	                    if (button.prop('disabled') || button.data('processing')) {
+	                        return;
+	                    }
+	                    
+	                    const loanCode = button.data('loan-code');
+	                    
+	                    // Show confirmation modal
+	                    this.showConfirmModal(
+	                        'Approve Loan',
+	                        'Are you sure you want to approve this loan?',
+	                        function() {
+	                            this.processLoanAction(loanCode, 'APPROVED', button);
+	                        }.bind(this)
+	                    );
+	                }, this));
+	                
+	                // Reject button
+	                $('.btn-reject').on('click', $.proxy(function(e) {
+	                    e.preventDefault();
+	                    const button = $(e.currentTarget);
+	                    
+	                    if (button.prop('disabled') || button.data('processing')) {
+	                        return;
+	                    }
+	                    
+	                    const loanCode = button.data('loan-code');
+	                    
+	                    // Show confirmation modal
+	                    this.showConfirmModal(
+	                        'Reject Loan',
+	                        'Are you sure you want to reject this loan?',
+	                        function() {
+	                            this.processLoanAction(loanCode, 'REJECTED', button);
+	                        }.bind(this)
+	                    );
+	                }, this));
+	                
+	                // Cancel button
+	                $('.btn-cancel').on('click', $.proxy(function(e) {
+	                    e.preventDefault();
+	                    const button = $(e.currentTarget);
+	                    
+	                    if (button.prop('disabled') || button.data('processing')) {
+	                        return;
+	                    }
+	                    
+	                    const loanCode = button.data('loan-code');
+	                    
+	                    // Show confirmation modal
+	                    this.showConfirmModal(
+	                        'Cancel Loan',
+	                        'Are you sure you want to cancel this loan?',
+	                        function() {
+	                            this.processLoanAction(loanCode, 'CANCELLED', button);
+	                        }.bind(this)
+	                    );
+	                }, this));
+	                
+	                // RELEASE button (for APPROVED status)
+	                $('.btn-release').on('click', $.proxy(function(e) {
+	                    e.preventDefault();
+	                    const button = $(e.currentTarget);
+	                    
+	                    if (button.prop('disabled') || button.data('processing')) {
+	                        return;
+	                    }
+	                    
+	                    const loanCode = button.data('loan-code');
+	                    
+	                    // Show confirmation modal
+	                    this.showConfirmModal(
+	                        'Release Loan',
+	                        'Are you sure you want to release this loan? This will change status to ACTIVE.',
+	                        function() {
+	                            this.processLoanAction(loanCode, 'ACTIVE', button);
+	                        }.bind(this)
+	                    );
+	                }, this));
+	                
+	                // Fully Paid button
+	                $('.btn-fully-paid').on('click', $.proxy(function(e) {
+	                    e.preventDefault();
+	                    const button = $(e.currentTarget);
+	                    
+	                    if (button.prop('disabled') || button.data('processing')) {
+	                        return;
+	                    }
+	                    
+	                    const loanCode = button.data('loan-code');
+	                    
+	                    // Show confirmation modal
+	                    this.showConfirmModal(
+	                        'Mark as Fully Paid',
+	                        'Are you sure you want to mark this loan as FULLY PAID?',
+	                        function() {
+	                            this.processLoanAction(loanCode, 'FULLY_PAID', button);
+	                        }.bind(this)
+	                    );
+	                }, this));
+	            },
+	            
+	            // ========== CONFIRMATION MODAL ==========
+	            showConfirmModal: function(title, message, callback) {
+	                // Set modal content
+	                $('#confirmTitle').text(title);
+	                $('#confirmMessage').text(message);
+	                
+	                // Remove previous click handler and attach new one
+	                $('#confirmOkBtn').off('click').on('click', $.proxy(function() {
+	                    $('#confirmModal').modal('hide');
+	                    if (callback) {
+	                        callback();
+	                    }
+	                }, this));
+	                
+	                // Show modal
+	                $('#confirmModal').modal('show');
+	            },
+	            
+	            // ========== PROCESS LOAN ACTION ==========
+	            processLoanAction: function(loanCode, action, button) {
+	                // Set processing flag to prevent double click
+	                button.data('processing', true);
+	                
+	                // Get all buttons in this row
+	                const row = button.closest('tr');
+	                const approveBtn = row.find('.btn-approve');
+	                const rejectBtn = row.find('.btn-reject');
+	                const cancelBtn = row.find('.btn-cancel');
+	                const releaseBtn = row.find('.btn-release');
+	                const fullyPaidBtn = row.find('.btn-fully-paid');
+	                
+	                // Show loading state on clicked button
+	                const originalText = button.text();
+	                button.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...');
+	                button.prop('disabled', true);
+	                
+	                // Prepare payload
+	                const payload = {
+	                    loanCode: loanCode,
+	                    actionStatus: action  // APPROVED, REJECTED, CANCELLED, ACTIVE, FULLY_PAID
+	                };
+	                
+	                // Call POST API
+	                $.ajax({
+	                    url: 'http://localhost:8080/groupsavings/api/v1/loan/status',
+	                    type: 'POST',
+	                    contentType: 'application/json',
+	                    dataType: 'json',
+	                    data: JSON.stringify(payload),
+	                    success: $.proxy(function(response) {
+	                        console.log('Loan processed:', response);
+	                        
+	                        // Update status badge
+	                        const newStatus = payload.actionStatus;
+	                        const badgeClass = this.getStatusBadgeClass(newStatus);
+	                        row.find('td:eq(6)').html(`<span class="badge badge-${badgeClass}">${newStatus}</span>`);
+	                        
+	                        // Reset button text
+	                        button.html(originalText);
+	                        
+	                        // Disable ALL buttons in this row
+	                        if (approveBtn.length) approveBtn.prop('disabled', true);
+	                        if (rejectBtn.length) rejectBtn.prop('disabled', true);
+	                        if (cancelBtn.length) cancelBtn.prop('disabled', true);
+	                        if (releaseBtn.length) releaseBtn.prop('disabled', true);
+	                        if (fullyPaidBtn.length) fullyPaidBtn.prop('disabled', true);
+	                        
+	                        // Reload the table with current status para mag-update ang list
+	                        const currentStatus = $('#loanStatus').val();
+	                        this.loadLoansInfo(currentStatus);
+	                        
+	                        // Show success message
+	                        let actionDisplay = '';
+	                        if (action === 'ACTIVE') {
+	                            actionDisplay = 'released';
+	                        } else {
+	                            actionDisplay = payload.actionStatus.toLowerCase().replace('_', ' ');
+	                        }
+	                        this.showModal('success', `Loan ${actionDisplay} successfully!`);
+	                        
+	                        // Clear processing flag
+	                        button.removeData('processing');
+	                        
+	                    }, this),
+	                    error: $.proxy(function(xhr) {
+	                        console.error('Error processing loan:', xhr.responseText);
+	                        
+	                        // Reset button
+	                        button.html(originalText);
+	                        button.prop('disabled', false);
+	                        
+	                        // Show error message
+	                        if (xhr.status === 400) {
+	                            this.showModal('warning', 'Invalid request: ' + xhr.responseText);
+	                        } else if (xhr.status === 404) {
+	                            this.showModal('warning', 'Loan not found.');
+	                        } else {
+	                            this.showModal('error', 'Failed to process loan. Please try again.');
+	                        }
+	                        
+	                        // Clear processing flag
+	                        button.removeData('processing');
+	                        
+	                    }, this)
 	                });
 	            },
 	            
-	            showAlert: function(type, message) {
-	                // Remove existing alerts
-	                $('.alert-dynamic').remove();
+	            // ========== SHOW MODAL ==========
+	            showModal: function(type, message) {
+	                let modalId = '';
+	                let messageId = '';
 	                
-	                const icons = {
-	                    'success': 'check-circle',
-	                    'danger': 'exclamation-circle',
-	                    'warning': 'exclamation-triangle',
-	                    'info': 'info-circle'
-	                };
+	                switch(type) {
+	                    case 'success':
+	                        modalId = '#successModal';
+	                        messageId = '#successMessage';
+	                        break;
+	                    case 'error':
+	                        modalId = '#errorModal';
+	                        messageId = '#errorMessage';
+	                        break;
+	                    case 'warning':
+	                        modalId = '#warningModal';
+	                        messageId = '#warningMessage';
+	                        break;
+	                    case 'info':
+	                        modalId = '#infoModal';
+	                        messageId = '#infoMessage';
+	                        break;
+	                    default:
+	                        modalId = '#infoModal';
+	                        messageId = '#infoMessage';
+	                }
 	                
-	                const alertHtml = `
-	                    <div class="alert alert-${type} alert-dynamic alert-dismissible fade show" style="margin-top: 12px;" role="alert">
-	                        <i class="fa fa-${icons[type]} me-2"></i>
-	                        ${message}
-	                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-	                    </div>
-	                `;
+	                // Set message
+	                $(messageId).text(message);
 	                
-	                $('.table').before(alertHtml);
+	                // Show modal
+	                $(modalId).modal('show');
 	                
-	                setTimeout(() => $('.alert-dynamic').fadeOut('slow', function() {
-	                    $(this).remove();
-	                }), 5000);
+	                // Auto hide after 3 seconds for success/info, longer for error/warning
+	                let timeout = 3000;
+	                if (type === 'error' || type === 'warning') {
+	                    timeout = 4000;
+	                }
+	                
+	                setTimeout(() => {
+	                    $(modalId).modal('hide');
+	                }, timeout);
 	            }
 	        };
 	        
@@ -214,5 +829,5 @@
 	        MemberInfo.init();
 	    });
 	</script>
-  </body>
+</body>
 </html>

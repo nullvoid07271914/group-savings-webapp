@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
-public class ContributionController {
+public class ContributionViewController {
 
 	@GetMapping("/contribution/search-member")
 	public String viewBorrowerForLoan(Model model, HttpServletRequest request) {

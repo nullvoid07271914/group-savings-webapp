@@ -1,6 +1,7 @@
 package com.groupsavings.model.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class LoanRequestDto {
 
@@ -11,6 +12,8 @@ public class LoanRequestDto {
 	private BigDecimal loanAmount;
 
 	private int terms;
+
+	private LocalDate dateApplied;
 
 	public String getMemberCode() {
 		return memberCode;
@@ -42,6 +45,20 @@ public class LoanRequestDto {
 
 	public void setTerms(int terms) {
 		this.terms = terms;
+	}
+
+	public LocalDate getDateApplied() {
+		return dateApplied;
+	}
+
+	public void setDateApplied(LocalDate dateApplied) {
+		this.dateApplied = dateApplied;
+	}
+
+	@Override
+	public String toString() {
+		return "LoanRequestDto [memberCode=" + memberCode + ", loanCode=" + loanCode + ", loanAmount=" + loanAmount
+				+ ", terms=" + terms + ", dateApplied=" + dateApplied + "]";
 	}
 
 }

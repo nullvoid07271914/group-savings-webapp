@@ -76,20 +76,20 @@
                         <input type="text" class="form-control" id="interest" value="" readonly>
                       </div>
                       <div class="form-group">
-                        <label for="forDueDate">Due Date</label>
-                        <input type="date" class="form-control" id="dueDate" readonly>
-                      </div>
-                      <div class="form-group">
-                        <label for="forTotalAmount">Total Amount</label>
-                        <input type="text" class="form-control" id="totalAmount" readonly>
-                      </div>
-                      <div class="form-group">
-                        <label for="forAmortization">Terms Amortization</label>
-                        <input type="text" class="form-control" id="amortization" readonly>
-                      </div>
-                      <div class="form-group">
                         <label for="forDateApplied">Date Apply</label>
-                        <input type="date" class="form-control" id="dateApplied" readonly>
+                        <input type="date" class="form-control" id="dateApplied">
+                      </div>
+                      <div class="form-group" hidden="true">
+                        <label for="forDueDate">Due Date</label>
+                        <input type="date" class="form-control" id="dueDate" value="" readonly>
+                      </div>
+                      <div class="form-group" hidden="true">
+                        <label for="forTotalAmount">Total Amount</label>
+                        <input type="text" class="form-control" id="totalAmount" value="" readonly>
+                      </div>
+                      <div class="form-group" hidden="true">
+                        <label for="forAmortization">Amortization</label>
+                        <input type="text" class="form-control" id="amortization" value="" readonly>
                       </div>
                       <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
                       <button class="btn btn-light">Cancel</button>
@@ -266,7 +266,8 @@
 	                    memberCode: this.memberCode,
 	                    loanCode: $('#loanCode').text().replace('Loan Code# ', ''),
 	                    loanAmount: $('#loanAmount').val(),
-	                    terms: $('#loanTerms').val()
+	                    terms: $('#loanTerms').val(),
+	                    dateApplied: $('#dateApplied').val(),
 	                };
 	                
 	                // Validate
@@ -295,7 +296,10 @@
 	                $('#dueDate').val(response.dueDate);
 	                $('#totalAmount').val(response.totalAmount);
 	                $('#amortization').val(response.amortization);
-	                $('#dateApplied').val(response.dateApplied);
+	                
+	                $('#dueDate').closest('.form-group').show();
+	                $('#totalAmount').closest('.form-group').show();
+	                $('#amortization').closest('.form-group').show();
 	                
 	                // Load contributors to table
 	                this.loadContributors(response.loanContributors);

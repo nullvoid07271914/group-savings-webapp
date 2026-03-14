@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.groupsavings.model.dto.LoanRequestDto;
 import com.groupsavings.model.dto.LoanResponseDto;
+import com.groupsavings.model.dto.LoanStatusRequestDto;
 import com.groupsavings.model.enums.LoanStatus;
 import com.groupsavings.service.LoanService;
 
@@ -33,9 +35,15 @@ public class LoanApiRestController {
 		return new ResponseEntity<>(loan, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/manage")
-	public ResponseEntity<List<LoanResponseDto>> manage() {
-		List<LoanResponseDto> loans = loanService.loanByStatus(LoanStatus.PENDING);
+	@GetMapping("/manage/{status}")
+	public ResponseEntity<List<LoanResponseDto>> manage(@PathVariable String status) {
+		List<LoanResponseDto> loans = loanService.loanByStatus(LoanStatus.valueOf(status));
 		return new ResponseEntity<>(loans, HttpStatus.CREATED);
+	}
+
+	@PostMapping("/status")
+	public ResponseEntity<LoanResponseDto> apply(@Valid @RequestBody LoanStatusRequestDto request) {
+		LoanResponseDto loan = loanService.loanStatusProcess(request);
+		return new ResponseEntity<>(loan, HttpStatus.CREATED);
 	}
 }

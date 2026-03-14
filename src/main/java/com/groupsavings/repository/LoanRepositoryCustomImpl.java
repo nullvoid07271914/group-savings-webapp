@@ -1,5 +1,6 @@
 package com.groupsavings.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -23,10 +24,11 @@ public class LoanRepositoryCustomImpl implements LoanRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Object[]> fetchMembersPoolAmountForLoan(Long poolId) {
+	public List<Object[]> fetchMembersPoolAmountForLoan(Long poolId, LocalDate loanDateApplied) {
 		String sql = sqlLoader.getQuery("available_amount_in_pool.sql");
 		Query query = entityManager.createNativeQuery(sql);
 		query.setParameter(1, poolId);
+		query.setParameter(2, loanDateApplied);
 		return query.getResultList();
 	}
 

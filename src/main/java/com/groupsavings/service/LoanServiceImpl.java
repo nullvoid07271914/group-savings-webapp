@@ -11,19 +11,21 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.groupsavings.component.AmountInPoolPerMemberMapper;
 import com.groupsavings.constants.LoanConstants;
 import com.groupsavings.exception.BorrowerLoanExistException;
 import com.groupsavings.exception.BorrowerNotFoundException;
+import com.groupsavings.exception.LoanUnSuccessfulTransactionException;
+import com.groupsavings.exception.RequestInsufficientException;
 import com.groupsavings.mapper.LoanMapper;
-import com.groupsavings.mapper.MemberMapper;
 import com.groupsavings.model.dto.AmountPerMemberDto;
-import com.groupsavings.model.dto.LoanContributorDto;
 import com.groupsavings.model.dto.LoanRequestDto;
 import com.groupsavings.model.dto.LoanResponseDto;
-import com.groupsavings.model.dto.MemberResponseDto;
+import com.groupsavings.model.dto.LoanStatusRequestDto;
 import com.groupsavings.model.entity.Loan;
+import com.groupsavings.model.entity.LoanMemberAllocation;
 import com.groupsavings.model.entity.Member;
 import com.groupsavings.model.entity.SavingsPool;
 import com.groupsavings.model.enums.LoanStatus;
@@ -35,7 +37,10 @@ import com.groupsavings.repository.MemberRepository;
 import com.groupsavings.utils.LoanUtils;
 import com.groupsavings.utils.TermDueDateUtils;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class LoanServiceImpl implements LoanService, LoanConstants {
 
 	private static final Logger log = LoggerFactory.getLogger(LoanService.class);
@@ -50,25 +55,14 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 
 	private final LoanMapper loanMapper;
 
-	private final MemberMapper memberMapper;
-
-	public LoanServiceImpl(MemberRepository memberRepository, LoanRepository loanRepository,
-			ConfigRepositoty configRepositoty, AmountInPoolPerMemberMapper amountInPoolPerMemberMapper,
-			LoanMapper loanMapper, MemberMapper memberMapper) {
-		this.memberRepository = memberRepository;
-		this.loanRepository = loanRepository;
-		this.configRepositoty = configRepositoty;
-		this.amountInPoolPerMemberMapper = amountInPoolPerMemberMapper;
-		this.loanMapper = loanMapper;
-		this.memberMapper = memberMapper;
-	}
-
+	@Transactional
 	@Override
 	public LoanResponseDto applyLoan(LoanRequestDto request) {
+		log.info("LoanRequestDto: {}", request);
+
 		String code = request.getMemberCode();
 		Member borrower = memberRepository.findByMemberCode(code);
 
-		LoanResponseDto loanDto = new LoanResponseDto();
 		if (Objects.nonNull(borrower)) {
 			Loan loan = new Loan();
 
@@ -91,7 +85,7 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 				}
 			}
 
-			LocalDate currentDate = LocalDate.now();
+			LocalDate dateApplied = request.getDateApplied();
 			BigDecimal loanAmount = request.getLoanAmount();
 
 			BigDecimal interestRate = BigDecimal.valueOf(loan.getInterestRate());
@@ -99,7 +93,7 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 			BigDecimal terms = BigDecimal.valueOf(request.getTerms());
 			BigDecimal amortization = totalAmount.divide(terms, 2, RoundingMode.FLOOR);
 
-			LocalDate dueDate = TermDueDateUtils.calculateDueDate(currentDate, request.getTerms());
+			LocalDate dueDate = TermDueDateUtils.calculateDueDate(dateApplied, request.getTerms());
 
 			loan.setMember(borrower);
 			loan.setLoanCode(request.getLoanCode());
@@ -107,54 +101,76 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 
 			loan.setLoanAmount(loanAmount);
 			loan.setTerms(request.getTerms());
-			loan.setDateApplied(currentDate);
+			loan.setDateApplied(dateApplied);
 			loan.setTotalAmount(totalAmount.setScale(2, RoundingMode.FLOOR));
 			loan.setLoanStatus(LoanStatus.PENDING);
 			loan.setDueDate(dueDate);
 			loan.setAmortization(amortization.setScale(2, RoundingMode.FLOOR));
 
-			Loan savedLoan = loanRepository.save(loan);
-			loanDto = loanMapper.toDto(savedLoan);
+			List<AmountPerMemberDto> memberAmountPoolList = availableAmountInPoolPerMember(savingsPool.getPoolId(),
+					dateApplied);
 
-			log.info("loanDto: {}", loanDto);
+			List<AmountPerMemberDto> contributorList = filterContributorsWithNonZeroAmount(memberAmountPoolList);
+			log.info("contributorList: {}", contributorList);
 
-			List<AmountPerMemberDto> memberAmountPoolList = availableAmountInPoolPerMember(savingsPool.getPoolId());
-			BigDecimal totalAmountInPool = memberAmountPoolList.stream().map(AmountPerMemberDto::getAmount)
-					.filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+			BigDecimal totalAmountInPool = contributorList.stream().map(AmountPerMemberDto::getAmount)
+					.reduce(BigDecimal.ZERO, BigDecimal::add);
+			log.info("totalAmountInPool: {}", totalAmountInPool);
 
-			List<LoanContributorDto> loanContributors = new ArrayList<LoanContributorDto>();
-			if (totalAmountInPool.compareTo(loanAmount) > 0) {
-				BigDecimal baseAmount = totalAmountInPool.subtract(loanAmount);
+			if (totalAmountInPool.compareTo(loanAmount) >= 0) {
+				List<LoanMemberAllocation> loanContributors = fetchLoanContributors(contributorList, loan,
+						totalAmountInPool, loanAmount);
 
-				List<AmountPerMemberDto> memberDtoList = memberAmountPoolList.stream().filter(this::canContributeLoan)
-						.toList();
+				loan.setLoanMembersAllocation(loanContributors);
+				log.info("saveLoanContributors: {}", loanContributors);
+				Loan savedLoan = loanRepository.save(loan);
 
-				for (AmountPerMemberDto item : memberDtoList) {
-					BigDecimal memberAmount = item.getAmount();
-					BigDecimal percentage = memberAmount.divide(totalAmountInPool, 2, RoundingMode.FLOOR);
-					BigDecimal lessAmount = percentage.multiply(baseAmount);
-					BigDecimal contribution = memberAmount.subtract(lessAmount);
-
-					LoanContributorDto contributorDto = new LoanContributorDto();
-
-					Member memberContributor = memberRepository.findByMemberCode(item.getMemberCode());
-					MemberResponseDto memberDto = memberMapper.toResponseDto(memberContributor);
-
-					contributorDto.setMemberCode(item.getMemberCode());
-					contributorDto.setFullname(memberDto.getFirstname() + " " + memberDto.getLastname());
-					contributorDto.setAmount(contribution.setScale(2, RoundingMode.FLOOR));
-					contributorDto.setPercentage(percentage.floatValue());
-					loanContributors.add(contributorDto);
+				if (Objects.nonNull(savedLoan)) {
+					LoanResponseDto responseDto = loanMapper.toDto(savedLoan);
+					return responseDto;
+				} else {
+					throw new LoanUnSuccessfulTransactionException(
+							"Unsuccessfull Loan Transaction Please review Inputs.");
 				}
 
-				loanDto.setLoanContributors(loanContributors);
+			} else {
+				throw new RequestInsufficientException(
+						"Insufficient Amount in pool for loan Php " + request.getLoanAmount());
 			}
 
 		} else {
 			throw new BorrowerNotFoundException("Required borrower to apply loan.");
 		}
+	}
 
-		return loanDto;
+	private List<AmountPerMemberDto> filterContributorsWithNonZeroAmount(
+			List<AmountPerMemberDto> memberAmountPoolList) {
+		return memberAmountPoolList.stream().filter(Objects::nonNull)
+				.filter(dto -> Objects.nonNull(dto.getAmount()) && dto.getAmount().compareTo(BigDecimal.ZERO) > 0)
+				.toList();
+	}
+
+	private List<LoanMemberAllocation> fetchLoanContributors(List<AmountPerMemberDto> memberAmountPoolList, Loan loan,
+			BigDecimal totalAmountInPool, BigDecimal loanAmount) {
+		List<LoanMemberAllocation> loanContributors = new ArrayList<LoanMemberAllocation>();
+		BigDecimal baseAmount = totalAmountInPool.subtract(loanAmount);
+
+		for (AmountPerMemberDto item : memberAmountPoolList) {
+			BigDecimal memberAmount = item.getAmount();
+			BigDecimal percentage = memberAmount.divide(totalAmountInPool, 5, RoundingMode.FLOOR);
+			BigDecimal lessAmount = percentage.multiply(baseAmount);
+			BigDecimal contribution = memberAmount.subtract(lessAmount);
+
+			LoanMemberAllocation contributorDto = new LoanMemberAllocation();
+			Member member = memberRepository.findByMemberCode(item.getMemberCode());
+			contributorDto.setMember(member);
+			contributorDto.setContributionPercentage(percentage.floatValue());
+			contributorDto.setContributionAmount(contribution.setScale(2, RoundingMode.FLOOR));
+			contributorDto.setLoan(loan);
+			loanContributors.add(contributorDto);
+		}
+
+		return loanContributors;
 	}
 
 	@Override
@@ -164,15 +180,25 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 		return loansDto;
 	}
 
-	private boolean canContributeLoan(AmountPerMemberDto memberDto) {
-		BigDecimal amount = memberDto.getAmount();
-		return amount.compareTo(BigDecimal.valueOf(100)) > 0;
-	}
-
-	private List<AmountPerMemberDto> availableAmountInPoolPerMember(Long poolId) {
-		List<Object[]> poolAmountPerMember = loanRepository.fetchMembersPoolAmountForLoan(poolId);
+	private List<AmountPerMemberDto> availableAmountInPoolPerMember(Long poolId, LocalDate dateApplied) {
+		List<Object[]> poolAmountPerMember = loanRepository.fetchMembersPoolAmountForLoan(poolId, dateApplied);
 		log.info("poolAmountPerMember: {}", poolAmountPerMember);
 		List<AmountPerMemberDto> perMemberList = amountInPoolPerMemberMapper.toDtoList(poolAmountPerMember);
 		return perMemberList;
+	}
+
+	@Override
+	public LoanResponseDto loanStatusProcess(LoanStatusRequestDto request) {
+		log.info("LoanStatusRequestDto: {}", request);
+		Optional<Loan> loan = loanRepository.findByLoanCode(request.getLoanCode());
+		if (loan.isPresent()) {
+			Loan currentLoan = loan.get();
+			currentLoan.setLoanStatus(LoanStatus.valueOf(request.getActionStatus()));
+			currentLoan.setDateApproved(LocalDate.now());
+			Loan savedLoan = loanRepository.save(currentLoan);
+			return loanMapper.toDto(savedLoan);
+		}
+
+		return new LoanResponseDto();
 	}
 }

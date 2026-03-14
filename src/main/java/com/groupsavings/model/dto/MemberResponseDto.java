@@ -157,4 +157,13 @@ public class MemberResponseDto {
 	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
 	}
+
+	@Override
+	public String toString() {
+		return "MemberResponseDto [memberCode=" + memberCode + ", loanCode=" + loanCode + ", firstname=" + firstname
+				+ ", lastname=" + lastname + ", mobileNumber=" + mobileNumber + ", email=" + email + ", type=" + type
+				+ ", status=" + status + ", interest=" + interest + ", joinedDate=" + joinedDate + ", street=" + street
+				+ ", barangay=" + barangay + ", city=" + city + ", province=" + province + ", zipcode=" + zipcode + "]";
+	}
+
 }
