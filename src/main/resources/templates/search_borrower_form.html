@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Loan Savings</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" th:href="@{/assets/vendors/mdi/css/materialdesignicons.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/ti-icons/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/css/vendor.bundle.base.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/font-awesome/css/font-awesome.min.css}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" th:href="@{/assets/vendors/select2/select2.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
+    
+    <!-- Add this CSS -->
+	<style>
+	    .spinner-border-sm {
+	        width: 1rem;
+	        height: 1rem;
+	        border-width: 0.2em;
+	        margin-right: 0.5rem;
+	    }
+	</style>
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div th:replace="~{fragments/header_menu :: headerMenu}"></div>
+      
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <div th:replace="~{fragments/nav_menu :: navMenu}"></div>
+        
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Search Information </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Search Form</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Search Form</h4>
+                    <form class="forms-sample">
+                      <div class="form-group">
+                        <label for="forNameSearch">Name</label>
+                        <input type="text" class="form-control" id="name_search" value="">
+                      </div>
+                      <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                      <button class="btn btn-light">Cancel</button>
+                    </form>
+                  </div>
+
+                  <div class="card-body">
+                    <h4 class="card-title">Member(s) Search List</h4>
+                    </p>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th> Full Name </th>
+                          <th> Date Registered </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
+    <script th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script th:src="@{/assets/js/off-canvas.js}"></script>
+    <script th:src="@{/assets/js/misc.js}"></script>
+    <script th:src="@{/assets/js/settings.js}"></script>
+    <script th:src="@{/assets/js/todolist.js}"></script>
+    <script th:src="@{/assets/js/jquery.cookie.js}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script th:src="@{/assets/js/file-upload.js}"></script>
+    <script th:src="@{/assets/js/typeahead.js}"></script>
+    <script th:src="@{/assets/js/select2.js}"></script>
+    <!-- End custom js for this page -->
+    
+    <script type="text/javascript">
+	$(document).ready(function() {
+		
+		// Enhanced button with spinner (reusable)
+		function setLoading(button, isLoading, originalText) {
+		    if (isLoading) {
+		        button.prop('disabled', true).html(`
+		            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+		            Searching...
+		        `);
+		    } else {
+		        button.prop('disabled', false).html(originalText || '<i class="fa fa-search"></i> Submit');
+		    }
+		}
+		
+	    const MemberSearch = {
+	        init: function() {
+	            this.form = $('.forms-sample'); // Search form
+	            this.searchInput = $('#name_search');
+	            this.submitBtn = this.form.find('button[type="submit"]');
+	            this.cancelBtn = this.form.find('.btn-light');
+	            this.tableBody = $('.table tbody');
+	            
+	            // Store original button text
+	            this.originalBtnHtml = this.submitBtn.html();
+	            
+	            this.bindEvents();
+	        },
+	        
+	        bindEvents: function() {
+	            this.form.on('submit', $.proxy(this.handleSubmit, this));
+	            this.cancelBtn.on('click', $.proxy(this.handleCancel, this));
+	            
+	            // Real-time validation on blur
+	            this.searchInput.on('blur', $.proxy(this.validateField, this));
+	            
+	            // Optional: Search as you type (with debounce)
+	            let searchTimeout;
+	            this.searchInput.on('keyup', $.proxy(function() {
+	                clearTimeout(searchTimeout);
+	                searchTimeout = setTimeout($.proxy(function() {
+	                    if (this.searchInput.val().length >= 2 || this.searchInput.val().length === 0) {
+	                        this.performSearch();
+	                    }
+	                }, this), 500);
+	            }, this));
+	        },
+	        
+	        handleSubmit: function(e) {
+	            e.preventDefault();
+	            this.performSearch();
+	        },
+	        
+	        handleCancel: function(e) {
+	            e.preventDefault();
+	            this.resetSearch();
+	        },
+	        
+	        performSearch: function() {
+	            const searchTerm = this.searchInput.val().trim();
+	            
+	            if (!this.validateSearch(searchTerm)) {
+	                return;
+	            }
+	            
+	            this.setLoading(true);
+	            
+	            // Prepare data for POST request
+	            const requestData = {
+	                name: searchTerm  // or fullname, depending on your API
+	            };
+	            
+	            // POST API call
+	            $.ajax({
+	                url: 'http://localhost:8080/groupsavings/api/v1/member/info',  // POST endpoint
+	                type: 'POST',
+	                contentType: 'application/json',
+	                data: JSON.stringify(requestData),  // Send data in body
+	                dataType: 'json',
+	                success: $.proxy(this.handleSuccess, this),
+	                error: $.proxy(this.handleError, this),
+	                complete: $.proxy(function() {
+	                    this.setLoading(false);
+	                }, this)
+	            });
+	        },
+	        
+	        handleSuccess: function(response) {
+	            console.log('Members loaded:', response);
+	            
+	            // Handle different response formats
+	            const members = Array.isArray(response) ? response : (response.data || response.content || []);
+	            
+	            if (members.length === 0) {
+	                this.showAlert('info', 'No members found.');
+	                this.tableBody.html(this.getEmptyRow());
+	                return;
+	            }
+	            
+	            // Build table rows
+	            let tableRows = '';
+	            members.forEach($.proxy(function(member) {
+	                tableRows += this.buildTableRow(member);
+	            }, this));
+	            
+	            this.tableBody.html(tableRows);
+	            
+	            if (this.searchInput.val().trim()) {
+	                this.showAlert('success', 'Found ' + members.length + ' member(s).');
+	            }
+	        },
+	        
+	        handleError: function(xhr) {
+	            if (xhr.status === 400) {
+	                const errors = xhr.responseJSON;
+	                if (errors) {
+	                    this.displayFieldErrors(errors);
+	                }
+	                this.showAlert('warning', 'Invalid search parameters.');
+	            } else if (xhr.status === 404) {
+	                this.tableBody.html(this.getEmptyRow());
+	                this.showAlert('info', 'No members found.');
+	            } else {
+	                this.showAlert('danger', 'An error occurred. Please try again.');
+	                console.error('Search error:', xhr.responseText);
+	            }
+	        },
+	        
+	        displayFieldErrors: function(errors) {
+	            // Clear previous errors
+	            this.form.find('.is-invalid').removeClass('is-invalid');
+	            this.form.find('.invalid-feedback').remove();
+	            
+	            // Display new errors
+	            $.each(errors, function(field, messages) {
+	                const $input = $('#name_search');  // Adjust if multiple fields
+	                const message = Array.isArray(messages) ? messages[0] : messages;
+	                
+	                $input.addClass('is-invalid');
+	                $input.after(`<div class="invalid-feedback">${message}</div>`);
+	            });
+	        },
+	        
+	        buildTableRow: function(member) {
+	            // Handle different possible field names
+	            const fullName = member.firstname + ' ' + member.lastname;
+	            const dateRegistered = this.formatDate(member.joinedDate);
+	            const memberCode = member.memberCode || '';
+	            
+	            return `
+	                <tr>
+	                    <td>
+	                        <a href="/groupsavings/member/info/${memberCode}" class="member-link">
+	                            <i class="fa fa-user-circle me-2"></i>${this.escapeHtml(fullName)}
+	                        </a>
+	                    </td>
+	                    <td>${dateRegistered}</td>
+	                </tr>
+	            `;
+	        },
+	        
+	        getEmptyRow: function() {
+	            return `
+	                <tr>
+	                    <td colspan="2" class="text-center py-4">
+	                        <i class="fa fa-info-circle fa-2x text-muted mb-3"></i>
+	                        <p class="text-muted mb-0">No members to display</p>
+	                    </td>
+	                </tr>
+	            `;
+	        },
+	        
+	        validateSearch: function(searchTerm) {
+	            // Remove existing validation styles
+	            this.searchInput.removeClass('is-invalid');
+	            this.form.find('.invalid-feedback').remove();
+	            
+	            // Allow empty (will show all members)
+	            if (searchTerm.length === 0) {
+	                return true;
+	            }
+	            
+	            // Check minimum length
+	            if (searchTerm.length < 2) {
+	                this.searchInput.addClass('is-invalid');
+	                this.searchInput.after('<div class="invalid-feedback">Please enter at least 2 characters</div>');
+	                return false;
+	            }
+	            
+	            return true;
+	        },
+	        
+	        validateField: function(e) {
+	            const $field = $(e.target);
+	            const value = $field.val().trim();
+	            
+	            if (value.length > 0 && value.length < 2) {
+	                $field.addClass('is-invalid');
+	                $field.siblings('.invalid-feedback').remove();
+	                $field.after('<div class="invalid-feedback">Please enter at least 2 characters</div>');
+	            } else {
+	                $field.removeClass('is-invalid');
+	                $field.siblings('.invalid-feedback').remove();
+	            }
+	        },
+	        
+	        setLoading: function(isLoading) {
+	            if (isLoading) {
+	                this.submitBtn.prop('disabled', true).html(`
+	                    <span class="spinner-border spinner-border-sm" role="status"></span>
+	                    Searching...
+	                `);
+	                
+	                // Optional: Show loading in table
+	                this.tableBody.html(`
+	                    <tr>
+	                        <td colspan="2" class="text-center py-4">
+	                            <div class="spinner-border text-primary" role="status">
+	                                <span class="visually-hidden">Loading...</span>
+	                            </div>
+	                            <p class="mt-2 text-muted">Loading members...</p>
+	                        </td>
+	                    </tr>
+	                `);
+	            } else {
+	                this.submitBtn.prop('disabled', false).html(this.originalBtnHtml);
+	            }
+	        },
+	        
+	        resetSearch: function() {
+	            this.searchInput.val('').removeClass('is-invalid');
+	            this.form.find('.invalid-feedback').remove();
+	            this.showAlert('info', 'Search reset');
+	            this.tableBody.html(this.getEmptyRow()); // Clear table or load initial data
+	        },
+	        
+	        formatDate: function(dateString) {
+	            if (!dateString) return 'N/A';
+	            
+	            try {
+	                const date = new Date(dateString);
+	                if (isNaN(date.getTime())) return dateString;
+	                
+	                const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 
+	                               'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+	                
+	                const month = months[date.getMonth()];
+	                const day = String(date.getDate()).padStart(2, '0');
+	                const year = date.getFullYear();
+	                
+	                return `${month}-${day}-${year}`;
+	            } catch (e) {
+	                return dateString;
+	            }
+	        },
+	        
+	        escapeHtml: function(text) {
+	            if (!text) return text;
+	            const div = document.createElement('div');
+	            div.textContent = text;
+	            return div.innerHTML;
+	        },
+	        
+	        showAlert: function(type, message) {
+	            // Remove existing alerts
+	            $('.alert-dynamic').remove();
+	            
+	            const alertHtml = `
+	                <div class="alert alert-${type} alert-dynamic alert-dismissible fade show" style="margin-top: 12px;" role="alert">
+	                    <i class="fa fa-${this.getAlertIcon(type)} me-2"></i>
+	                    ${message}
+	                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+	                </div>
+	            `;
+	            
+	            this.form.before(alertHtml);
+	            
+	            // Auto dismiss
+	            setTimeout(() => $('.alert-dynamic').fadeOut('slow', function() {
+	                $(this).remove();
+	            }), 5000);
+	        },
+	        
+	        getAlertIcon: function(type) {
+	            const icons = {
+	                'success': 'check-circle',
+	                'danger': 'exclamation-circle',
+	                'warning': 'exclamation-triangle',
+	                'info': 'info-circle'
+	            };
+	            return icons[type] || 'info-circle';
+	        }
+	    };
+	    
+	    // Initialize
+	    MemberSearch.init();
+	});
+</script>
+  </body>
+</html>

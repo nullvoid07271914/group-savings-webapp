@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Loan Savings</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" th:href="@{/assets/vendors/mdi/css/materialdesignicons.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/ti-icons/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/css/vendor.bundle.base.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/font-awesome/css/font-awesome.min.css}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" th:href="@{/assets/vendors/select2/select2.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
+    
+    <!-- Add this CSS -->
+	<style>
+	    .spinner-border-sm {
+	        width: 1rem;
+	        height: 1rem;
+	        border-width: 0.2em;
+	        margin-right: 0.5rem;
+	    }
+	</style>
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div th:replace="~{fragments/header_menu :: headerMenu}"></div>
+      
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <div th:replace="~{fragments/nav_menu :: navMenu}"></div>
+        
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Search Information </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Search Form</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Search Form</h4>
+                    <form class="forms-sample">
+                      <div class="form-group">
+                        <label for="forNameSearch">Name</label>
+                        <input type="text" class="form-control" id="name_search" value="">
+                      </div>
+                      <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                      <button class="btn btn-light">Cancel</button>
+                    </form>
+                  </div>
+
+                  <div class="card-body">
+                    <h4 class="card-title">Member(s) Search List</h4>
+                    </p>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th> Full Name </th>
+                          <th> Date Registered </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div class="card-body">
+                    <h4 class="card-title">Contribution Form</h4>
+                    <p class="card-description">Contribution details of member</p>
+                    <form class="member_contribution_form" novalidate>
+                      <div class="form-group">
+                        <label for="inputForAmount">Member Code</label>
+                        <input type="text" class="form-control" id="memberCode" name="memberCode" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="inputForAmount">Amount</label>
+                        <input type="number" class="form-control" id="amount" name="amount">
+                      </div>
+                      <div class="form-group">
+                        <label for="inputForContributionDate">Contribution Date</label>
+                        <input type="date" class="form-control" id="contributionDate" name="contributionDate">
+                      </div>
+                      <div class="form-group">
+                        <label for="inputForPaymentMethod">Payment Method</label>
+                        <select class="form-select" id="paymentMethod" name="paymentMethod">
+                          <option></option>
+                          <option >GCASH</option>
+                          <option>CASH</option>
+                          <option>MAYA</option>
+                          <option>MARIBANK</option>
+                          <option>BANK_TRANSFER</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label>Payment Receipt</label>
+                        <input type="file" name="img[]" class="file-upload-default">
+                        <div class="input-group col-xs-12">
+                          <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Payment Receipt">
+                          <span class="input-group-append">
+                            <button class="file-upload-browse btn btn-gradient-primary py-3" type="button">Upload</button>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="inputForReferenceNumber">Reference Number</label>
+                        <input type="text" class="form-control" id="referenceNumber" name="referenceNumber">
+                      </div>
+                      <div class="form-group">
+                        <label for="inputForTerm">Term</label>
+                        <input type="number" class="form-control" id="term" name="term" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="forNotes">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="4"></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                      <button class="btn btn-light">Cancel</button>
+                    </form>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
+    <script th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script th:src="@{/assets/js/off-canvas.js}"></script>
+    <script th:src="@{/assets/js/misc.js}"></script>
+    <script th:src="@{/assets/js/settings.js}"></script>
+    <script th:src="@{/assets/js/todolist.js}"></script>
+    <script th:src="@{/assets/js/jquery.cookie.js}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script th:src="@{/assets/js/file-upload.js}"></script>
+    <script th:src="@{/assets/js/typeahead.js}"></script>
+    <script th:src="@{/assets/js/select2.js}"></script>
+    <!-- End custom js for this page -->
+    
+    <script type="text/javascript">
+	$(document).ready(function() {
+	    
+	    // Enhanced button with spinner (reusable)
+	    function setLoading(button, isLoading, originalText) {
+	        if (isLoading) {
+	            button.prop('disabled', true).html(`
+	                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+	                Searching...
+	            `);
+	        } else {
+	            button.prop('disabled', false).html(originalText || '<i class="fa fa-search"></i> Submit');
+	        }
+	    }
+	    
+	    const MemberSearch = {
+	        init: function() {
+	            this.form = $('.forms-sample'); // Search form
+	            this.searchInput = $('#name_search');
+	            this.submitBtn = this.form.find('button[type="submit"]');
+	            this.cancelBtn = this.form.find('.btn-light');
+	            this.tableBody = $('.table tbody');
+	            
+	            // Contribution form elements
+	            this.contributionForm = $('.member_contribution_form');
+	            this.memberCodeInput = $('#memberCode');
+	            this.amountInput = $('#amount');
+	            this.contributionDateInput = $('#contributionDate');
+	            this.paymentMethodSelect = $('#paymentMethod');
+	            this.referenceNumberInput = $('#referenceNumber');
+	            this.termInput = $('#term');
+	            this.notesTextarea = $('#notes');
+	            this.contributionSubmitBtn = this.contributionForm.find('button[type="submit"]');
+	            
+	            // Store original button text
+	            this.originalBtnHtml = this.submitBtn.html();
+	            
+	            this.bindEvents();
+	        },
+	        
+	        bindEvents: function() {
+	            this.form.on('submit', $.proxy(this.handleSubmit, this));
+	            this.cancelBtn.on('click', $.proxy(this.handleCancel, this));
+	            this.contributionForm.on('submit', $.proxy(this.handleContributionSubmit, this));
+	            
+	            // Real-time validation on blur
+	            this.searchInput.on('blur', $.proxy(this.validateField, this));
+	            
+	            // NEW: Remove error messages when user types
+	            this.amountInput.on('input', $.proxy(this.removeFieldError, this));
+	            this.contributionDateInput.on('input', $.proxy(this.removeFieldError, this));
+	            this.paymentMethodSelect.on('change', $.proxy(this.removeFieldError, this));
+	            
+	            // NEW: Auto-compute term when contribution date changes
+	            this.contributionDateInput.on('change', $.proxy(this.computeTerm, this));
+	            
+	            // Optional: Search as you type (with debounce)
+	            let searchTimeout;
+	            this.searchInput.on('keyup', $.proxy(function() {
+	                clearTimeout(searchTimeout);
+	                searchTimeout = setTimeout($.proxy(function() {
+	                    if (this.searchInput.val().length >= 2 || this.searchInput.val().length === 0) {
+	                        this.performSearch();
+	                    }
+	                }, this), 500);
+	            }, this));
+	            
+	            // Set default contribution date to today
+	            this.setDefaultContributionDate();
+	        },
+	        
+	        setDefaultContributionDate: function() {
+	            const today = new Date();
+	            const year = today.getFullYear();
+	            const month = String(today.getMonth() + 1).padStart(2, '0');
+	            const day = String(today.getDate()).padStart(2, '0');
+	            const dateStr = `${year}-${month}-${day}`;
+	            this.contributionDateInput.val(dateStr);
+	            
+	            // Compute term for default date
+	            this.computeTerm();
+	        },
+	        
+	        // NEW: Remove error message from a field
+	        removeFieldError: function(e) {
+	            const field = $(e.target);
+	            field.removeClass('is-invalid');
+	            field.siblings('.invalid-feedback').remove();
+	        },
+	        
+	        // NEW: Compute term based on contribution date
+	        computeTerm: function() {
+	            const dateStr = this.contributionDateInput.val();
+	            if (!dateStr) {
+	                this.termInput.val('');
+	                return;
+	            }
+	            
+	            const date = new Date(dateStr);
+	            const month = date.getMonth() + 1; // 0-based, so +1
+	            const day = date.getDate();
+	            
+	            // Get last day of the month
+	            const lastDay = new Date(date.getFullYear(), month, 0).getDate();
+	            
+	            // Determine term
+	            // Term = (month - 1) * 2 + (day <= 15 ? 1 : 2)
+	            let term;
+	            if (day <= 15) {
+	                term = (month - 1) * 2 + 1;  // First half of month
+	            } else {
+	                term = (month - 1) * 2 + 2;  // Second half of month
+	            }
+	            
+	            this.termInput.val(term);
+	            console.log(`Date: ${dateStr}, Month: ${month}, Day: ${day}, Term: ${term}`);
+	        },
+	        
+	        handleSubmit: function(e) {
+	            e.preventDefault();
+	            this.performSearch();
+	        },
+	        
+	        handleCancel: function(e) {
+	            e.preventDefault();
+	            this.resetSearch();
+	        },
+	        
+	        performSearch: function() {
+	            const searchTerm = this.searchInput.val().trim();
+	            
+	            if (!this.validateSearch(searchTerm)) {
+	                return;
+	            }
+	            
+	            this.setLoading(true);
+	            
+	            // Prepare data for POST request
+	            const requestData = {
+	                name: searchTerm  // or fullname, depending on your API
+	            };
+	            
+	            // POST API call
+	            $.ajax({
+	                url: 'http://localhost:8080/groupsavings/api/v1/member/info',  // POST endpoint
+	                type: 'POST',
+	                contentType: 'application/json',
+	                data: JSON.stringify(requestData),  // Send data in body
+	                dataType: 'json',
+	                success: $.proxy(this.handleSuccess, this),
+	                error: $.proxy(this.handleError, this),
+	                complete: $.proxy(function() {
+	                    this.setLoading(false);
+	                }, this)
+	            });
+	        },
+	        
+	        handleSuccess: function(response) {
+	            console.log('Members loaded:', response);
+	            
+	            // Handle different response formats
+	            const members = Array.isArray(response) ? response : (response.data || response.content || []);
+	            
+	            if (members.length === 0) {
+	                this.showAlert('info', 'No members found.');
+	                this.tableBody.html(this.getEmptyRow());
+	                return;
+	            }
+	            
+	            // Build table rows
+	            let tableRows = '';
+	            members.forEach($.proxy(function(member) {
+	                tableRows += this.buildTableRow(member);
+	            }, this));
+	            
+	            this.tableBody.html(tableRows);
+	            
+	            if (this.searchInput.val().trim()) {
+	                this.showAlert('success', 'Found ' + members.length + ' member(s).');
+	            }
+	        },
+	        
+	        handleError: function(xhr) {
+	            if (xhr.status === 400) {
+	                const errors = xhr.responseJSON;
+	                if (errors) {
+	                    this.displayFieldErrors(errors);
+	                }
+	                this.showAlert('warning', 'Invalid search parameters.');
+	            } else if (xhr.status === 404) {
+	                this.tableBody.html(this.getEmptyRow());
+	                this.showAlert('info', 'No members found.');
+	            } else {
+	                this.showAlert('danger', 'An error occurred. Please try again.');
+	                console.error('Search error:', xhr.responseText);
+	            }
+	        },
+	        
+	        // NEW: Handle click on member name
+	        handleMemberClick: function(memberCode, e) {
+	            e.preventDefault();
+	            
+	            // Show loading in the contribution form
+	            this.setContributionFormLoading(true);
+	            
+	            // Call API to get member details
+	            $.ajax({
+	                url: 'http://localhost:8080/groupsavings/api/v1/member/info/' + memberCode,
+	                type: 'GET',
+	                contentType: 'application/json',
+	                dataType: 'json',
+	                success: $.proxy(function(response) {
+	                    this.handleMemberInfoSuccess(response, memberCode);
+	                }, this),
+	                error: $.proxy(this.handleMemberInfoError, this),
+	                complete: $.proxy(function() {
+	                    this.setContributionFormLoading(false);
+	                }, this)
+	            });
+	        },
+	        
+	        handleMemberInfoSuccess: function(response, memberCode) {
+	            console.log('Member info loaded:', response);
+	            
+	            // Set member code in the form
+	            this.memberCodeInput.val(memberCode);
+	            
+	            // Optional: Auto-populate other fields if available
+	            if (response.term) {
+	                this.termInput.val(response.term);
+	            }
+	            
+	            // Show success message
+	            this.showAlert('success', 'Member ' + response.firstname + ' ' + response.lastname + ' loaded successfully!');
+	            
+	            // Scroll to contribution form
+	            $('html, body').animate({
+	                scrollTop: this.contributionForm.offset().top - 100
+	            }, 500);
+	        },
+	        
+	        handleMemberInfoError: function(xhr) {
+	            if (xhr.status === 404) {
+	                this.showAlert('warning', 'Member not found.');
+	            } else {
+	                this.showAlert('danger', 'Failed to load member information.');
+	                console.error('Error loading member:', xhr.responseText);
+	            }
+	        },
+	        
+	        // NEW: Handle contribution form submission
+	        handleContributionSubmit: function(e) {
+	            e.preventDefault();
+	            
+	            // Validate form
+	            if (!this.validateContributionForm()) {
+	                return;
+	            }
+	            
+	            // Get form data
+	            const contributionData = {
+	                memberCode: this.memberCodeInput.val(),
+	                amount: this.amountInput.val(),
+	                contributionDate: this.contributionDateInput.val(),
+	                paymentMethod: this.paymentMethodSelect.val(),
+	                referenceNumber: this.referenceNumberInput.val() || null,
+	                term: this.termInput.val(),
+	                notes: this.notesTextarea.val() || null
+	            };
+	            
+	            // Show loading state
+	            this.setContributionSubmitLoading(true);
+	            
+	            // Call POST API
+	            $.ajax({
+	                url: 'http://localhost:8080/groupsavings/api/v1/contribution/create',
+	                type: 'POST',
+	                contentType: 'application/json',
+	                dataType: 'json',
+	                data: JSON.stringify(contributionData),
+	                success: $.proxy(this.handleContributionSuccess, this),
+	                error: $.proxy(this.handleContributionError, this),
+	                complete: $.proxy(function() {
+	                    this.setContributionSubmitLoading(false);
+	                }, this)
+	            });
+	        },
+	        
+	        handleContributionSuccess: function(response) {
+	            console.log('Contribution saved:', response);
+	            
+	            // Reset form but keep member code and today's date
+	            const memberCode = this.memberCodeInput.val();
+	            this.amountInput.val('');
+	            this.referenceNumberInput.val('');
+	            this.notesTextarea.val('');
+	            this.setDefaultContributionDate(); // This will also recompute term
+	            this.memberCodeInput.val(memberCode);
+	            
+	            // Show success message
+	            this.showAlert('success', 'Contribution saved successfully! Reference: ' + (response.referenceNumber || 'N/A'));
+	        },
+	        
+	        handleContributionError: function(xhr) {
+	            if (xhr.status === 400) {
+	                const errors = xhr.responseJSON;
+	                if (errors) {
+	                    this.displayContributionFieldErrors(errors);
+	                }
+	                this.showAlert('warning', 'Please check the form for errors.');
+	            } else {
+	                this.showAlert('danger', 'Failed to save contribution. Please try again.');
+	                console.error('Contribution error:', xhr.responseText);
+	            }
+	        },
+	        
+	        validateContributionForm: function() {
+	            let isValid = true;
+	            
+	            // Remove existing validation styles
+	            this.contributionForm.find('.is-invalid').removeClass('is-invalid');
+	            this.contributionForm.find('.invalid-feedback').remove();
+	            
+	            // Validate member code
+	            if (!this.memberCodeInput.val()) {
+	                this.showFieldError(this.memberCodeInput, 'Please select a member first');
+	                isValid = false;
+	            }
+	            
+	            // Validate amount
+	            if (!this.amountInput.val()) {
+	                this.showFieldError(this.amountInput, 'Amount is required');
+	                isValid = false;
+	            } else if (parseFloat(this.amountInput.val()) <= 0) {
+	                this.showFieldError(this.amountInput, 'Amount must be greater than 0');
+	                isValid = false;
+	            }
+	            
+	            // Validate contribution date
+	            if (!this.contributionDateInput.val()) {
+	                this.showFieldError(this.contributionDateInput, 'Contribution date is required');
+	                isValid = false;
+	            }
+	            
+	            // Validate payment method
+	            if (!this.paymentMethodSelect.val()) {
+	                this.showFieldError(this.paymentMethodSelect, 'Payment method is required');
+	                isValid = false;
+	            }
+	            
+	            return isValid;
+	        },
+	        
+	        showFieldError: function(field, message) {
+	            field.addClass('is-invalid');
+	            field.after(`<div class="invalid-feedback">${message}</div>`);
+	        },
+	        
+	        displayContributionFieldErrors: function(errors) {
+	            // Clear previous errors
+	            this.contributionForm.find('.is-invalid').removeClass('is-invalid');
+	            this.contributionForm.find('.invalid-feedback').remove();
+	            
+	            // Display new errors
+	            $.each(errors, function(field, messages) {
+	                const $input = $('#' + field);
+	                const message = Array.isArray(messages) ? messages[0] : messages;
+	                
+	                if ($input.length) {
+	                    $input.addClass('is-invalid');
+	                    $input.after(`<div class="invalid-feedback">${message}</div>`);
+	                }
+	            });
+	        },
+	        
+	        setContributionFormLoading: function(isLoading) {
+	            if (isLoading) {
+	                this.memberCodeInput.val('Loading...');
+	            }
+	        },
+	        
+	        setContributionSubmitLoading: function(isLoading) {
+	            if (isLoading) {
+	                this.contributionSubmitBtn.prop('disabled', true).html(`
+	                    <span class="spinner-border spinner-border-sm" role="status"></span>
+	                    Saving...
+	                `);
+	            } else {
+	                this.contributionSubmitBtn.prop('disabled', false).html('Submit');
+	            }
+	        },
+	        
+	        displayFieldErrors: function(errors) {
+	            // Clear previous errors
+	            this.form.find('.is-invalid').removeClass('is-invalid');
+	            this.form.find('.invalid-feedback').remove();
+	            
+	            // Display new errors
+	            $.each(errors, function(field, messages) {
+	                const $input = $('#name_search');  // Adjust if multiple fields
+	                const message = Array.isArray(messages) ? messages[0] : messages;
+	                
+	                $input.addClass('is-invalid');
+	                $input.after(`<div class="invalid-feedback">${message}</div>`);
+	            });
+	        },
+	        
+	        buildTableRow: function(member) {
+	            // Handle different possible field names
+	            const fullName = member.firstname + ' ' + member.lastname;
+	            const dateRegistered = this.formatDate(member.joinedDate);
+	            const memberCode = member.memberCode || '';
+	            
+	            return `
+	                <tr>
+	                    <td>
+	                        <a href="#" class="member-link" data-member-code="${memberCode}">
+	                            <i class="fa fa-user-circle me-2"></i>${this.escapeHtml(fullName)}
+	                        </a>
+	                    </td>
+	                    <td>${dateRegistered}</td>
+	                </tr>
+	            `;
+	        },
+	        
+	        getEmptyRow: function() {
+	            return `
+	                <tr>
+	                    <td colspan="2" class="text-center py-4">
+	                        <i class="fa fa-info-circle fa-2x text-muted mb-3"></i>
+	                        <p class="text-muted mb-0">No members to display</p>
+	                    </td>
+	                </tr>
+	            `;
+	        },
+	        
+	        validateSearch: function(searchTerm) {
+	            // Remove existing validation styles
+	            this.searchInput.removeClass('is-invalid');
+	            this.form.find('.invalid-feedback').remove();
+	            
+	            // Allow empty (will show all members)
+	            if (searchTerm.length === 0) {
+	                return true;
+	            }
+	            
+	            // Check minimum length
+	            if (searchTerm.length < 2) {
+	                this.searchInput.addClass('is-invalid');
+	                this.searchInput.after('<div class="invalid-feedback">Please enter at least 2 characters</div>');
+	                return false;
+	            }
+	            
+	            return true;
+	        },
+	        
+	        validateField: function(e) {
+	            const $field = $(e.target);
+	            const value = $field.val().trim();
+	            
+	            if (value.length > 0 && value.length < 2) {
+	                $field.addClass('is-invalid');
+	                $field.siblings('.invalid-feedback').remove();
+	                $field.after('<div class="invalid-feedback">Please enter at least 2 characters</div>');
+	            } else {
+	                $field.removeClass('is-invalid');
+	                $field.siblings('.invalid-feedback').remove();
+	            }
+	        },
+	        
+	        setLoading: function(isLoading) {
+	            if (isLoading) {
+	                this.submitBtn.prop('disabled', true).html(`
+	                    <span class="spinner-border spinner-border-sm" role="status"></span>
+	                    Searching...
+	                `);
+	                
+	                // Optional: Show loading in table
+	                this.tableBody.html(`
+	                    <tr>
+	                        <td colspan="2" class="text-center py-4">
+	                            <div class="spinner-border text-primary" role="status">
+	                                <span class="visually-hidden">Loading...</span>
+	                            </div>
+	                            <p class="mt-2 text-muted">Loading members...</p>
+	                        </td>
+	                    </tr>
+	                `);
+	            } else {
+	                this.submitBtn.prop('disabled', false).html(this.originalBtnHtml);
+	            }
+	        },
+	        
+	        resetSearch: function() {
+	            this.searchInput.val('').removeClass('is-invalid');
+	            this.form.find('.invalid-feedback').remove();
+	            this.showAlert('info', 'Search reset');
+	            this.tableBody.html(this.getEmptyRow()); // Clear table or load initial data
+	        },
+	        
+	        formatDate: function(dateString) {
+	            if (!dateString) return 'N/A';
+	            
+	            try {
+	                const date = new Date(dateString);
+	                if (isNaN(date.getTime())) return dateString;
+	                
+	                const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 
+	                               'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+	                
+	                const month = months[date.getMonth()];
+	                const day = String(date.getDate()).padStart(2, '0');
+	                const year = date.getFullYear();
+	                
+	                return `${month}-${day}-${year}`;
+	            } catch (e) {
+	                return dateString;
+	            }
+	        },
+	        
+	        escapeHtml: function(text) {
+	            if (!text) return text;
+	            const div = document.createElement('div');
+	            div.textContent = text;
+	            return div.innerHTML;
+	        },
+	        
+	        showAlert: function(type, message) {
+	            // Remove existing alerts
+	            $('.alert-dynamic').remove();
+	            
+	            const alertHtml = `
+	                <div class="alert alert-${type} alert-dynamic alert-dismissible fade show" style="margin-top: 12px;" role="alert">
+	                    <i class="fa fa-${this.getAlertIcon(type)} me-2"></i>
+	                    ${message}
+	                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+	                </div>
+	            `;
+	            
+	            this.form.before(alertHtml);
+	            
+	            // Auto dismiss
+	            setTimeout(() => $('.alert-dynamic').fadeOut('slow', function() {
+	                $(this).remove();
+	            }), 5000);
+	        },
+	        
+	        getAlertIcon: function(type) {
+	            const icons = {
+	                'success': 'check-circle',
+	                'danger': 'exclamation-circle',
+	                'warning': 'exclamation-triangle',
+	                'info': 'info-circle'
+	            };
+	            return icons[type] || 'info-circle';
+	        }
+	    };
+	    
+	    // Initialize
+	    MemberSearch.init();
+	    
+	    // Event delegation for member links (since table rows are dynamically added)
+	    $(document).on('click', '.member-link', function(e) {
+	        const memberCode = $(this).data('member-code');
+	        MemberSearch.handleMemberClick(memberCode, e);
+	    });
+	});
+	</script>
+  </body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Loan Savings</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" th:href="@{/assets/vendors/mdi/css/materialdesignicons.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/ti-icons/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/css/vendor.bundle.base.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/font-awesome/css/font-awesome.min.css}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" th:href="@{/assets/vendors/select2/select2.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
+    
+    <!-- Add this CSS -->
+	<style>
+	    .spinner-border-sm {
+	        width: 1rem;
+	        height: 1rem;
+	        border-width: 0.2em;
+	        margin-right: 0.5rem;
+	    }
+	</style>
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div th:replace="~{fragments/header_menu :: headerMenu}"></div>
+      
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <div th:replace="~{fragments/nav_menu :: navMenu}"></div>
+        
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Loan Information Details </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Loan Form</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Loan</h4>
+                    <p class="card-description">Loans Pending Status</p>
+	                            
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th> Full Name </th>
+                          <th> Loan Amount </th>
+                          <th> Terms </th>
+                          <th> Amortization </th>
+                          <th> Date Applied </th>
+                          <th> Loan Status </th>
+                          <th> Action </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
+    <script th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script th:src="@{/assets/js/off-canvas.js}"></script>
+    <script th:src="@{/assets/js/misc.js}"></script>
+    <script th:src="@{/assets/js/settings.js}"></script>
+    <script th:src="@{/assets/js/todolist.js}"></script>
+    <script th:src="@{/assets/js/jquery.cookie.js}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script th:src="@{/assets/js/file-upload.js}"></script>
+    <script th:src="@{/assets/js/typeahead.js}"></script>
+    <script th:src="@{/assets/js/select2.js}"></script>
+    <!-- End custom js for this page -->
+    
+    <script type="text/javascript">
+	    $(document).ready(function() {
+	        const MemberInfo = {
+	            init: function() {
+	                this.loadLoansInfo();
+	            },
+	            
+	            loadLoansInfo: function() {
+	                $.ajax({
+	                    url: 'http://localhost:8080/groupsavings/api/v1/loan/manage',
+	                    type: 'GET',
+	                    contentType: 'application/json',
+	                    dataType: 'json',
+	                    success: $.proxy(this.handleSuccess, this),
+	                    error: $.proxy(this.handleError, this)
+	                });
+	            },
+	            
+	            handleSuccess: function(response) {
+	                console.log('Member loaded:', response);
+	                
+	                this.loadLoans(response);
+	                
+	                this.showAlert('success', 'Member information loaded!');
+	            },
+	            
+	            handleError: function(xhr) {
+	                console.error('Error:', xhr.responseText);
+	                
+	                if (xhr.status === 404) {
+	                    this.showAlert('warning', 'Member not found.');
+	                } else {
+	                    this.showAlert('danger', 'Failed to load member information.');
+	                }
+	            },
+	            
+	            loadLoans: function(loans) {
+	                const tbody = $('.table tbody');
+	                tbody.empty();
+	                
+	                if (!loans || loans.length === 0) {
+	                    tbody.append(`
+	                        <tr>
+	                            <td colspan="3" class="text-center">No contributors found</td>
+	                        </tr>
+	                    `);
+	                    return;
+	                }
+	                
+	                $.each(loans, function(index, loan) {
+	                    const row = `
+	                        <tr>
+	                            <td>${loan.member.firstname + ' ' + loan.member.lastname}</td>
+	                            <td>Php ${loan.loanAmount}</td>
+	                            <td>${loan.terms}</td>
+	                            <td>Php ${loan.amortization}</td>
+	                            <td>${loan.dateApplied}</td>
+	                            <td>${loan.loanStatus}</td>
+	                            <td>
+	                            	<button type="button" class="btn btn-gradient-info btn-rounded btn-fw">Approve</button>
+	                            	<button type="button" class="btn btn-gradient-danger btn-rounded btn-fw">Reject</button>
+	                            </td>
+	                        </tr>
+	                    `;
+	                    tbody.append(row);
+	                });
+	            },
+	            
+	            showAlert: function(type, message) {
+	                // Remove existing alerts
+	                $('.alert-dynamic').remove();
+	                
+	                const icons = {
+	                    'success': 'check-circle',
+	                    'danger': 'exclamation-circle',
+	                    'warning': 'exclamation-triangle',
+	                    'info': 'info-circle'
+	                };
+	                
+	                const alertHtml = `
+	                    <div class="alert alert-${type} alert-dynamic alert-dismissible fade show" style="margin-top: 12px;" role="alert">
+	                        <i class="fa fa-${icons[type]} me-2"></i>
+	                        ${message}
+	                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+	                    </div>
+	                `;
+	                
+	                $('.table').before(alertHtml);
+	                
+	                setTimeout(() => $('.alert-dynamic').fadeOut('slow', function() {
+	                    $(this).remove();
+	                }), 5000);
+	            }
+	        };
+	        
+	        // Initialize
+	        MemberInfo.init();
+	    });
+	</script>
+  </body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Loan Savings</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" th:href="@{/assets/vendors/mdi/css/materialdesignicons.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/ti-icons/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/css/vendor.bundle.base.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/font-awesome/css/font-awesome.min.css}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" th:href="@{/assets/vendors/select2/select2.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
+    
+    <!-- Add this CSS -->
+	<style>
+	    .spinner-border-sm {
+	        width: 1rem;
+	        height: 1rem;
+	        border-width: 0.2em;
+	        margin-right: 0.5rem;
+	    }
+	</style>
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div th:replace="~{fragments/header_menu :: headerMenu}"></div>
+      
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <div th:replace="~{fragments/nav_menu :: navMenu}"></div>
+        
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Loan Information Details </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Loan Form</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Loan Form</h4>
+                    <p class="card-description" id="loanCode"></p>
+                    <form class="forms-sample">
+                      <div class="form-group">
+                        <label for="forFullname">Fullname</label>
+                        <input type="text" class="form-control" id="fullname" value="" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputCity1">Loan Amount</label>
+                        <input type="number" class="form-control" id="loanAmount">
+                      </div>
+                      <div class="form-group">
+                        <label for="forLoanTerms">Loan Terms</label>
+                        <input type="number" class="form-control" id="loanTerms">
+                      </div>
+                      <div class="form-group">
+                        <label for="forInterest">Interest Rate</label>
+                        <input type="text" class="form-control" id="interest" value="" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="forDueDate">Due Date</label>
+                        <input type="date" class="form-control" id="dueDate" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="forTotalAmount">Total Amount</label>
+                        <input type="text" class="form-control" id="totalAmount" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="forAmortization">Terms Amortization</label>
+                        <input type="text" class="form-control" id="amortization" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="forDateApplied">Date Apply</label>
+                        <input type="date" class="form-control" id="dateApplied" readonly>
+                      </div>
+                      <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                      <button class="btn btn-light">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Member Loan Contribution</h4>
+                    </p>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th> Full Name </th>
+                          <th> Percentage </th>
+                          <th> Amount </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
+    <script th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script th:src="@{/assets/js/off-canvas.js}"></script>
+    <script th:src="@{/assets/js/misc.js}"></script>
+    <script th:src="@{/assets/js/settings.js}"></script>
+    <script th:src="@{/assets/js/todolist.js}"></script>
+    <script th:src="@{/assets/js/jquery.cookie.js}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script th:src="@{/assets/js/file-upload.js}"></script>
+    <script th:src="@{/assets/js/typeahead.js}"></script>
+    <script th:src="@{/assets/js/select2.js}"></script>
+    <!-- End custom js for this page -->
+    
+    <script type="text/javascript">
+	    $(document).ready(function() {
+	        
+	    	function getMemberCodeFromUrl() {
+	            const path = window.location.pathname;
+	            const parts = path.split('/');
+	            return parts[parts.length - 1];
+	        }
+	    	
+	    	function isValidMemberCode(code) {
+	    	    const pattern = /^\d{4}[A-Z0-9]{8}$/;
+	    	    return pattern.test(code);
+	    	}
+	        
+	        const memberCode = getMemberCodeFromUrl();
+	        
+	        if (!isValidMemberCode(memberCode)) {
+	            showAlert('danger', 'Invalid member code');
+	            return;
+	        }
+	        
+	        const MemberInfo = {
+	            init: function() {
+	                this.memberCode = memberCode;
+	                this.loadMemberInfo();
+	            },
+	            
+	            loadMemberInfo: function() {
+	                $.ajax({
+	                    url: 'http://localhost:8080/groupsavings/api/v1/member/info/' + this.memberCode,
+	                    type: 'GET',
+	                    contentType: 'application/json',
+	                    dataType: 'json',
+	                    success: $.proxy(this.handleSuccess, this),
+	                    error: $.proxy(this.handleError, this)
+	                });
+	            },
+	            
+	            handleSuccess: function(response) {
+	                console.log('Member loaded:', response);
+	                
+	                // Populate form fields
+	                this.populateForm(response);
+	                
+	                // Show success message (optional)
+	                this.showAlert('success', 'Member information loaded!');
+	            },
+	            
+	            handleError: function(xhr) {
+	                console.error('Error:', xhr.responseText);
+	                
+	                if (xhr.status === 404) {
+	                    this.showAlert('warning', 'Member not found.');
+	                } else {
+	                    this.showAlert('danger', 'Failed to load member information.');
+	                }
+	            },
+	            
+	            populateForm: function(data) {
+	                // Map response to form fields
+	                const fieldMappings = {
+	                    'fullname': data.firstname + " " + data.lastname,
+	                    'interest': data.interest,
+	                    'loanCode': data.loanCode
+	                };
+	                
+	                // Loop through mappings and set values
+	                $.each(fieldMappings, function(fieldId, value) {
+	                	if (fieldId === 'loanCode') {
+	                		$('#' + fieldId).text('Loan Code# ' + value);
+	                	} else {
+	                        $('#' + fieldId).val(value);
+	                    }
+	                });
+	            },
+	            
+	            showAlert: function(type, message) {
+	                // Remove existing alerts
+	                $('.alert-dynamic').remove();
+	                
+	                const icons = {
+	                    'success': 'check-circle',
+	                    'danger': 'exclamation-circle',
+	                    'warning': 'exclamation-triangle',
+	                    'info': 'info-circle'
+	                };
+	                
+	                const alertHtml = `
+	                    <div class="alert alert-${type} alert-dynamic alert-dismissible fade show" style="margin-top: 12px;" role="alert">
+	                        <i class="fa fa-${icons[type]} me-2"></i>
+	                        ${message}
+	                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+	                    </div>
+	                `;
+	                
+	                $('.forms-sample').before(alertHtml);
+	                
+	                setTimeout(() => $('.alert-dynamic').fadeOut('slow', function() {
+	                    $(this).remove();
+	                }), 5000);
+	            },
+	            
+	            // New method to submit loan form
+	            submitLoan: function(event) {
+	                event.preventDefault();
+	                $("button[type='submit']").prop("disabled", true);
+	                
+	                // Get form values
+	                const loanData = {
+	                    memberCode: this.memberCode,
+	                    loanCode: $('#loanCode').text().replace('Loan Code# ', ''),
+	                    loanAmount: $('#loanAmount').val(),
+	                    terms: $('#loanTerms').val()
+	                };
+	                
+	                // Validate
+	                if (!loanData.loanAmount || !loanData.terms) {
+	                    this.showAlert('warning', 'Please fill in all required fields');
+	                    return;
+	                }
+	                
+	                // Submit to API
+	                $.ajax({
+	                    url: 'http://localhost:8080/groupsavings/api/v1/loan/apply',
+	                    type: 'POST',
+	                    contentType: 'application/json',
+	                    dataType: 'json',
+	                    data: JSON.stringify(loanData),
+	                    success: $.proxy(this.handleLoanSuccess, this),
+	                    error: $.proxy(this.handleLoanError, this)
+	                });
+	            },
+	            
+	            handleLoanSuccess: function(response) {
+	            	$("button[type='submit']").text("STATUS - PENDING");
+	                
+	                // Populate the hidden fields
+	                $('#loanCode').text('Loan Code# ' + response.loanCode);
+	                $('#dueDate').val(response.dueDate);
+	                $('#totalAmount').val(response.totalAmount);
+	                $('#amortization').val(response.amortization);
+	                $('#dateApplied').val(response.dateApplied);
+	                
+	                // Load contributors to table
+	                this.loadContributors(response.loanContributors);
+	                
+	                this.showAlert('success', 'Loan created successfully!');
+	            },
+	            
+	            handleLoanError: function(xhr) {
+	            	var response = JSON.parse(xhr.responseText);
+	                var message = response.message
+	                this.showAlert('danger', 'Failed to create loan. ' + message);
+	            },
+	            
+	            // New method to load contributors to table
+	            loadContributors: function(contributors) {
+	                const tbody = $('.table tbody');
+	                tbody.empty(); // Clear existing rows
+	                
+	                if (!contributors || contributors.length === 0) {
+	                    tbody.append(`
+	                        <tr>
+	                            <td colspan="3" class="text-center">No contributors found</td>
+	                        </tr>
+	                    `);
+	                    return;
+	                }
+	                
+	                // Loop through contributors and create table rows
+	                $.each(contributors, function(index, contributor) {
+	                    const percentage = contributor.percentage * 100;
+	                    const row = `
+	                        <tr>
+	                            <td>${contributor.fullname}</td>
+	                            <td>
+	                                <div class="progress">
+	                                    <div class="progress-bar bg-info" role="progressbar" 
+	                                         style="width: ${percentage}%" 
+	                                         aria-valuenow="${percentage}" 
+	                                         aria-valuemin="0" 
+	                                         aria-valuemax="100">
+	                                        ${percentage.toFixed(2)}%
+	                                    </div>
+	                                </div>
+	                            </td>
+	                            <td>Php ${contributor.amount}</td>
+	                        </tr>
+	                    `;
+	                    tbody.append(row);
+	                });
+	            }
+	        };
+	        
+	        // Initialize
+	        MemberInfo.init();
+	        
+	        // Bind form submit event
+	        $('form.forms-sample').on('submit', function(event) {
+	            MemberInfo.submitLoan(event);
+	        });
+	    });
+	</script>
+  </body>
+</html>
