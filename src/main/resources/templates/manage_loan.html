@@ -29,7 +29,7 @@
 <!-- End layout styles -->
 <link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
 
-<!-- Add this CSS -->
+<!-- Enhanced CSS for better readability -->
 <style>
 .spinner-border-sm {
 	width: 1rem;
@@ -155,13 +155,14 @@
     margin-bottom: 25px;
 }
 
-/* Filter section styles */
+/* Filter section styles - Enhanced */
 .filter-section {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #e9ecef;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .filter-label {
@@ -169,33 +170,205 @@
     color: #495057;
     margin-bottom: 8px;
     font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .filter-input {
-    border-radius: 5px;
-    border: 1px solid #ced4da;
-    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    padding: 12px 15px;
     transition: all 0.3s;
+    background: white;
 }
 
 .filter-input:focus {
     border-color: #4d83ff;
     box-shadow: 0 0 0 0.2rem rgba(77, 131, 255, 0.25);
+    outline: none;
 }
 
+/* Action buttons */
 .action-buttons {
     display: flex;
-    gap: 5px;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
-/* Badge colors */
-.badge-success { background: #28a745; color: white; }
+.action-buttons .btn {
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    border-radius: 20px;
+    transition: all 0.2s;
+}
+
+.action-buttons .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Table enhancements */
+.table {
+    font-size: 0.9rem;
+}
+
+.table th {
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 8px;
+    border: none;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table td {
+    padding: 12px 8px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.table tr:hover {
+    background-color: #f8f9ff;
+    transition: background-color 0.2s;
+}
+
+/* Badge styles */
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
 .badge-warning { background: #ffc107; color: #212529; }
-.badge-danger { background: #dc3545; color: white; }
-.badge-info { background: #17a2b8; color: white; }
+.badge-success { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; }
+.badge-danger { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; }
+.badge-info { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; }
 .badge-secondary { background: #6c757d; color: white; }
-.badge-primary { background: #007bff; color: white; }
+.badge-primary { background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); color: white; }
+
+/* Loan amount styling */
+.loan-amount {
+    font-weight: 700;
+    color: #28a745;
+    font-size: 1rem;
+}
+
+.loan-code {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: #007bff;
+}
+
+.member-code-badge {
+    background: #e9ecef;
+    color: #495057;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 0.8rem;
+}
+
+/* Stats cards */
+.stats-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border-left: 4px solid;
+    transition: transform 0.2s;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.stats-card.pending { border-left-color: #ffc107; }
+.stats-card.approved { border-left-color: #28a745; }
+.stats-card.active { border-left-color: #17a2b8; }
+.stats-card.fully-paid { border-left-color: #007bff; }
+
+.stats-card h3 {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 10px 0 5px 0;
+}
+
+.stats-card p {
+    color: #6c757d;
+    margin: 0;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Status filter buttons */
+.status-filter-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.status-filter-btn {
+    padding: 8px 20px;
+    border-radius: 25px;
+    background: white;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+}
+
+.status-filter-btn:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+}
+
+.status-filter-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* Search input with icon */
+.search-wrapper {
+    position: relative;
+}
+
+.search-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #adb5bd;
+}
+
+.search-wrapper input {
+    padding-left: 40px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .table {
+        font-size: 0.75rem;
+    }
+    
+    .badge {
+        padding: 4px 8px;
+        font-size: 0.65rem;
+    }
+}
 </style>
 </head>
 <body>
@@ -210,7 +383,9 @@
 			<div class="main-panel">
 				<div class="content-wrapper">
 					<div class="page-header">
-						<h3 class="page-title">Loan Management</h3>
+						<h3 class="page-title">
+							<i class="mdi mdi-currency-usd"></i> Loan Management
+						</h3>
 						<nav aria-label="breadcrumb">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="#">Loans</a></li>
@@ -218,60 +393,131 @@
 							</ol>
 						</nav>
 					</div>
+					
+					<!-- Stats Cards Row -->
+					<div class="row mb-4">
+						<div class="col-md-3">
+							<div class="stats-card pending">
+								<p>Pending Approval</p>
+								<h3 id="pendingCount">0</h3>
+								<small>Waiting for review</small>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="stats-card approved">
+								<p>Approved</p>
+								<h3 id="approvedCount">0</h3>
+								<small>Ready for release</small>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="stats-card active">
+								<p>Active Loans</p>
+								<h3 id="activeCount">0</h3>
+								<small>Currently paying</small>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="stats-card fully-paid">
+								<p>Fully Paid</p>
+								<h3 id="fullyPaidCount">0</h3>
+								<small>Completed loans</small>
+							</div>
+						</div>
+					</div>
+					
 					<div class="row">
 						<div class="col-12 grid-margin stretch-card">
 							<div class="card">
 								<div class="card-body">
-									<h4 class="card-title">Loan Management</h4>
-									<p class="card-description">View and manage loan applications</p>
+									<h4 class="card-title">
+										<i class="mdi mdi-filter"></i> Filter Loans
+									</h4>
+									<p class="card-description">Search and filter loan applications</p>
 									
-									<!-- Filter Section (Improved design from member list page) -->
+									<!-- Quick Status Filter Buttons -->
+									<div class="status-filter-group">
+										<button class="status-filter-btn active" data-status="ALL">
+											<i class="mdi mdi-view-dashboard"></i> All Loans
+										</button>
+										<button class="status-filter-btn" data-status="PENDING">
+											<i class="mdi mdi-clock"></i> Pending
+										</button>
+										<button class="status-filter-btn" data-status="APPROVED">
+											<i class="mdi mdi-check-circle"></i> Approved
+										</button>
+										<button class="status-filter-btn" data-status="ACTIVE">
+											<i class="mdi mdi-cash"></i> Active
+										</button>
+										<button class="status-filter-btn" data-status="FULLY_PAID">
+											<i class="mdi mdi-check-all"></i> Fully Paid
+										</button>
+										<button class="status-filter-btn" data-status="REJECTED">
+											<i class="mdi mdi-close-circle"></i> Rejected
+										</button>
+										<button class="status-filter-btn" data-status="CANCELLED">
+											<i class="mdi mdi-cancel"></i> Cancelled
+										</button>
+									</div>
+									
+									<!-- Filter Section -->
 									<div class="filter-section">
-										<div class="row">
-											<div class="col-md-4">
+										<div class="row align-items-end">
+											<div class="col-md-5">
 												<div class="form-group">
-													<label class="filter-label">Borrower Name</label>
-													<input type="text" class="form-control filter-input" id="borrowerName" 
-														   placeholder="Search by borrower name...">
+													<label class="filter-label">
+														<i class="mdi mdi-account"></i> Borrower Name
+													</label>
+													<div class="search-wrapper">
+														<i class="mdi mdi-magnify"></i>
+														<input type="text" class="form-control filter-input" id="borrowerName" 
+															   placeholder="Search by borrower name or member code...">
+													</div>
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="filter-label">Loan Status</label>
+													<label class="filter-label">
+														<i class="mdi mdi-filter"></i> Loan Status
+													</label>
 													<select class="form-select filter-input" id="loanStatus">
-														<option value="ALL" selected>ALL</option>
-														<option value="PENDING">PENDING</option>
-														<option value="APPROVED">APPROVED</option>
-														<option value="ACTIVE">ACTIVE</option>
-														<option value="FULLY_PAID">FULLY PAID</option>
-														<option value="REJECTED">REJECTED</option>
-														<option value="CANCELLED">CANCELLED</option>
+														<option value="ALL" selected>ALL STATUSES</option>
+														<option value="PENDING">⏳ PENDING</option>
+														<option value="APPROVED">✓ APPROVED</option>
+														<option value="ACTIVE">💰 ACTIVE</option>
+														<option value="FULLY_PAID">🏆 FULLY PAID</option>
+														<option value="REJECTED">✗ REJECTED</option>
+														<option value="CANCELLED">⊗ CANCELLED</option>
 													</select>
 												</div>
 											</div>
-											<div class="col-md-4 d-flex align-items-end">
-												<div class="form-group w-100">
-													<button class="btn btn-gradient-primary btn-fw me-2" id="applyFilterBtn">
-														<i class="mdi mdi-filter"></i> Apply
-													</button>
-													<button class="btn btn-gradient-secondary btn-fw" id="resetFilterBtn">
-														<i class="mdi mdi-refresh"></i> Reset
-													</button>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label class="filter-label">&nbsp;</label>
+													<div>
+														<button class="btn btn-gradient-primary btn-fw me-2" id="applyFilterBtn">
+															<i class="mdi mdi-filter"></i> Apply Filter
+														</button>
+														<button class="btn btn-outline-secondary btn-fw" id="resetFilterBtn">
+															<i class="mdi mdi-refresh"></i> Reset
+														</button>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 									
-									<table class="table table-striped">
-										<thead>
-											<tr>
+									<!-- Loans Table -->
+									<div class="table-responsive">
+										<table class="table table-hover">
+											<thead>
 												<!-- Header will be dynamically updated by JavaScript -->
-											</tr>
-										</thead>
-										<tbody>
-											<!-- Data will be loaded here via AJAX -->
-										</tbody>
-									</table>
+											</thead>
+											<tbody>
+												<!-- Data will be loaded here via AJAX -->
+											</tbody>
+										</table>
+									</div>
 
 								</div>
 							</div>
@@ -431,6 +677,7 @@
 	            init: function() {
 	                this.bindEvents();
 	                this.loadLoans(); // Load all loans by default
+	                this.bindStatusFilterButtons();
 	            },
 	            
 	            bindEvents: function() {
@@ -444,6 +691,9 @@
 	                    $('#borrowerName').val('');
 	                    $('#loanStatus').val('ALL');
 	                    this.loadLoans();
+	                    // Reset active status filter buttons
+	                    $('.status-filter-btn').removeClass('active');
+	                    $('.status-filter-btn[data-status="ALL"]').addClass('active');
 	                }, this));
 	                
 	                // Enter key in search field
@@ -454,35 +704,72 @@
 	                }, this));
 	            },
 	            
+	            bindStatusFilterButtons: function() {
+	                $('.status-filter-btn').on('click', $.proxy(function(e) {
+	                    const status = $(e.currentTarget).data('status');
+	                    $('#loanStatus').val(status);
+	                    $('.status-filter-btn').removeClass('active');
+	                    $(e.currentTarget).addClass('active');
+	                    this.loadLoans();
+	                }, this));
+	            },
+	            
+	            // ========== UPDATE STATS CARDS ==========
+	            updateStatsCards: function(members) {
+	                let pending = 0, approved = 0, active = 0, fullyPaid = 0;
+	                
+	                $.each(members, function(memberIndex, member) {
+	                    if (member.loans) {
+	                        $.each(member.loans, function(loanIndex, loan) {
+	                            switch(loan.loanStatus) {
+	                                case 'PENDING': pending++; break;
+	                                case 'APPROVED': approved++; break;
+	                                case 'ACTIVE': active++; break;
+	                                case 'FULLY_PAID': fullyPaid++; break;
+	                            }
+	                        });
+	                    }
+	                });
+	                
+	                $('#pendingCount').text(pending);
+	                $('#approvedCount').text(approved);
+	                $('#activeCount').text(active);
+	                $('#fullyPaidCount').text(fullyPaid);
+	            },
+	            
 	            // ========== ADJUST TABLE HEADER ==========
 	            adjustTableHeader: function(status) {
-	                const thead = $('.table thead tr');
+	                const thead = $('.table thead');
 	                thead.empty();
 	                
 	                // MAY ACTION COLUMN para sa PENDING, ACTIVE, at APPROVED
 	                if (status === 'PENDING' || status === 'ACTIVE' || status === 'APPROVED') {
 	                    thead.html(`
-	                        <th>Loan Code</th>
-	                        <th>Member Code</th>
-	                        <th>Full Name</th>
-	                        <th>Loan Amount</th>
-	                        <th>Terms</th>
-	                        <th>Amortization</th>
-	                        <th>Date Applied</th>
-	                        <th>Loan Status</th>
-	                        <th>Action</th>
+	                        <tr>
+	                            <th>Loan Code</th>
+	                            <th>Member Code</th>
+	                            <th>Borrower Name</th>
+	                            <th>Loan Amount</th>
+	                            <th>Terms</th>
+	                            <th>Amortization</th>
+	                            <th>Date Applied</th>
+	                            <th>Status</th>
+	                            <th>Actions</th>
+	                        </tr>
 	                    `);
 	                } else {
 	                    // WALANG ACTION COLUMN - para sa lahat ng ibang status
 	                    thead.html(`
-	                        <th>Loan Code</th>
-	                        <th>Member Code</th>
-	                        <th>Full Name</th>
-	                        <th>Loan Amount</th>
-	                        <th>Terms</th>
-	                        <th>Amortization</th>
-	                        <th>Date Applied</th>
-	                        <th>Loan Status</th>
+	                        <tr>
+	                            <th>Loan Code</th>
+	                            <th>Member Code</th>
+	                            <th>Borrower Name</th>
+	                            <th>Loan Amount</th>
+	                            <th>Terms</th>
+	                            <th>Amortization</th>
+	                            <th>Date Applied</th>
+	                            <th>Status</th>
+	                        </tr>
 	                    `);
 	                }
 	            },
@@ -503,7 +790,7 @@
 	                
 	                // Determine colspan for loading message
 	                const hasActionColumn = (loanStatus === 'PENDING' || loanStatus === 'ACTIVE' || loanStatus === 'APPROVED');
-	                const colspan = hasActionColumn ? 9 : 8; // 9 columns with action, 8 without
+	                const colspan = hasActionColumn ? 9 : 8;
 	                
 	                // Show loading indicator
 	                const tbody = $('.table tbody');
@@ -514,8 +801,8 @@
 	                                <span class="visually-hidden">Loading...</span>
 	                            </div>
 	                            <br>Loading loans...
-	                        </td>
-	                    </tr>
+	                         </td>
+	                     </tr>
 	                `);
 	                
 	                // POST API call
@@ -530,6 +817,9 @@
 	                        
 	                        // Check if response is an array or single object
 	                        const members = Array.isArray(response) ? response : [response];
+	                        
+	                        // Update stats cards
+	                        this.updateStatsCards(members);
 	                        
 	                        this.displayLoans(members, loanStatus);
 	                        
@@ -559,7 +849,7 @@
 	                });
 	            },
 	            
-	         // ========== DISPLAY LOANS IN TABLE (with row grouping) ==========
+	            // ========== DISPLAY LOANS IN TABLE ==========
 	            displayLoans: function(members, status) {
 	                const tbody = $('.table tbody');
 	                tbody.empty();
@@ -573,7 +863,9 @@
 	                if (!hasAnyLoans) {
 	                    tbody.append(`
 	                        <tr>
-	                            <td colspan="${colspan}" class="text-center">No loans found</td>
+	                            <td colspan="${colspan}" class="text-center">
+	                                <i class="mdi mdi-information"></i> No loans found
+	                            </td>
 	                        </tr>
 	                    `);
 	                    return;
@@ -585,7 +877,7 @@
 	                // Loop through each member and their loans
 	                $.each(members, function(memberIndex, member) {
 	                    if (!member.loans || member.loans.length === 0) {
-	                        return; // Skip members with no loans
+	                        return;
 	                    }
 	                    
 	                    const memberCode = member.memberCode || 'N/A';
@@ -596,11 +888,9 @@
 	                        let row = '';
 	                        rowCount++;
 	                        
-	                        // Check if this is the same member as previous row
 	                        const isSameMember = (memberCode === previousMemberCode);
 	                        
 	                        if (hasActionColumn) {
-	                            // ===== MAY ACTION COLUMN =====
 	                            let actionButtons = '';
 	                            
 	                            if (loan.loanStatus === 'PENDING') {
@@ -641,92 +931,82 @@
 	                            }
 	                            
 	                            if (isSameMember) {
-	                                // Same member as previous row - MERGE Member Code and Full Name columns
 	                                row = `
 	                                    <tr data-loan-code="${loan.loanCode}" data-loan-status="${loan.loanStatus}" data-member-code="${memberCode}">
-	                                        <td><a href="/groupsavings/loan/manage/{memberCode}/{loanCode}"><strong>${loan.loanCode}</strong></a></td>
-	                                        <td></td>  <!-- Empty Member Code -->
-	                                        <td></td>  <!-- Empty Full Name -->
-	                                        <td>Php ${this.formatNumber(loan.loanAmount)}</td>
-	                                        <td>${loan.terms}</td>
-	                                        <td>Php ${this.formatNumber(loan.amortization)}</td>
+	                                        <td><code class="loan-code">${loan.loanCode}</code></td>
+	                                        <td></td>
+	                                        <td></td>
+	                                        <td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td>
+	                                        <td>${loan.terms} months</td>
+	                                        <td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td>
 	                                        <td>${this.formatDate(loan.dateApplied)}</td>
 	                                        <td><span class="badge badge-${this.getStatusBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td>
 	                                        <td>${actionButtons}</td>
-	                                    </tr>
+	                                     </tr>
 	                                `;
 	                            } else {
-	                                // First row of this member or different member
 	                                row = `
 	                                    <tr data-loan-code="${loan.loanCode}" data-loan-status="${loan.loanStatus}" data-member-code="${memberCode}">
-	                                        <td><a href="/groupsavings/loan/manage/{memberCode}/{loanCode}"><strong>${loan.loanCode}</strong></a></td>
-	                                        <td><span class="badge badge-info">${memberCode}</span></td>
-	                                        <td>${fullName}</td>
-	                                        <td>Php ${this.formatNumber(loan.loanAmount)}</td>
-	                                        <td>${loan.terms}</td>
-	                                        <td>Php ${this.formatNumber(loan.amortization)}</td>
+	                                        <td><code class="loan-code">${loan.loanCode}</code></td>
+	                                        <td><span class="member-code-badge">${memberCode}</span></td>
+	                                        <td><strong>${fullName}</strong></td>
+	                                        <td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td>
+	                                        <td>${loan.terms} months</td>
+	                                        <td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td>
 	                                        <td>${this.formatDate(loan.dateApplied)}</td>
 	                                        <td><span class="badge badge-${this.getStatusBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td>
 	                                        <td>${actionButtons}</td>
-	                                    </tr>
+	                                     </tr>
 	                                `;
 	                            }
 	                        } else {
-	                            // ===== WALANG ACTION COLUMN =====
 	                            if (isSameMember) {
-	                                // Same member as previous row - MERGE Member Code and Full Name columns
 	                                row = `
 	                                    <tr data-loan-code="${loan.loanCode}" data-loan-status="${loan.loanStatus}" data-member-code="${memberCode}">
-	                                        <td><a href="/groupsavings/loan/manage/{memberCode}/{loanCode}"><strong>${loan.loanCode}</strong></a></td>
-	                                        <td></td>  <!-- Empty Member Code -->
-	                                        <td></td>  <!-- Empty Full Name -->
-	                                        <td>Php ${this.formatNumber(loan.loanAmount)}</td>
-	                                        <td>${loan.terms}</td>
-	                                        <td>Php ${this.formatNumber(loan.amortization)}</td>
+	                                        <td><code class="loan-code">${loan.loanCode}</code></td>
+	                                        <td></td>
+	                                        <td></td>
+	                                        <td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td>
+	                                        <td>${loan.terms} months</td>
+	                                        <td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td>
 	                                        <td>${this.formatDate(loan.dateApplied)}</td>
 	                                        <td><span class="badge badge-${this.getStatusBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td>
-	                                    </tr>
+	                                     </tr>
 	                                `;
 	                            } else {
-	                                // First row of this member or different member
 	                                row = `
 	                                    <tr data-loan-code="${loan.loanCode}" data-loan-status="${loan.loanStatus}" data-member-code="${memberCode}">
-	                                        <td><a href="/groupsavings/loan/manage/{memberCode}/{loanCode}"><strong>${loan.loanCode}</strong></a></td>
-	                                        <td><span class="badge badge-info">${memberCode}</span></td>
-	                                        <td>${fullName}</td>
-	                                        <td>Php ${this.formatNumber(loan.loanAmount)}</td>
-	                                        <td>${loan.terms}</td>
-	                                        <td>Php ${this.formatNumber(loan.amortization)}</td>
+	                                        <td><code class="loan-code">${loan.loanCode}</code></td>
+	                                        <td><span class="member-code-badge">${memberCode}</span></td>
+	                                        <td><strong>${fullName}</strong></td>
+	                                        <td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td>
+	                                        <td>${loan.terms} months</td>
+	                                        <td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td>
 	                                        <td>${this.formatDate(loan.dateApplied)}</td>
 	                                        <td><span class="badge badge-${this.getStatusBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td>
-	                                    </tr>
+	                                     </tr>
 	                                `;
 	                            }
 	                        }
 	                        
 	                        tbody.append(row);
-	                        
-	                        // Update previous member code for next iteration
 	                        previousMemberCode = memberCode;
 	                        
 	                    }.bind(this));
 	                }.bind(this));
 	                
-	                // Bind click events ONLY if may action column
 	                if (hasActionColumn) {
 	                    this.bindActionButtons();
 	                }
 	                
-	                console.log(`Displayed ${rowCount} loan rows with grouping`);
+	                console.log(`Displayed ${rowCount} loan rows`);
 	            },
 	            
-	            // ========== FORMAT NUMBER WITH COMMAS ==========
 	            formatNumber: function(number) {
 	                if (!number) return '0';
 	                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	            },
 	            
-	            // ========== FORMAT DATE ==========
 	            formatDate: function(dateString) {
 	                if (!dateString) return 'N/A';
 	                try {
@@ -741,7 +1021,6 @@
 	                }
 	            },
 	            
-	            // ========== STATUS BADGE COLORS ==========
 	            getStatusBadgeClass: function(status) {
 	                const badges = {
 	                    'PENDING': 'warning',
@@ -754,139 +1033,67 @@
 	                return badges[status] || 'info';
 	            },
 	            
-	            // ========== BUTTON CLICK HANDLERS ==========
 	            bindActionButtons: function() {
 	                // Approve button
 	                $('.btn-approve').on('click', $.proxy(function(e) {
 	                    e.preventDefault();
 	                    const button = $(e.currentTarget);
-	                    
-	                    if (button.prop('disabled') || button.data('processing')) {
-	                        return;
-	                    }
-	                    
+	                    if (button.prop('disabled') || button.data('processing')) return;
 	                    const loanCode = button.data('loan-code');
-	                    
-	                    // Show confirmation modal
-	                    this.showConfirmModal(
-	                        'Approve Loan',
-	                        'Are you sure you want to approve this loan?',
-	                        function() {
-	                            this.processLoanAction(loanCode, 'APPROVED', button);
-	                        }.bind(this)
-	                    );
+	                    this.showConfirmModal('Approve Loan', 'Are you sure you want to approve this loan?',
+	                        function() { this.processLoanAction(loanCode, 'APPROVED', button); }.bind(this));
 	                }, this));
 	                
 	                // Reject button
 	                $('.btn-reject').on('click', $.proxy(function(e) {
 	                    e.preventDefault();
 	                    const button = $(e.currentTarget);
-	                    
-	                    if (button.prop('disabled') || button.data('processing')) {
-	                        return;
-	                    }
-	                    
+	                    if (button.prop('disabled') || button.data('processing')) return;
 	                    const loanCode = button.data('loan-code');
-	                    
-	                    // Show confirmation modal
-	                    this.showConfirmModal(
-	                        'Reject Loan',
-	                        'Are you sure you want to reject this loan?',
-	                        function() {
-	                            this.processLoanAction(loanCode, 'REJECTED', button);
-	                        }.bind(this)
-	                    );
+	                    this.showConfirmModal('Reject Loan', 'Are you sure you want to reject this loan?',
+	                        function() { this.processLoanAction(loanCode, 'REJECTED', button); }.bind(this));
 	                }, this));
 	                
 	                // Cancel button
 	                $('.btn-cancel').on('click', $.proxy(function(e) {
 	                    e.preventDefault();
 	                    const button = $(e.currentTarget);
-	                    
-	                    if (button.prop('disabled') || button.data('processing')) {
-	                        return;
-	                    }
-	                    
+	                    if (button.prop('disabled') || button.data('processing')) return;
 	                    const loanCode = button.data('loan-code');
-	                    
-	                    // Show confirmation modal
-	                    this.showConfirmModal(
-	                        'Cancel Loan',
-	                        'Are you sure you want to cancel this loan?',
-	                        function() {
-	                            this.processLoanAction(loanCode, 'CANCELLED', button);
-	                        }.bind(this)
-	                    );
+	                    this.showConfirmModal('Cancel Loan', 'Are you sure you want to cancel this loan?',
+	                        function() { this.processLoanAction(loanCode, 'CANCELLED', button); }.bind(this));
 	                }, this));
 	                
-	                // RELEASE button (for APPROVED status)
+	                // Release button
 	                $('.btn-release').on('click', $.proxy(function(e) {
 	                    e.preventDefault();
 	                    const button = $(e.currentTarget);
-	                    
-	                    if (button.prop('disabled') || button.data('processing')) {
-	                        return;
-	                    }
-	                    
+	                    if (button.prop('disabled') || button.data('processing')) return;
 	                    const loanCode = button.data('loan-code');
-	                    
-	                    // Show confirmation modal
-	                    this.showConfirmModal(
-	                        'Release Loan',
-	                        'Are you sure you want to release this loan? This will change status to ACTIVE.',
-	                        function() {
-	                            this.processLoanAction(loanCode, 'ACTIVE', button);
-	                        }.bind(this)
-	                    );
+	                    this.showConfirmModal('Release Loan', 'Release this loan? This will change status to ACTIVE.',
+	                        function() { this.processLoanAction(loanCode, 'ACTIVE', button); }.bind(this));
 	                }, this));
 	                
 	                // Fully Paid button
 	                $('.btn-fully-paid').on('click', $.proxy(function(e) {
 	                    e.preventDefault();
 	                    const button = $(e.currentTarget);
-	                    
-	                    if (button.prop('disabled') || button.data('processing')) {
-	                        return;
-	                    }
-	                    
+	                    if (button.prop('disabled') || button.data('processing')) return;
 	                    const loanCode = button.data('loan-code');
-	                    
-	                    // Show confirmation modal
-	                    this.showConfirmModal(
-	                        'Mark as Fully Paid',
-	                        'Are you sure you want to mark this loan as FULLY PAID?',
-	                        function() {
-	                            this.processLoanAction(loanCode, 'FULLY_PAID', button);
-	                        }.bind(this)
-	                    );
+	                    this.showConfirmModal('Mark as Fully Paid', 'Mark this loan as FULLY PAID?',
+	                        function() { this.processLoanAction(loanCode, 'FULLY_PAID', button); }.bind(this));
 	                }, this));
 	            },
 	            
-	         // ========== PROCESS LOAN ACTION ==========
 	            processLoanAction: function(loanCode, action, button) {
-	                // Set processing flag to prevent double click
 	                button.data('processing', true);
-	                
-	                // Get all buttons in this row
 	                const row = button.closest('tr');
-	                const approveBtn = row.find('.btn-approve');
-	                const rejectBtn = row.find('.btn-reject');
-	                const cancelBtn = row.find('.btn-cancel');
-	                const releaseBtn = row.find('.btn-release');
-	                const fullyPaidBtn = row.find('.btn-fully-paid');
-	                
-	                // Show loading state on clicked button
 	                const originalText = button.html();
-	                button.html('<span class="spinner-border spinner-border-sm" role="status"></span> Processing...');
+	                button.html('<span class="spinner-border spinner-border-sm" role="status"></span>');
 	                button.prop('disabled', true);
 	                
-	                // Prepare payload
-	                const payload = {
-	                    loanCode: loanCode,
-	                    actionStatus: action  // APPROVED, REJECTED, CANCELLED, ACTIVE, FULLY_PAID
-	                };
+	                const payload = { loanCode: loanCode, actionStatus: action };
 	                
-	                // Call POST API
 	                $.ajax({
 	                    url: 'http://localhost:8080/groupsavings/api/v1/loan/status',
 	                    type: 'POST',
@@ -894,130 +1101,44 @@
 	                    dataType: 'json',
 	                    data: JSON.stringify(payload),
 	                    success: $.proxy(function(response) {
-	                        console.log('Loan processed:', response);
-	                        
-	                        // Get the current status column index
-	                        const hasActionColumn = (row.find('td').length === 9); // 9 columns = may action
-	                        const statusColumnIndex = hasActionColumn ? 7 : 7; // Status is always 7th column (0-based)
-	                        
-	                        // Update status badge
-	                        const newStatus = payload.actionStatus;
-	                        const badgeClass = this.getStatusBadgeClass(newStatus);
-	                        row.find(`td:eq(${statusColumnIndex})`).html(`<span class="badge badge-${badgeClass}">${newStatus}</span>`);
-	                        
-	                        // Reset button text
-	                        button.html(originalText);
-	                        
-	                        // Disable ALL buttons in this row
-	                        if (approveBtn.length) approveBtn.prop('disabled', true);
-	                        if (rejectBtn.length) rejectBtn.prop('disabled', true);
-	                        if (cancelBtn.length) cancelBtn.prop('disabled', true);
-	                        if (releaseBtn.length) releaseBtn.prop('disabled', true);
-	                        if (fullyPaidBtn.length) fullyPaidBtn.prop('disabled', true);
-	                        
-	                        // Reload the table with current filters para mag-update
 	                        this.loadLoans();
-	                        
-	                        // Show success message
-	                        let actionDisplay = '';
-	                        if (action === 'ACTIVE') {
-	                            actionDisplay = 'released';
-	                        } else {
-	                            actionDisplay = payload.actionStatus.toLowerCase().replace('_', ' ');
-	                        }
+	                        let actionDisplay = action === 'ACTIVE' ? 'released' : payload.actionStatus.toLowerCase().replace('_', ' ');
 	                        this.showModal('success', `Loan ${actionDisplay} successfully!`);
-	                        
-	                        // Clear processing flag
 	                        button.removeData('processing');
-	                        
 	                    }, this),
 	                    error: $.proxy(function(xhr) {
-	                        console.error('Error processing loan:', xhr.responseText);
-	                        
-	                        // Reset button
 	                        button.html(originalText);
 	                        button.prop('disabled', false);
-	                        
-	                        // Show error message
-	                        if (xhr.status === 400) {
-	                            this.showModal('warning', 'Invalid request: ' + xhr.responseText);
-	                        } else if (xhr.status === 404) {
-	                            this.showModal('warning', 'Loan not found.');
-	                        } else {
-	                            this.showModal('error', 'Failed to process loan. Please try again.');
-	                        }
-	                        
-	                        // Clear processing flag
+	                        this.showModal('error', 'Failed to process loan. Please try again.');
 	                        button.removeData('processing');
-	                        
 	                    }, this)
 	                });
 	            },
 	            
-	            // ========== SHOW MODAL ==========
 	            showModal: function(type, message) {
-	                let modalId = '';
-	                let messageId = '';
-	                
+	                let modalId = '', messageId = '';
 	                switch(type) {
-	                    case 'success':
-	                        modalId = '#successModal';
-	                        messageId = '#successMessage';
-	                        break;
-	                    case 'error':
-	                        modalId = '#errorModal';
-	                        messageId = '#errorMessage';
-	                        break;
-	                    case 'warning':
-	                        modalId = '#warningModal';
-	                        messageId = '#warningMessage';
-	                        break;
-	                    case 'info':
-	                        modalId = '#infoModal';
-	                        messageId = '#infoMessage';
-	                        break;
-	                    default:
-	                        modalId = '#infoModal';
-	                        messageId = '#infoMessage';
+	                    case 'success': modalId = '#successModal'; messageId = '#successMessage'; break;
+	                    case 'error': modalId = '#errorModal'; messageId = '#errorMessage'; break;
+	                    case 'warning': modalId = '#warningModal'; messageId = '#warningMessage'; break;
+	                    default: modalId = '#infoModal'; messageId = '#infoMessage';
 	                }
-	                
-	                // Set message
 	                $(messageId).text(message);
-	                
-	                // Show modal
 	                $(modalId).modal('show');
-	                
-	                // Auto hide after 3 seconds for success/info, 4 seconds for error/warning
-	                let timeout = 3000;
-	                if (type === 'error' || type === 'warning') {
-	                    timeout = 4000;
-	                }
-	                
-	                setTimeout(() => {
-	                    $(modalId).modal('hide');
-	                }, timeout);
+	                setTimeout(() => { $(modalId).modal('hide'); }, 3000);
 	            },
 	            
-	            // ========== CONFIRMATION MODAL ==========
 	            showConfirmModal: function(title, message, callback) {
-	                // Set modal content
 	                $('#confirmTitle').text(title);
 	                $('#confirmMessage').text(message);
-	                
-	                // Remove previous click handler and attach new one
 	                $('#confirmOkBtn').off('click').on('click', $.proxy(function() {
 	                    $('#confirmModal').modal('hide');
-	                    if (callback) {
-	                        callback();
-	                    }
+	                    if (callback) callback();
 	                }, this));
-	                
-	                // Show modal
 	                $('#confirmModal').modal('show');
 	            }
 	        };
 	        
-	        // Initialize
 	        LoanManager.init();
 	    });
 	</script>

@@ -123,38 +123,6 @@
     color: white;
 }
 
-/* Confirmation modal specific */
-.confirm-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px auto;
-    font-size: 40px;
-    box-shadow: 0 10px 30px rgba(255, 82, 82, 0.4);
-}
-
-.confirm-icon.warning {
-    background: linear-gradient(135deg, #ffb64d 0%, #ff9f1a 100%);
-    box-shadow: 0 10px 30px rgba(255, 159, 26, 0.4);
-}
-
-.confirm-title {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-
-.confirm-message {
-    font-size: 16px;
-    color: #6c757d;
-    margin-bottom: 25px;
-}
-
 /* Filter section styles */
 .filter-section {
     background: #f8f9fa;
@@ -189,6 +157,27 @@
     opacity: 0.9;
 }
 
+/* Summary card */
+.summary-card {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.summary-card h3 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.summary-card p {
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+}
+
 /* Table styles */
 .table th {
     font-weight: 600;
@@ -219,6 +208,48 @@
     margin: 5px 0 0 0;
     opacity: 0.9;
 }
+
+/* Summary table row hover */
+.summary-row {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.summary-row:hover {
+    background-color: #f0f0f0;
+    transform: translateX(5px);
+}
+
+/* Select2 custom styling */
+.select2-container--bootstrap .select2-selection {
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    padding: 5px;
+}
+
+.select2-container--bootstrap .select2-selection--single {
+    height: 45px;
+}
+
+.select2-container--bootstrap .select2-selection--single .select2-selection__rendered {
+    line-height: 35px;
+    padding-left: 15px;
+}
+
+.select2-container--bootstrap .select2-selection--single .select2-selection__arrow {
+    height: 43px;
+}
+
+.select2-container--bootstrap .select2-search--dropdown .select2-search__field {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 8px;
+}
+
+.select2-dropdown {
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+}
 </style>
 </head>
 <body>
@@ -248,58 +279,88 @@
 									<h4 class="card-title">Member Contributions</h4>
 									<p class="card-description">View contributions by member</p>
 									
-									<!-- Filter Section -->
+									<!-- Filter Section with Autocomplete Dropdown -->
 									<div class="filter-section">
 										<div class="row">
 											<div class="col-md-8">
 												<div class="form-group">
-													<label class="filter-label">Select Member</label>
-													<select class="form-select" id="memberFilter">
-														<option value="">-- Select a Member --</option>
-														<!-- Members will be populated here -->
+													<label class="filter-label">Search Member</label>
+													<select class="form-select" id="memberFilter" style="width: 100%;">
+														<option value="">-- Search or Select a Member --</option>
+														<!-- Members will be populated here via Select2 -->
 													</select>
+													<small class="text-muted">Type to search member by name or member code</small>
 												</div>
 											</div>
 											<div class="col-md-4 d-flex align-items-end">
 												<div class="form-group w-100">
 													<button class="btn btn-gradient-primary btn-fw me-2" id="applyFilterBtn">
-														<i class="mdi mdi-magnify"></i> Filter
+														<i class="mdi mdi-magnify"></i> View Details
 													</button>
 													<button class="btn btn-gradient-secondary btn-fw" id="resetFilterBtn">
-														<i class="mdi mdi-refresh"></i> Reset
+														<i class="mdi mdi-refresh"></i> Show All
 													</button>
 												</div>
 											</div>
 										</div>
 									</div>
 									
-									<!-- Member Info Card -->
+									<!-- Summary Card -->
+									<div class="summary-card" id="summaryCard">
+										<p>Total Members</p>
+										<h3 id="totalMembers">0</h3>
+										<p>Total Contributions: <span id="grandTotal">Php 0.00</span></p>
+									</div>
+									
+									<!-- Member Info Card (for detailed view) -->
 									<div class="member-info-card" id="memberInfoCard">
 										<h3 id="memberName"></h3>
 										<p>Member Code: <span id="memberCodeDisplay"></span> | Joined: <span id="joinedDateDisplay"></span></p>
 									</div>
 									
-									<!-- Total Contributions Card -->
+									<!-- Total Contributions Card (for detailed view) -->
 									<div class="total-card" id="totalCard" style="display: none;">
 										<p>Total Contributions</p>
 										<h4 id="totalAmount">Php 0.00</h4>
 									</div>
 									
-									<table class="table table-striped">
-										<thead>
-											 <tr>
-												<th>Contribution Code</th>
-												<th>Amount</th>
-												<th>Contribution Date</th>
-												<th>Payment Method</th>
-												<th>Reference Number</th>
-												<th>Month Term</th>
-											</tr>
-										</thead>
-										<tbody>
-											<!-- Data will be loaded here via AJAX -->
-										</tbody>
-									</table>
+									<!-- Summary Table (for all members) -->
+									<div id="summaryTableView">
+										<table class="table table-striped">
+											<thead>
+												   <tr>
+													<th>Member Code</th>
+													<th>Full Name</th>
+													<th>Joined Date</th>
+													<th>Total Contribution</th>
+													<th>Action</th>
+												   </tr>
+											</thead>
+											<tbody id="summaryTableBody">
+												<!-- Summary data will be loaded here -->
+											</tbody>
+										</table>
+									</div>
+									
+									<!-- Detailed Table (for selected member) -->
+									<div id="detailedTableView" style="display: none;">
+										<h5 class="mb-3">Contribution Details</h5>
+										<table class="table table-striped">
+											<thead>
+												   <tr>
+													<th>Contribution Code</th>
+													<th>Amount</th>
+													<th>Contribution Date</th>
+													<th>Payment Method</th>
+													<th>Reference Number</th>
+													<th>Month Term</th>
+												   </tr>
+											</thead>
+											<tbody id="detailedTableBody">
+												<!-- Detailed data will be loaded here -->
+											</tbody>
+										</table>
+									</div>
 
 								</div>
 							</div>
@@ -435,36 +496,116 @@
 	<script type="text/javascript">
 	    $(document).ready(function() {
 	        const ContributionManager = {
+	            membersData: [], // Store members data for summary view
+	            select2Initialized: false,
+	            
 	            init: function() {
 	                this.bindEvents();
-	                this.loadMembers(); // Load member list on init
+	                this.loadSummary(); // Load summary on init
 	            },
 	            
 	            bindEvents: function() {
-	                // Apply filter button
+	                // View Details button (for selected member)
 	                $('#applyFilterBtn').on('click', $.proxy(function() {
 	                    const memberCode = $('#memberFilter').val();
 	                    if (!memberCode) {
-	                        this.showModal('warning', 'Please select a member first');
+	                        this.showModal('warning', 'Please search and select a member first');
 	                        return;
 	                    }
 	                    this.loadMemberContributions(memberCode);
 	                }, this));
 	                
-	                // Reset filter button
+	                // Show All button (reset to summary)
 	                $('#resetFilterBtn').on('click', $.proxy(function() {
-	                    $('#memberFilter').val('');
-	                    this.resetDisplay();
-	                    this.showModal('info', 'Filter reset. Please select a member.');
+	                    this.showSummaryView();
+	                    $('#memberFilter').val('').trigger('change');
+	                    this.showModal('info', 'Showing all members summary');
+	                }, this));
+	                
+	                // Enter key in select2 search
+	                $('#memberFilter').on('select2:select', $.proxy(function(e) {
+	                    const memberCode = e.params.data.id;
+	                    if (memberCode) {
+	                        this.loadMemberContributions(memberCode);
+	                    }
 	                }, this));
 	            },
 	            
-	            // ========== LOAD MEMBERS FROM API ==========
-	            loadMembers: function() {
+	            // ========== INITIALIZE SELECT2 AUTOCOMPLETE ==========
+	            initSelect2: function(members) {
+	                if (this.select2Initialized) {
+	                    $('#memberFilter').select2('destroy');
+	                }
+	                
+	                // Prepare data for Select2
+	                const select2Data = [
+	                    { id: '', text: '-- Search or Select a Member --', disabled: true }
+	                ];
+	                
+	                $.each(members, function(index, member) {
+	                    const fullName = `${member.firstname} ${member.lastname}`;
+	                    select2Data.push({
+	                        id: member.memberCode,
+	                        text: `${fullName} (${member.memberCode})`,
+	                        fullName: fullName,
+	                        memberCode: member.memberCode
+	                    });
+	                });
+	                
+	                // Initialize Select2 with search
+	                $('#memberFilter').select2({
+	                    theme: 'bootstrap',
+	                    placeholder: 'Type to search member by name or member code...',
+	                    allowClear: true,
+	                    data: select2Data,
+	                    dropdownParent: $('.filter-section'),
+	                    matcher: function(params, data) {
+	                        // Custom search matcher that searches in both name and member code
+	                        if ($.trim(params.term) === '') {
+	                            return data;
+	                        }
+	                        
+	                        const searchTerm = params.term.toLowerCase();
+	                        const text = data.text.toLowerCase();
+	                        const fullName = data.fullName ? data.fullName.toLowerCase() : '';
+	                        const memberCode = data.memberCode ? data.memberCode.toLowerCase() : '';
+	                        
+	                        if (text.indexOf(searchTerm) > -1 || 
+	                            fullName.indexOf(searchTerm) > -1 || 
+	                            memberCode.indexOf(searchTerm) > -1) {
+	                            return data;
+	                        }
+	                        
+	                        return null;
+	                    },
+	                    templateResult: function(data) {
+	                        if (!data.id) return data.text;
+	                        return $('<span><strong>' + data.fullName + '</strong><br><small class="text-muted">' + data.memberCode + '</small></span>');
+	                    },
+	                    templateSelection: function(data) {
+	                        if (!data.id) return data.text;
+	                        return data.fullName + ' (' + data.memberCode + ')';
+	                    }
+	                });
+	                
+	                this.select2Initialized = true;
+	            },
+	            
+	            // ========== LOAD SUMMARY (ALL MEMBERS) ==========
+	            loadSummary: function() {
 	                const url = 'http://localhost:8080/groupsavings/api/v1/member/contributions';
 	                
-	                // Show loading in dropdown
-	                $('#memberFilter').html('<option value="">Loading members...</option>');
+	                // Show loading in summary table
+	                $('#summaryTableBody').html(`
+	                    <tr>
+	                        <td colspan="5" class="text-center">
+	                            <div class="spinner-border text-primary" role="status">
+	                                <span class="visually-hidden">Loading...</span>
+	                            </div>
+	                            <br>Loading members...
+	                        </td>
+	                    </tr>
+	                `);
 	                
 	                $.ajax({
 	                    url: url,
@@ -472,45 +613,95 @@
 	                    contentType: 'application/json',
 	                    dataType: 'json',
 	                    success: $.proxy(function(response) {
-	                        console.log('Members loaded:', response);
-	                        this.populateMemberDropdown(response);
+	                        console.log('Summary loaded:', response);
+	                        this.membersData = response;
+	                        this.displaySummary(response);
+	                        this.initSelect2(response); // Initialize Select2 with member data
 	                        this.showModal('success', 'Members loaded successfully!');
 	                    }, this),
 	                    error: $.proxy(function(xhr) {
 	                        console.error('Error:', xhr.responseText);
 	                        this.showModal('error', 'Failed to load members. Please try again.');
-	                        $('#memberFilter').html('<option value="">-- Select a Member --</option>');
+	                        $('#summaryTableBody').html(`
+	                            <tr>
+	                                <td colspan="5" class="text-center text-danger">Failed to load members</td>
+	                            </tr>
+	                        `);
 	                    }, this)
 	                });
 	            },
 	            
-	            // ========== POPULATE MEMBER DROPDOWN ==========
-	            populateMemberDropdown: function(members) {
-	                const dropdown = $('#memberFilter');
-	                dropdown.empty();
-	                dropdown.append('<option value="">-- Select a Member --</option>');
+	            // ========== DISPLAY SUMMARY TABLE ==========
+	            displaySummary: function(members) {
+	                const tbody = $('#summaryTableBody');
+	                tbody.empty();
 	                
 	                if (!members || members.length === 0) {
-	                    dropdown.append('<option value="" disabled>No members found</option>');
+	                    tbody.append(`
+	                        <tr>
+	                            <td colspan="5" class="text-center">No members found</td>
+	                        </tr>
+	                    `);
+	                    $('#totalMembers').text('0');
+	                    $('#grandTotal').text('Php 0.00');
 	                    return;
 	                }
+	                
+	                // Calculate grand total
+	                let grandTotal = 0;
 	                
 	                // Sort by firstname
 	                members.sort((a, b) => a.firstname.localeCompare(b.firstname));
 	                
 	                $.each(members, function(index, member) {
 	                    const fullName = `${member.firstname} ${member.lastname}`;
-	                    dropdown.append(`<option value="${member.memberCode}">${fullName}</option>`);
+	                    const joinedDate = member.joinedDate ? new Date(member.joinedDate).toLocaleDateString() : 'N/A';
+	                    const amount = member.amount || 0;
+	                    grandTotal += amount;
+	                    
+	                    const row = `
+	                        <tr class="summary-row" data-member-code="${member.memberCode}" style="cursor: pointer;">
+	                            <td><code>${member.memberCode}</code></td>
+	                            <td><strong>${fullName}</strong></td>
+	                            <td>${joinedDate}</td>
+	                            <td class="contribution-amount">Php ${amount.toLocaleString()}</td>
+	                            <td>
+	                                <button class="btn btn-gradient-info btn-sm btn-view-details" data-member-code="${member.memberCode}">
+	                                    <i class="mdi mdi-eye"></i> View Details
+	                                </button>
+	                            </td>
+	                        </tr>
+	                    `;
+	                    tbody.append(row);
 	                });
+	                
+	                // Update summary card
+	                $('#totalMembers').text(members.length);
+	                $('#grandTotal').text(`Php ${grandTotal.toLocaleString()}`);
+	                
+	                // Bind click events for view details buttons and rows
+	                $('.btn-view-details').on('click', $.proxy(function(e) {
+	                    e.stopPropagation();
+	                    const memberCode = $(e.currentTarget).data('member-code');
+	                    this.loadMemberContributions(memberCode);
+	                    // Update select2 value
+	                    $('#memberFilter').val(memberCode).trigger('change');
+	                }, this));
+	                
+	                $('.summary-row').on('click', $.proxy(function(e) {
+	                    if ($(e.target).closest('.btn-view-details').length) return;
+	                    const memberCode = $(e.currentTarget).data('member-code');
+	                    this.loadMemberContributions(memberCode);
+	                    $('#memberFilter').val(memberCode).trigger('change');
+	                }, this));
 	            },
 	            
 	            // ========== LOAD MEMBER CONTRIBUTIONS ==========
 	            loadMemberContributions: function(memberCode) {
 	                const url = `http://localhost:8080/groupsavings/api/v1/member/contributions/${memberCode}`;
 	                
-	                // Show loading indicator
-	                const tbody = $('.table tbody');
-	                tbody.html(`
+	                // Show loading in detailed table
+	                $('#detailedTableBody').html(`
 	                    <tr>
 	                        <td colspan="6" class="text-center">
 	                            <div class="spinner-border text-primary" role="status">
@@ -528,8 +719,7 @@
 	                    dataType: 'json',
 	                    success: $.proxy(function(response) {
 	                        console.log('Contributions loaded:', response);
-	                        this.displayMemberInfo(response);
-	                        this.displayContributions(response.contributions);
+	                        this.showDetailedView(response);
 	                        this.showModal('success', 'Contributions loaded successfully!');
 	                    }, this),
 	                    error: $.proxy(function(xhr) {
@@ -540,20 +730,23 @@
 	                        } else {
 	                            this.showModal('error', 'Failed to load contributions. Please try again.');
 	                        }
-	                        
-	                        this.resetDisplay();
 	                    }, this)
 	                });
 	            },
 	            
-	            // ========== DISPLAY MEMBER INFO ==========
-	            displayMemberInfo: function(memberData) {
-	                // Show member info card
+	            // ========== SHOW DETAILED VIEW ==========
+	            showDetailedView: function(memberData) {
+	                // Hide summary view, show detailed view
+	                $('#summaryTableView').hide();
+	                $('#summaryCard').hide();
+	                $('#detailedTableView').show();
 	                $('#memberInfoCard').show();
+	                $('#totalCard').show();
+	                
+	                // Display member info
 	                $('#memberName').text(`${memberData.firstname} ${memberData.lastname}`);
 	                $('#memberCodeDisplay').text(memberData.memberCode);
 	                
-	                // Format joined date
 	                if (memberData.joinedDate) {
 	                    const joinedDate = new Date(memberData.joinedDate).toLocaleDateString();
 	                    $('#joinedDateDisplay').text(joinedDate);
@@ -570,12 +763,14 @@
 	                }
 	                
 	                $('#totalAmount').text(`Php ${total.toLocaleString()}`);
-	                $('#totalCard').show();
+	                
+	                // Display contributions table
+	                this.displayDetailedContributions(memberData.contributions);
 	            },
 	            
-	            // ========== DISPLAY CONTRIBUTIONS IN TABLE ==========
-	            displayContributions: function(contributions) {
-	                const tbody = $('.table tbody');
+	            // ========== DISPLAY DETAILED CONTRIBUTIONS ==========
+	            displayDetailedContributions: function(contributions) {
+	                const tbody = $('#detailedTableBody');
 	                tbody.empty();
 	                
 	                if (!contributions || contributions.length === 0) {
@@ -591,10 +786,7 @@
 	                contributions.sort((a, b) => new Date(b.contributionDate) - new Date(a.contributionDate));
 	                
 	                $.each(contributions, function(index, contribution) {
-	                    // Format date
 	                    const contribDate = contribution.contributionDate ? new Date(contribution.contributionDate).toLocaleDateString() : 'N/A';
-	                    
-	                    // Format amount
 	                    const amount = `Php ${contribution.amount.toLocaleString()}`;
 	                    
 	                    const row = `
@@ -611,19 +803,17 @@
 	                });
 	            },
 	            
-	            // ========== RESET DISPLAY ==========
-	            resetDisplay: function() {
-	                // Hide info card and total card
+	            // ========== SHOW SUMMARY VIEW ==========
+	            showSummaryView: function() {
+	                // Show summary view, hide detailed view
+	                $('#summaryTableView').show();
+	                $('#summaryCard').show();
+	                $('#detailedTableView').hide();
 	                $('#memberInfoCard').hide();
 	                $('#totalCard').hide();
 	                
-	                // Clear table
-	                const tbody = $('.table tbody');
-	                tbody.html(`
-	                    <tr>
-	                        <td colspan="6" class="text-center">Select a member to view contributions</td>
-	                    </tr>
-	                `);
+	                // Refresh summary data
+	                this.loadSummary();
 	            },
 	            
 	            // ========== SHOW MODAL ==========
@@ -653,18 +843,10 @@
 	                        messageId = '#infoMessage';
 	                }
 	                
-	                // Set message
 	                $(messageId).text(message);
-	                
-	                // Show modal
 	                $(modalId).modal('show');
 	                
-	                // Auto hide after 3 seconds for success/info, 4 seconds for error/warning
-	                let timeout = 3000;
-	                if (type === 'error' || type === 'warning') {
-	                    timeout = 4000;
-	                }
-	                
+	                let timeout = (type === 'error' || type === 'warning') ? 4000 : 3000;
 	                setTimeout(() => {
 	                    $(modalId).modal('hide');
 	                }, timeout);

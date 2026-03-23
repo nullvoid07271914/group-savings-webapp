@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Loan Savings</title>
+    <title>Member Contributions - Group Savings</title>
     <!-- plugins:css -->
     <link rel="stylesheet" th:href="@{/assets/vendors/mdi/css/materialdesignicons.min.css}">
     <link rel="stylesheet" th:href="@{/assets/vendors/ti-icons/css/themify-icons.css}">
@@ -22,808 +22,895 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
     
-    <!-- Add this CSS -->
-	<style>
-	    .spinner-border-sm {
-	        width: 1rem;
-	        height: 1rem;
-	        border-width: 0.2em;
-	        margin-right: 0.5rem;
-	    }
-	</style>
-  </head>
-  <body>
+    <!-- Enhanced CSS -->
+    <style>
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+            border-width: 0.2em;
+            margin-right: 0.5rem;
+        }
+        
+        /* Modern Card Styles */
+        .modern-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.12);
+        }
+        
+        .card-header-modern {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px 25px;
+            color: white;
+        }
+        
+        .card-header-modern h4 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .card-header-modern p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+            font-size: 0.85rem;
+        }
+        
+        /* Search Section */
+        .search-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-wrapper {
+            position: relative;
+        }
+        
+        .search-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #adb5bd;
+            font-size: 1.1rem;
+        }
+        
+        .search-wrapper input {
+            padding-left: 45px;
+            height: 50px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .search-wrapper input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        /* Member Table */
+        .member-table {
+            margin-top: 20px;
+        }
+        
+        .member-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            padding: 12px;
+            border: none;
+        }
+        
+        .member-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .member-link:hover {
+            color: #764ba2;
+            transform: translateX(5px);
+        }
+        
+        /* Contribution Form */
+        .contribution-form-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .form-group-modern {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group-modern label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-group-modern input,
+        .form-group-modern select,
+        .form-group-modern textarea {
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            transition: all 0.3s;
+        }
+        
+        .form-group-modern input:focus,
+        .form-group-modern select:focus,
+        .form-group-modern textarea:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        /* File Upload */
+        .file-upload-wrapper {
+            position: relative;
+        }
+        
+        .file-upload-wrapper .file-upload-info {
+            border-radius: 10px 0 0 10px;
+        }
+        
+        .file-upload-wrapper .file-upload-browse {
+            border-radius: 0 10px 10px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .file-upload-wrapper .file-upload-browse:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* Selected Member Card */
+        .selected-member-card {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .selected-member-card i {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+        
+        .selected-member-info h5 {
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        .selected-member-info p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+            font-size: 0.85rem;
+        }
+        
+        .btn-clear-member {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            border-radius: 50px;
+            padding: 5px 15px;
+            transition: all 0.3s;
+        }
+        
+        .btn-clear-member:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading-spinner {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        /* Alert Styles */
+        .alert-dynamic {
+            border-radius: 12px;
+            border: none;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Badge */
+        .badge-modern {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .selected-member-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .btn-clear-member {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
     <div class="container-scroller">
-      <div th:replace="~{fragments/header_menu :: headerMenu}"></div>
-      
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <div th:replace="~{fragments/nav_menu :: navMenu}"></div>
+        <div th:replace="~{fragments/header_menu :: headerMenu}"></div>
         
         <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Search Information </h3>
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Search Form</li>
-                </ol>
-              </nav>
-            </div>
-            <div class="row">
-              <div class="col-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Search Form</h4>
-                    <form class="forms-sample">
-                      <div class="form-group">
-                        <label for="forNameSearch">Name</label>
-                        <input type="text" class="form-control" id="name_search" value="">
-                      </div>
-                      <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-                      <button class="btn btn-light">Cancel</button>
-                    </form>
-                  </div>
-
-                  <div class="card-body">
-                    <h4 class="card-title">Member(s) Search List</h4>
-                    </p>
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th> Full Name </th>
-                          <th> Date Registered </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                    </table>
-                  </div>
-                  
-                  <div class="card-body">
-                    <h4 class="card-title">Contribution Form</h4>
-                    <p class="card-description">Contribution details of member</p>
-                    <form class="member_contribution_form" novalidate>
-                      <div class="form-group">
-                        <label for="inputForAmount">Member Code</label>
-                        <input type="text" class="form-control" id="memberCode" name="memberCode" readonly>
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForAmount">Amount</label>
-                        <input type="number" class="form-control" id="amount" name="amount">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForContributionDate">Contribution Date</label>
-                        <input type="date" class="form-control" id="contributionDate" name="contributionDate">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForPaymentMethod">Payment Method</label>
-                        <select class="form-select" id="paymentMethod" name="paymentMethod">
-                          <option></option>
-                          <option >GCASH</option>
-                          <option>CASH</option>
-                          <option>MAYA</option>
-                          <option>MARIBANK</option>
-                          <option>BANK_TRANSFER</option>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label>Payment Receipt</label>
-                        <input type="file" name="img[]" class="file-upload-default">
-                        <div class="input-group col-xs-12">
-                          <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Payment Receipt">
-                          <span class="input-group-append">
-                            <button class="file-upload-browse btn btn-gradient-primary py-3" type="button">Upload</button>
-                          </span>
+        <div class="container-fluid page-body-wrapper">
+            <div th:replace="~{fragments/nav_menu :: navMenu}"></div>
+            
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="page-header">
+                        <h3 class="page-title">
+                            <i class="mdi mdi-account-search"></i> Member Contributions
+                        </h3>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#">Contributions</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Record Contribution</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- Search Section -->
+                            <div class="modern-card">
+                                <div class="card-header-modern">
+                                    <h4><i class="mdi mdi-magnify"></i> Search Member</h4>
+                                    <p>Search by member name to record their contribution</p>
+                                </div>
+                                <div class="card-body" style="padding: 25px;">
+                                    <div class="search-section">
+                                        <div class="row align-items-end">
+                                            <div class="col-md-8">
+                                                <div class="form-group-modern">
+                                                    <label><i class="mdi mdi-account"></i> Member Name</label>
+                                                    <div class="search-wrapper">
+                                                        <i class="mdi mdi-magnify"></i>
+                                                        <input type="text" class="form-control" id="name_search" 
+                                                               placeholder="Enter member name (e.g., Juan Dela Cruz)...">
+                                                    </div>
+                                                    <small class="text-muted">Type at least 2 characters to search</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button type="button" class="btn btn-gradient-primary btn-fw btn-block" id="searchBtn" style="width: 100%;">
+                                                    <i class="mdi mdi-magnify"></i> Search Member
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Member Search Results -->
+                                    <div class="member-table">
+                                        <h5 class="mb-3">
+                                            <i class="mdi mdi-format-list-bulleted"></i> Search Results
+                                        </h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Full Name</th>
+                                                        <th>Date Registered</th>
+                                                        <th>Member Code</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="searchResultsBody">
+                                                    <tr>
+                                                        <td colspan="3" class="empty-state">
+                                                            <i class="mdi mdi-account-search"></i>
+                                                            <p>Enter a name to search for members</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Selected Member Card -->
+                            <div class="selected-member-card" id="selectedMemberCard">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="mdi mdi-account-circle"></i>
+                                    <div class="selected-member-info">
+                                        <h5 id="selectedMemberName">-</h5>
+                                        <p>Member Code: <span id="selectedMemberCode">-</span></p>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-clear-member" id="clearMemberBtn">
+                                    <i class="mdi mdi-close"></i> Clear Selection
+                                </button>
+                            </div>
+                            
+                            <!-- Contribution Form -->
+                            <div class="modern-card">
+                                <div class="card-header-modern">
+                                    <h4><i class="mdi mdi-cash"></i> Record Contribution</h4>
+                                    <p>Fill in the contribution details for the selected member</p>
+                                </div>
+                                <div class="card-body" style="padding: 25px;">
+                                    <form class="member_contribution_form" id="contributionForm" novalidate>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group-modern">
+                                                    <label><i class="mdi mdi-barcode"></i> Member Code</label>
+                                                    <input type="text" class="form-control" id="memberCode" name="memberCode" readonly placeholder="Select a member first">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group-modern">
+                                                    <label><i class="mdi mdi-calendar"></i> Contribution Date</label>
+                                                    <input type="date" class="form-control" id="contributionDate" name="contributionDate">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group-modern">
+                                                    <label><i class="mdi mdi-currency-php"></i> Amount</label>
+                                                    <input type="number" class="form-control" id="amount" name="amount" placeholder="Enter amount">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group-modern">
+                                                    <label><i class="mdi mdi-credit-card"></i> Payment Method</label>
+                                                    <select class="form-select" id="paymentMethod" name="paymentMethod">
+                                                        <option value="">Select Payment Method</option>
+                                                        <option value="GCASH">📱 GCASH</option>
+                                                        <option value="CASH">💵 CASH</option>
+                                                        <option value="MAYA">📱 MAYA</option>
+                                                        <option value="MARIBANK">🏦 MARIBANK</option>
+                                                        <option value="BANK_TRANSFER">🏦 BANK TRANSFER</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group-modern">
+                                                    <label><i class="mdi mdi-receipt"></i> Reference Number</label>
+                                                    <input type="text" class="form-control" id="referenceNumber" name="referenceNumber" placeholder="e.g., GCASH-123456789">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group-modern">
+                                                    <label><i class="mdi mdi-counter"></i> Term</label>
+                                                    <input type="text" class="form-control" id="term" name="term" readonly placeholder="Auto-computed">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- CORRECTED FILE UPLOAD SECTION - Remove the duplicate -->
+										<div class="row">
+										    <div class="col-md-12">
+										        <div class="form-group-modern">
+										            <label><i class="mdi mdi-file-document"></i> Payment Receipt</label>
+										            <div class="file-upload-wrapper">
+										                <div class="input-group">
+										                    <input type="text" class="form-control file-upload-info" id="receiptFileName" disabled placeholder="Upload payment receipt (JPG, PNG, PDF)">
+										                    <span class="input-group-append">
+										                        <button class="file-upload-browse btn btn-gradient-primary" type="button">
+										                            <i class="mdi mdi-folder-open"></i> Browse File
+										                        </button>
+										                    </span>
+										                </div>
+										                <input type="file" class="file-upload-default" id="paymentReceipt" name="paymentReceipt" accept="image/jpeg,image/png,application/pdf" style="display: none;">
+										                <small class="text-muted">Max file size: 5MB. Allowed formats: JPG, PNG, PDF</small>
+										            </div>
+										        </div>
+										    </div>
+										</div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group-modern">
+                                                    <label><i class="mdi mdi-note-text"></i> Notes</label>
+                                                    <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Additional notes about this contribution..."></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group text-right">
+                                            <button type="submit" class="btn btn-gradient-primary btn-fw" id="submitContributionBtn">
+                                                <i class="mdi mdi-check"></i> Record Contribution
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary btn-fw" id="cancelContributionBtn">
+                                                <i class="mdi mdi-close"></i> Clear Form
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForReferenceNumber">Reference Number</label>
-                        <input type="text" class="form-control" id="referenceNumber" name="referenceNumber">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForTerm">Term</label>
-                        <input type="number" class="form-control" id="term" name="term" readonly>
-                      </div>
-                      <div class="form-group">
-                        <label for="forNotes">Notes</label>
-                        <textarea class="form-control" id="notes" name="notes" rows="4"></textarea>
-                      </div>
-                      <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-                      <button class="btn btn-light">Cancel</button>
-                    </form>
-                  </div>
-                  
+                    </div>
                 </div>
-              </div>
+                <!-- content-wrapper ends -->
+                
+                <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
+                            Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.
+                        </span>
+                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">
+                            Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i>
+                        </span>
+                    </div>
+                </footer>
             </div>
-          </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:../../partials/_footer.html -->
-          <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
-            </div>
-          </footer>
-          <!-- partial -->
         </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 mb-0">Processing...</p>
+        </div>
+    </div>
+    
+    <!-- Modals (reuse from previous, include them here) -->
+    <!-- Include all modals from previous version -->
+    
     <script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
     <script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
     <script th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
     <script th:src="@{/assets/js/off-canvas.js}"></script>
     <script th:src="@{/assets/js/misc.js}"></script>
     <script th:src="@{/assets/js/settings.js}"></script>
     <script th:src="@{/assets/js/todolist.js}"></script>
     <script th:src="@{/assets/js/jquery.cookie.js}"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
     <script th:src="@{/assets/js/file-upload.js}"></script>
     <script th:src="@{/assets/js/typeahead.js}"></script>
     <script th:src="@{/assets/js/select2.js}"></script>
-    <!-- End custom js for this page -->
     
     <script type="text/javascript">
-	$(document).ready(function() {
-	    
-	    // Enhanced button with spinner (reusable)
-	    function setLoading(button, isLoading, originalText) {
-	        if (isLoading) {
-	            button.prop('disabled', true).html(`
-	                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-	                Searching...
-	            `);
-	        } else {
-	            button.prop('disabled', false).html(originalText || '<i class="fa fa-search"></i> Submit');
-	        }
-	    }
-	    
-	    const MemberSearch = {
-	        
-    		init: function() {
-    		    this.form = $('.forms-sample'); // Search form
-    		    this.searchInput = $('#name_search');
-    		    this.submitBtn = this.form.find('button[type="submit"]');
-    		    this.cancelBtn = this.form.find('.btn-light');
-    		    this.tableBody = $('.table tbody');
-    		    
-    		    // Contribution form elements
-    		    this.contributionForm = $('.member_contribution_form');
-    		    this.memberCodeInput = $('#memberCode');
-    		    this.amountInput = $('#amount');
-    		    this.contributionDateInput = $('#contributionDate');
-    		    this.paymentMethodSelect = $('#paymentMethod');
-    		    
-    		    // NEW: File upload elements
-    		    this.fileUploadInput = $('.file-upload-default');
-    		    this.fileUploadInfo = $('.file-upload-info');
-    		    this.fileUploadBrowse = $('.file-upload-browse');
-    		    
-    		    // IMPORTANT: Remove existing event handlers to prevent double prompts
-    		    this.fileUploadBrowse.off('click');  // Remove all click handlers
-    		    this.fileUploadInput.off('change');  // Remove all change handlers
-    		    
-    		    this.referenceNumberInput = $('#referenceNumber');
-    		    this.termInput = $('#term');
-    		    this.notesTextarea = $('#notes');
-    		    this.contributionSubmitBtn = this.contributionForm.find('button[type="submit"]');
-    		    
-    		    // Store original button text
-    		    this.originalBtnHtml = this.submitBtn.html();
-    		    
-    		    this.bindEvents();
-    		},
-	        
-	        bindEvents: function() {
-	            this.form.on('submit', $.proxy(this.handleSubmit, this));
-	            this.cancelBtn.on('click', $.proxy(this.handleCancel, this));
-	            this.contributionForm.on('submit', $.proxy(this.handleContributionSubmit, this));
-	            
-	            // Real-time validation on blur
-	            this.searchInput.on('blur', $.proxy(this.validateField, this));
-	            
-	            // Remove error messages when user types
-	            this.amountInput.on('input', $.proxy(this.removeFieldError, this));
-	            this.contributionDateInput.on('input', $.proxy(this.removeFieldError, this));
-	            this.paymentMethodSelect.on('change', $.proxy(this.removeFieldError, this));
-	            
-	            // Auto-compute term when contribution date changes
-	            this.contributionDateInput.on('change', $.proxy(this.computeTerm, this));
-	            
-	            // FIX: File upload browse button - remove existing handlers first
-	            this.fileUploadBrowse.off('click'); // IMPORTANT: Remove existing click handlers
-	            this.fileUploadBrowse.on('click', $.proxy(function(e) {
-	                e.preventDefault(); // Prevent any default behavior
-	                e.stopPropagation(); // Stop event bubbling
-	                this.fileUploadInput.click();
-	            }, this));
-	            
-	            // FIX: File upload change event - remove existing handlers first
-	            this.fileUploadInput.off('change'); // Remove existing change handlers
-	            this.fileUploadInput.on('change', $.proxy(this.handleFileSelect, this));
-	            
-	            // Optional: Search as you type (with debounce)
-	            let searchTimeout;
-	            this.searchInput.on('keyup', $.proxy(function() {
-	                clearTimeout(searchTimeout);
-	                searchTimeout = setTimeout($.proxy(function() {
-	                    if (this.searchInput.val().length >= 2 || this.searchInput.val().length === 0) {
-	                        this.performSearch();
-	                    }
-	                }, this), 500);
-	            }, this));
-	            
-	            // Set default contribution date to today
-	            this.setDefaultContributionDate();
-	        },
-	        
-	        // NEW: Handle file selection
-	        handleFileSelect: function(e) {
-	            const file = e.target.files[0];
-	            if (file) {
-	                // Update the display with filename
-	                this.fileUploadInfo.val(file.name);
-	                
-	                // Optional: Validate file size (e.g., max 5MB)
-	                const maxSize = 5 * 1024 * 1024; // 5MB in bytes
-	                if (file.size > maxSize) {
-	                    this.showAlert('warning', 'File size should not exceed 5MB');
-	                    this.fileUploadInput.val('');
-	                    this.fileUploadInfo.val('');
-	                    return;
-	                }
-	                
-	                // Optional: Validate file type
-	                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
-	                if (!allowedTypes.includes(file.type)) {
-	                    this.showAlert('warning', 'Only JPG, PNG, and PDF files are allowed');
-	                    this.fileUploadInput.val('');
-	                    this.fileUploadInfo.val('');
-	                    return;
-	                }
-	            } else {
-	                this.fileUploadInfo.val('');
-	            }
-	        },
-	        
-	        setDefaultContributionDate: function() {
-	            const today = new Date();
-	            const year = today.getFullYear();
-	            const month = String(today.getMonth() + 1).padStart(2, '0');
-	            const day = String(today.getDate()).padStart(2, '0');
-	            const dateStr = `${year}-${month}-${day}`;
-	            this.contributionDateInput.val(dateStr);
-	            
-	            // Compute term for default date
-	            this.computeTerm();
-	        },
-	        
-	        // Remove error message from a field
-	        removeFieldError: function(e) {
-	            const field = $(e.target);
-	            field.removeClass('is-invalid');
-	            field.siblings('.invalid-feedback').remove();
-	        },
-	        
-	        // Compute term based on contribution date
-	        computeTerm: function() {
-	            const dateStr = this.contributionDateInput.val();
-	            if (!dateStr) {
-	                this.termInput.val('');
-	                return;
-	            }
-	            
-	            const date = new Date(dateStr);
-	            const month = date.getMonth() + 1; // 0-based, so +1
-	            const day = date.getDate();
-	            
-	            // Determine term
-	            // Term = (month - 1) * 2 + (day <= 15 ? 1 : 2)
-	            let term;
-	            if (day <= 15) {
-	                term = (month - 1) * 2 + 1;  // First half of month
-	            } else {
-	                term = (month - 1) * 2 + 2;  // Second half of month
-	            }
-	            
-	            this.termInput.val(term);
-	            console.log(`Date: ${dateStr}, Month: ${month}, Day: ${day}, Term: ${term}`);
-	        },
-	        
-	        handleSubmit: function(e) {
-	            e.preventDefault();
-	            this.performSearch();
-	        },
-	        
-	        handleCancel: function(e) {
-	            e.preventDefault();
-	            this.resetSearch();
-	        },
-	        
-	        performSearch: function() {
-	            const searchTerm = this.searchInput.val().trim();
-	            
-	            if (!this.validateSearch(searchTerm)) {
-	                return;
-	            }
-	            
-	            this.setLoading(true);
-	            
-	            // Prepare data for POST request
-	            const requestData = {
-	                name: searchTerm  // or fullname, depending on your API
-	            };
-	            
-	            // POST API call
-	            $.ajax({
-	                url: 'http://localhost:8080/groupsavings/api/v1/member/info',  // POST endpoint
-	                type: 'POST',
-	                contentType: 'application/json',
-	                data: JSON.stringify(requestData),  // Send data in body
-	                dataType: 'json',
-	                success: $.proxy(this.handleSuccess, this),
-	                error: $.proxy(this.handleError, this),
-	                complete: $.proxy(function() {
-	                    this.setLoading(false);
-	                }, this)
-	            });
-	        },
-	        
-	        handleSuccess: function(response) {
-	            console.log('Members loaded:', response);
-	            
-	            // Handle different response formats
-	            const members = Array.isArray(response) ? response : (response.data || response.content || []);
-	            
-	            if (members.length === 0) {
-	                this.showAlert('info', 'No members found.');
-	                this.tableBody.html(this.getEmptyRow());
-	                return;
-	            }
-	            
-	            // Build table rows
-	            let tableRows = '';
-	            members.forEach($.proxy(function(member) {
-	                tableRows += this.buildTableRow(member);
-	            }, this));
-	            
-	            this.tableBody.html(tableRows);
-	            
-	            if (this.searchInput.val().trim()) {
-	                this.showAlert('success', 'Found ' + members.length + ' member(s).');
-	            }
-	        },
-	        
-	        handleError: function(xhr) {
-	            if (xhr.status === 400) {
-	                const errors = xhr.responseJSON;
-	                if (errors) {
-	                    this.displayFieldErrors(errors);
-	                }
-	                this.showAlert('warning', 'Invalid search parameters.');
-	            } else if (xhr.status === 404) {
-	                this.tableBody.html(this.getEmptyRow());
-	                this.showAlert('info', 'No members found.');
-	            } else {
-	                this.showAlert('danger', 'An error occurred. Please try again.');
-	                console.error('Search error:', xhr.responseText);
-	            }
-	        },
-	        
-	        // Handle click on member name
-	        handleMemberClick: function(memberCode, e) {
-	            e.preventDefault();
-	            
-	            // Show loading in the contribution form
-	            this.setContributionFormLoading(true);
-	            
-	            // Call API to get member details
-	            $.ajax({
-	                url: 'http://localhost:8080/groupsavings/api/v1/member/info/' + memberCode,
-	                type: 'GET',
-	                contentType: 'application/json',
-	                dataType: 'json',
-	                success: $.proxy(function(response) {
-	                    this.handleMemberInfoSuccess(response, memberCode);
-	                }, this),
-	                error: $.proxy(this.handleMemberInfoError, this),
-	                complete: $.proxy(function() {
-	                    this.setContributionFormLoading(false);
-	                }, this)
-	            });
-	        },
-	        
-	        handleMemberInfoSuccess: function(response, memberCode) {
-	            console.log('Member info loaded:', response);
-	            
-	            // Set member code in the form
-	            this.memberCodeInput.val(memberCode);
-	            
-	            // Optional: Auto-populate other fields if available
-	            if (response.term) {
-	                this.termInput.val(response.term);
-	            }
-	            
-	            // Show success message
-	            this.showAlert('success', 'Member ' + response.firstname + ' ' + response.lastname + ' loaded successfully!');
-	            
-	            // Scroll to contribution form
-	            $('html, body').animate({
-	                scrollTop: this.contributionForm.offset().top - 100
-	            }, 500);
-	        },
-	        
-	        handleMemberInfoError: function(xhr) {
-	            if (xhr.status === 404) {
-	                this.showAlert('warning', 'Member not found.');
-	            } else {
-	                this.showAlert('danger', 'Failed to load member information.');
-	                console.error('Error loading member:', xhr.responseText);
-	            }
-	        },
-	        
-	     	// UPDATED: Handle contribution form submission with file upload
-	        handleContributionSubmit: function(e) {
-	            e.preventDefault();
-	            
-	            // Validate form
-	            if (!this.validateContributionForm()) {
-	                return;
-	            }
-	            
-	            // Create DTO object for the form fields
-	            const contributionDto = {
-	                memberCode: this.memberCodeInput.val(),
-	                amount: this.amountInput.val(),
-	                contributionDate: this.contributionDateInput.val(),
-	                paymentMethod: this.paymentMethodSelect.val(),
-	                referenceNumber: this.referenceNumberInput.val() || null,
-	                term: this.termInput.val(),
-	                notes: this.notesTextarea.val() || null
-	            };
-	            
-	            // Create FormData object
-	            const formData = new FormData();
-	            
-	            // Append the DTO as JSON string
-	            formData.append('contributionDto', new Blob([JSON.stringify(contributionDto)], {
-	                type: 'application/json'
-	            }));
-	            
-	            // Append file if selected
-	            const fileInput = this.fileUploadInput[0];
-	            if (fileInput.files.length > 0) {
-	                formData.append('paymentReceipt', fileInput.files[0]);
-	            }
-	            
-	            // Show loading state
-	            this.setContributionSubmitLoading(true);
-	            
-	            // Call POST API with FormData
-	            $.ajax({
-	                url: 'http://localhost:8080/groupsavings/api/v1/contribution/create',
-	                type: 'POST',
-	                data: formData,
-	                processData: false,
-	                contentType: false,
-	                dataType: 'json',
-	                success: $.proxy(this.handleContributionSuccess, this),
-	                error: $.proxy(this.handleContributionError, this),
-	                complete: $.proxy(function() {
-	                    this.setContributionSubmitLoading(false);
-	                }, this)
-	            });
-	        },
-	        
-	        handleContributionSuccess: function(response) {
-	            console.log('Contribution saved:', response);
-	            
-	            // Reset form but keep member code and today's date
-	            const memberCode = this.memberCodeInput.val();
-	            this.amountInput.val('');
-	            this.referenceNumberInput.val('');
-	            this.notesTextarea.val('');
-	            
-	            // NEW: Reset file upload
-	            this.fileUploadInput.val('');
-	            this.fileUploadInfo.val('');
-	            
-	            this.setDefaultContributionDate(); // This will also recompute term
-	            this.memberCodeInput.val(memberCode);
-	            
-	            // Show success message
-	            this.showAlert('success', 'Contribution saved successfully! Reference: ' + (response.code || 'N/A'));
-	        },
-	        
-	        handleContributionError: function(xhr) {
-	            if (xhr.status === 400) {
-	                const errors = xhr.responseJSON;
-	                if (errors) {
-	                    this.displayContributionFieldErrors(errors);
-	                }
-	                this.showAlert('warning', 'Please check the form for errors.');
-	            } else {
-	                this.showAlert('danger', 'Failed to save contribution. Please try again.');
-	                console.error('Contribution error:', xhr.responseText);
-	            }
-	        },
-	        
-	        validateContributionForm: function() {
-	            let isValid = true;
-	            
-	            // Remove existing validation styles
-	            this.contributionForm.find('.is-invalid').removeClass('is-invalid');
-	            this.contributionForm.find('.invalid-feedback').remove();
-	            
-	            // Validate member code
-	            if (!this.memberCodeInput.val()) {
-	                this.showFieldError(this.memberCodeInput, 'Please select a member first');
-	                isValid = false;
-	            }
-	            
-	            // Validate amount
-	            if (!this.amountInput.val()) {
-	                this.showFieldError(this.amountInput, 'Amount is required');
-	                isValid = false;
-	            } else if (parseFloat(this.amountInput.val()) <= 0) {
-	                this.showFieldError(this.amountInput, 'Amount must be greater than 0');
-	                isValid = false;
-	            }
-	            
-	            // Validate contribution date
-	            if (!this.contributionDateInput.val()) {
-	                this.showFieldError(this.contributionDateInput, 'Contribution date is required');
-	                isValid = false;
-	            }
-	            
-	            // Validate payment method
-	            if (!this.paymentMethodSelect.val()) {
-	                this.showFieldError(this.paymentMethodSelect, 'Payment method is required');
-	                isValid = false;
-	            }
-	            
-	         	// Validate reference number
-	            if (!this.referenceNumberInput.val()) {
-	                this.showFieldError(this.referenceNumberInput, 'Reference number is required');
-	                isValid = false;
-	            }
-	            
-	            // NEW: Optional file validation (if file is required, uncomment)
-	            // const fileInput = this.fileUploadInput[0];
-	            // if (fileInput.files.length === 0) {
-	            //     this.showFieldError(this.fileUploadInfo, 'Payment receipt is required');
-	            //     isValid = false;
-	            // }
-	            
-	            return isValid;
-	        },
-	        
-	        showFieldError: function(field, message) {
-	            field.addClass('is-invalid');
-	            field.after(`<div class="invalid-feedback">${message}</div>`);
-	        },
-	        
-	        displayContributionFieldErrors: function(errors) {
-	            // Clear previous errors
-	            this.contributionForm.find('.is-invalid').removeClass('is-invalid');
-	            this.contributionForm.find('.invalid-feedback').remove();
-	            
-	            // Display new errors
-	            $.each(errors, function(field, messages) {
-	                const $input = $('#' + field);
-	                const message = Array.isArray(messages) ? messages[0] : messages;
-	                
-	                if ($input.length) {
-	                    $input.addClass('is-invalid');
-	                    $input.after(`<div class="invalid-feedback">${message}</div>`);
-	                }
-	            });
-	        },
-	        
-	        setContributionFormLoading: function(isLoading) {
-	            if (isLoading) {
-	                this.memberCodeInput.val('Loading...');
-	            }
-	        },
-	        
-	        setContributionSubmitLoading: function(isLoading) {
-	            if (isLoading) {
-	                this.contributionSubmitBtn.prop('disabled', true).html(`
-	                    <span class="spinner-border spinner-border-sm" role="status"></span>
-	                    Saving...
-	                `);
-	            } else {
-	                this.contributionSubmitBtn.prop('disabled', false).html('Submit');
-	            }
-	        },
-	        
-	        displayFieldErrors: function(errors) {
-	            // Clear previous errors
-	            this.form.find('.is-invalid').removeClass('is-invalid');
-	            this.form.find('.invalid-feedback').remove();
-	            
-	            // Display new errors
-	            $.each(errors, function(field, messages) {
-	                const $input = $('#name_search');  // Adjust if multiple fields
-	                const message = Array.isArray(messages) ? messages[0] : messages;
-	                
-	                $input.addClass('is-invalid');
-	                $input.after(`<div class="invalid-feedback">${message}</div>`);
-	            });
-	        },
-	        
-	        buildTableRow: function(member) {
-	            // Handle different possible field names
-	            const fullName = member.firstname + ' ' + member.lastname;
-	            const dateRegistered = this.formatDate(member.joinedDate);
-	            const memberCode = member.memberCode || '';
-	            
-	            return `
-	                <tr>
-	                    <td>
-	                        <a href="#" class="member-link" data-member-code="${memberCode}">
-	                            <i class="fa fa-user-circle me-2"></i>${this.escapeHtml(fullName)}
-	                        </a>
-	                    </td>
-	                    <td>${dateRegistered}</td>
-	                </tr>
-	            `;
-	        },
-	        
-	        getEmptyRow: function() {
-	            return `
-	                <tr>
-	                    <td colspan="2" class="text-center py-4">
-	                        <i class="fa fa-info-circle fa-2x text-muted mb-3"></i>
-	                        <p class="text-muted mb-0">No members to display</p>
-	                    </td>
-	                </tr>
-	            `;
-	        },
-	        
-	        validateSearch: function(searchTerm) {
-	            // Remove existing validation styles
-	            this.searchInput.removeClass('is-invalid');
-	            this.form.find('.invalid-feedback').remove();
-	            
-	            // Allow empty (will show all members)
-	            if (searchTerm.length === 0) {
-	                return true;
-	            }
-	            
-	            // Check minimum length
-	            if (searchTerm.length < 2) {
-	                this.searchInput.addClass('is-invalid');
-	                this.searchInput.after('<div class="invalid-feedback">Please enter at least 2 characters</div>');
-	                return false;
-	            }
-	            
-	            return true;
-	        },
-	        
-	        validateField: function(e) {
-	            const $field = $(e.target);
-	            const value = $field.val().trim();
-	            
-	            if (value.length > 0 && value.length < 2) {
-	                $field.addClass('is-invalid');
-	                $field.siblings('.invalid-feedback').remove();
-	                $field.after('<div class="invalid-feedback">Please enter at least 2 characters</div>');
-	            } else {
-	                $field.removeClass('is-invalid');
-	                $field.siblings('.invalid-feedback').remove();
-	            }
-	        },
-	        
-	        setLoading: function(isLoading) {
-	            if (isLoading) {
-	                this.submitBtn.prop('disabled', true).html(`
-	                    <span class="spinner-border spinner-border-sm" role="status"></span>
-	                    Searching...
-	                `);
-	                
-	                // Optional: Show loading in table
-	                this.tableBody.html(`
-	                    <tr>
-	                        <td colspan="2" class="text-center py-4">
-	                            <div class="spinner-border text-primary" role="status">
-	                                <span class="visually-hidden">Loading...</span>
-	                            </div>
-	                            <p class="mt-2 text-muted">Loading members...</p>
-	                        </td>
-	                    </tr>
-	                `);
-	            } else {
-	                this.submitBtn.prop('disabled', false).html(this.originalBtnHtml);
-	            }
-	        },
-	        
-	        resetSearch: function() {
-	            this.searchInput.val('').removeClass('is-invalid');
-	            this.form.find('.invalid-feedback').remove();
-	            this.showAlert('info', 'Search reset');
-	            this.tableBody.html(this.getEmptyRow()); // Clear table or load initial data
-	        },
-	        
-	        formatDate: function(dateString) {
-	            if (!dateString) return 'N/A';
-	            
-	            try {
-	                const date = new Date(dateString);
-	                if (isNaN(date.getTime())) return dateString;
-	                
-	                const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 
-	                               'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-	                
-	                const month = months[date.getMonth()];
-	                const day = String(date.getDate()).padStart(2, '0');
-	                const year = date.getFullYear();
-	                
-	                return `${month}-${day}-${year}`;
-	            } catch (e) {
-	                return dateString;
-	            }
-	        },
-	        
-	        escapeHtml: function(text) {
-	            if (!text) return text;
-	            const div = document.createElement('div');
-	            div.textContent = text;
-	            return div.innerHTML;
-	        },
-	        
-	        showAlert: function(type, message) {
-	            // Remove existing alerts
-	            $('.alert-dynamic').remove();
-	            
-	            const alertHtml = `
-	                <div class="alert alert-${type} alert-dynamic alert-dismissible fade show" style="margin-top: 12px;" role="alert">
-	                    <i class="fa fa-${this.getAlertIcon(type)} me-2"></i>
-	                    ${message}
-	                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-	                </div>
-	            `;
-	            
-	            this.form.before(alertHtml);
-	            
-	            // Auto dismiss
-	            setTimeout(() => $('.alert-dynamic').fadeOut('slow', function() {
-	                $(this).remove();
-	            }), 5000);
-	        },
-	        
-	        getAlertIcon: function(type) {
-	            const icons = {
-	                'success': 'check-circle',
-	                'danger': 'exclamation-circle',
-	                'warning': 'exclamation-triangle',
-	                'info': 'info-circle'
-	            };
-	            return icons[type] || 'info-circle';
-	        }
-	    };
-	    
-	    // Initialize
-	    MemberSearch.init();
-	    
-	    // Event delegation for member links (since table rows are dynamically added)
-	    $(document).on('click', '.member-link', function(e) {
-	        const memberCode = $(this).data('member-code');
-	        MemberSearch.handleMemberClick(memberCode, e);
-	    });
-	});
-	</script>
-  </body>
+    $(document).ready(function() {
+        
+        const ContributionManager = {
+            currentMember: null,
+            
+            init: function() {
+                this.bindEvents();
+                this.setDefaultDate();
+                this.setupFileUpload();
+            },
+            
+            bindEvents: function() {
+                $('#searchBtn').on('click', $.proxy(this.performSearch, this));
+                $('#name_search').on('keypress', $.proxy(function(e) {
+                    if (e.which === 13) this.performSearch();
+                }, this));
+                $('#clearMemberBtn').on('click', $.proxy(this.clearSelectedMember, this));
+                $('#cancelContributionBtn').on('click', $.proxy(this.clearContributionForm, this));
+                $('#contributionForm').on('submit', $.proxy(this.handleContributionSubmit, this));
+                $('#contributionDate').on('change', $.proxy(this.computeTerm, this));
+                
+                // Real-time search with debounce
+                let searchTimeout;
+                $('#name_search').on('keyup', $.proxy(function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout($.proxy(function() {
+                        if ($('#name_search').val().length >= 2 || $('#name_search').val().length === 0) {
+                            this.performSearch();
+                        }
+                    }, this), 500);
+                }, this));
+            },
+            
+            setupFileUpload: function() {
+                // Single file upload browse button
+                $('.file-upload-browse').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    $('#paymentReceipt').click();
+                });
+                
+                // Handle file selection
+                $('#paymentReceipt').off('change').on('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        $('#receiptFileName').val(file.name);
+                        
+                        // Validate file size (max 5MB)
+                        if (file.size > 5 * 1024 * 1024) {
+                            ContributionManager.showAlert('warning', 'File size should not exceed 5MB');
+                            $(this).val('');
+                            $('#receiptFileName').val('');
+                            return;
+                        }
+                        
+                        // Validate file type
+                        const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+                        if (!allowedTypes.includes(file.type)) {
+                            ContributionManager.showAlert('warning', 'Only JPG, PNG, and PDF files are allowed');
+                            $(this).val('');
+                            $('#receiptFileName').val('');
+                            return;
+                        }
+                    } else {
+                        $('#receiptFileName').val('');
+                    }
+                });
+            },
+            
+            setDefaultDate: function() {
+                const today = new Date().toISOString().split('T')[0];
+                $('#contributionDate').val(today);
+                this.computeTerm();
+            },
+            
+            computeTerm: function() {
+                const dateStr = $('#contributionDate').val();
+                if (!dateStr) {
+                    $('#term').val('');
+                    return;
+                }
+                
+                const date = new Date(dateStr);
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+                
+                let term;
+                if (day <= 15) {
+                    term = (month - 1) * 2 + 1;
+                } else {
+                    term = (month - 1) * 2 + 2;
+                }
+                
+                $('#term').val(term);
+            },
+            
+            performSearch: function() {
+                const searchTerm = $('#name_search').val().trim();
+                
+                if (searchTerm.length === 0) {
+                    this.displaySearchResults([]);
+                    return;
+                }
+                
+                if (searchTerm.length < 2) {
+                    this.showAlert('warning', 'Please enter at least 2 characters');
+                    return;
+                }
+                
+                this.showLoading(true);
+                
+                $.ajax({
+                    url: 'http://localhost:8080/groupsavings/api/v1/member/info',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ name: searchTerm }),
+                    dataType: 'json',
+                    success: $.proxy(this.handleSearchSuccess, this),
+                    error: $.proxy(this.handleSearchError, this),
+                    complete: $.proxy(function() {
+                        this.showLoading(false);
+                    }, this)
+                });
+            },
+            
+            handleSearchSuccess: function(response) {
+                const members = Array.isArray(response) ? response : (response.data || []);
+                this.displaySearchResults(members);
+                
+                if (members.length === 0) {
+                    this.showAlert('info', 'No members found');
+                } else {
+                    this.showAlert('success', `Found ${members.length} member(s)`);
+                }
+            },
+            
+            handleSearchError: function(xhr) {
+                if (xhr.status === 404) {
+                    this.displaySearchResults([]);
+                    this.showAlert('info', 'No members found');
+                } else {
+                    this.showAlert('danger', 'Failed to search members');
+                }
+            },
+            
+            displaySearchResults: function(members) {
+                const tbody = $('#searchResultsBody');
+                tbody.empty();
+                
+                if (!members || members.length === 0) {
+                    tbody.html(`
+                        <tr>
+                            <td colspan="3" class="empty-state">
+                                <i class="mdi mdi-account-search"></i>
+                                <p>No members found</p>
+                            </td>
+                        </tr>
+                    `);
+                    return;
+                }
+                
+                $.each(members, function(index, member) {
+                    const fullName = `${member.firstname} ${member.lastname}`;
+                    const dateRegistered = this.formatDate(member.joinedDate);
+                    const memberCode = member.memberCode;
+                    
+                    const row = `
+                        <tr class="member-row" data-member-code="${memberCode}" data-member-name="${fullName}" style="cursor: pointer;">
+                            <td>
+                                <a href="#" class="member-link" data-member-code="${memberCode}">
+                                    <i class="mdi mdi-account-circle"></i> ${this.escapeHtml(fullName)}
+                                </a>
+                            </td>
+                            <td>${dateRegistered}</td>
+                            <td><span class="badge badge-modern badge-info">${memberCode}</span></td>
+                        </tr>
+                    `;
+                    tbody.append(row);
+                }.bind(this));
+                
+                // Bind click events to rows
+                $('.member-row').on('click', $.proxy(function(e) {
+                    const row = $(e.currentTarget);
+                    const memberCode = row.data('member-code');
+                    const memberName = row.data('member-name');
+                    this.selectMember(memberCode, memberName);
+                }, this));
+            },
+            
+            selectMember: function(memberCode, memberName) {
+                this.showLoading(true);
+                
+                $.ajax({
+                    url: `http://localhost:8080/groupsavings/api/v1/member/info/${memberCode}`,
+                    type: 'GET',
+                    contentType: 'application/json',
+                    success: $.proxy(function(response) {
+                        this.currentMember = response;
+                        this.populateMemberForm(memberCode, memberName);
+                        this.showSelectedMemberCard(memberCode, memberName);
+                        this.showAlert('success', `Member ${memberName} selected`);
+                    }, this),
+                    error: $.proxy(function() {
+                        this.showAlert('danger', 'Failed to load member details');
+                    }, this),
+                    complete: $.proxy(function() {
+                        this.showLoading(false);
+                    }, this)
+                });
+            },
+            
+            populateMemberForm: function(memberCode, memberName) {
+                $('#memberCode').val(memberCode);
+            },
+            
+            showSelectedMemberCard: function(memberCode, memberName) {
+                $('#selectedMemberName').text(memberName);
+                $('#selectedMemberCode').text(memberCode);
+                $('#selectedMemberCard').show();
+                
+                // Scroll to form
+                $('html, body').animate({
+                    scrollTop: $('#contributionForm').offset().top - 100
+                }, 500);
+            },
+            
+            clearSelectedMember: function() {
+                this.currentMember = null;
+                $('#selectedMemberCard').hide();
+                $('#memberCode').val('');
+                this.showAlert('info', 'Member selection cleared');
+            },
+            
+            clearContributionForm: function() {
+                $('#amount').val('');
+                $('#paymentMethod').val('');
+                $('#referenceNumber').val('');
+                $('#notes').val('');
+                $('#paymentReceipt').val('');  // Clear file input
+                $('#receiptFileName').val(''); // Clear filename display
+                this.setDefaultDate();
+                this.showAlert('info', 'Form cleared');
+            },
+            
+            handleContributionSubmit: function(e) {
+                e.preventDefault();
+                
+                if (!this.validateContributionForm()) {
+                    return;
+                }
+                
+                const contributionData = {
+                    memberCode: $('#memberCode').val(),
+                    amount: $('#amount').val(),
+                    contributionDate: $('#contributionDate').val(),
+                    paymentMethod: $('#paymentMethod').val(),
+                    referenceNumber: $('#referenceNumber').val(),
+                    term: $('#term').val(),
+                    notes: $('#notes').val()
+                };
+                
+                const formData = new FormData();
+                formData.append('contributionDto', new Blob([JSON.stringify(contributionData)], { type: 'application/json' }));
+                
+                // FIXED: Use the correct file input ID
+                const fileInput = $('#paymentReceipt')[0];
+                if (fileInput && fileInput.files.length > 0) {
+                    formData.append('paymentReceipt', fileInput.files[0]);
+                }
+                
+                this.showLoading(true);
+                $('#submitContributionBtn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Saving...');
+                
+                $.ajax({
+                    url: 'http://localhost:8080/groupsavings/api/v1/contribution/create',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: $.proxy(function(response) {
+                        this.showAlert('success', 'Contribution recorded successfully!');
+                        this.clearContributionForm();
+                        // Reset file upload
+                        $('#paymentReceipt').val('');
+                        $('#receiptFileName').val('');
+                        if (this.currentMember) {
+                            this.populateMemberForm(this.currentMember.memberCode, `${this.currentMember.firstname} ${this.currentMember.lastname}`);
+                        }
+                    }, this),
+                    error: $.proxy(function(xhr) {
+                        let message = 'Failed to record contribution';
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            message = response.message || message;
+                        } catch(e) {}
+                        this.showAlert('danger', message);
+                    }, this),
+                    complete: $.proxy(function() {
+                        this.showLoading(false);
+                        $('#submitContributionBtn').prop('disabled', false).html('<i class="mdi mdi-check"></i> Record Contribution');
+                    }, this)
+                });
+            },
+            
+            validateContributionForm: function() {
+                if (!$('#memberCode').val()) {
+                    this.showAlert('warning', 'Please select a member first');
+                    return false;
+                }
+                
+                if (!$('#amount').val() || parseFloat($('#amount').val()) <= 0) {
+                    this.showAlert('warning', 'Please enter a valid amount');
+                    return false;
+                }
+                
+                if (!$('#paymentMethod').val()) {
+                    this.showAlert('warning', 'Please select a payment method');
+                    return false;
+                }
+                
+                if (!$('#referenceNumber').val()) {
+                    this.showAlert('warning', 'Please enter a reference number');
+                    return false;
+                }
+                
+                return true;
+            },
+            
+            formatDate: function(dateString) {
+                if (!dateString) return 'N/A';
+                try {
+                    const date = new Date(dateString);
+                    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                } catch(e) {
+                    return dateString;
+                }
+            },
+            
+            escapeHtml: function(text) {
+                if (!text) return text;
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            },
+            
+            showAlert: function(type, message) {
+                $('.alert-dynamic').remove();
+                const icons = { success: 'check-circle', danger: 'exclamation-circle', warning: 'exclamation-triangle', info: 'info-circle' };
+                const alertHtml = `
+                    <div class="alert alert-${type} alert-dynamic alert-dismissible fade show" role="alert">
+                        <i class="mdi mdi-${icons[type]} me-2"></i>
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+                $('.member-table').before(alertHtml);
+                setTimeout(() => $('.alert-dynamic').fadeOut('slow', function() { $(this).remove(); }), 5000);
+            },
+            
+            showLoading: function(show) {
+                if (show) {
+                    $('#loadingOverlay').fadeIn(200);
+                } else {
+                    $('#loadingOverlay').fadeOut(200);
+                }
+            }
+        };
+        
+        ContributionManager.init();
+    });
+    </script>
+</body>
 </html>
