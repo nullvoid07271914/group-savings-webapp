@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.groupsavings.model.dto.LoanPaymentDto;
 import com.groupsavings.model.dto.LoanRequestDto;
 import com.groupsavings.model.dto.LoanResponseDto;
 import com.groupsavings.model.dto.LoanStatusRequestDto;
@@ -19,18 +20,19 @@ import com.groupsavings.model.dto.MemberLoanRequestDto;
 import com.groupsavings.model.dto.MemberLoansDto;
 import com.groupsavings.model.enums.LoanStatus;
 import com.groupsavings.service.LoanService;
+import com.groupsavings.service.PaymentService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/loan")
+@RequiredArgsConstructor
 public class LoanApiRestController {
 
 	private final LoanService loanService;
 
-	public LoanApiRestController(LoanService loanService) {
-		this.loanService = loanService;
-	}
+	private final PaymentService paymentService;
 
 	@PostMapping("/apply")
 	public ResponseEntity<LoanResponseDto> apply(@Valid @RequestBody LoanRequestDto request) {
@@ -58,7 +60,13 @@ public class LoanApiRestController {
 
 	@GetMapping("/manage/{memberCode}/{loanCode}")
 	public ResponseEntity<MemberLoanDto> manageLoan(@PathVariable String memberCode, @PathVariable String loanCode) {
-		MemberLoanDto loan = null;//loanService.memberLoan(memberCode, loanCode);
+		MemberLoanDto loan = null;// loanService.memberLoan(memberCode, loanCode);
 		return new ResponseEntity<>(loan, HttpStatus.CREATED);
+	}
+
+	@PostMapping("/payment")
+	public ResponseEntity<LoanPaymentDto> payment(@Valid @RequestBody LoanPaymentDto request) {
+		LoanPaymentDto loanPayment = paymentService.loanPaymentByTerm(request);
+		return new ResponseEntity<>(loanPayment, HttpStatus.CREATED);
 	}
 }

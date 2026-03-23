@@ -1,5 +1,6 @@
 package com.groupsavings.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.mapstruct.Mapper;
@@ -7,11 +8,13 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import com.groupsavings.model.dto.LoanContributorDto;
+import com.groupsavings.model.dto.LoanPaymentDto;
 import com.groupsavings.model.dto.LoanResponseDto;
 import com.groupsavings.model.dto.MemberResponseDto;
 import com.groupsavings.model.entity.Loan;
 import com.groupsavings.model.entity.LoanMemberAllocation;
 import com.groupsavings.model.entity.Member;
+import com.groupsavings.model.entity.Payment;
 
 @Mapper(componentModel = "spring", uses = { MemberMapper.class })
 public interface LoanMapper {
@@ -42,6 +45,22 @@ public interface LoanMapper {
 			dto.setPercentage(item.getContributionPercentage());
 			return dto;
 		}).toList();
+	}
+
+	@Mapping(target = "loanCode", expression = "java(fetchLoanCode(payment))")
+	@Mapping(target = "amount", expression = "java(fetchAmortization(payment))")
+	@Mapping(target = "payInTerm", source = "payInTerm")
+	@Mapping(target = "paymentMethod", source = "paymentMethod")
+	@Mapping(target = "referenceNumber", source = "referenceNumber")
+	@Mapping(target = "paymentDate", source = "paymentDate")
+	LoanPaymentDto toLoanPaymentDto(Payment payment);
+
+	default String fetchLoanCode(Payment payment) {
+		return payment.getLoan().getLoanCode();
+	}
+
+	default BigDecimal fetchAmortization(Payment payment) {
+		return payment.getLoan().getAmortization();
 	}
 
 	@Named("toMemberResponseDto")

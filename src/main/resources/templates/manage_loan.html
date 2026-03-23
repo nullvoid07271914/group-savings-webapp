@@ -29,7 +29,6 @@
 <!-- End layout styles -->
 <link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
 
-<!-- Enhanced CSS for better readability -->
 <style>
 .spinner-border-sm {
 	width: 1rem;
@@ -155,7 +154,7 @@
     margin-bottom: 25px;
 }
 
-/* Filter section styles - Enhanced */
+/* Filter section styles */
 .filter-section {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     padding: 25px;
@@ -188,7 +187,6 @@
     outline: none;
 }
 
-/* Action buttons */
 .action-buttons {
     display: flex;
     gap: 8px;
@@ -207,7 +205,6 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* Table enhancements */
 .table {
     font-size: 0.9rem;
 }
@@ -234,7 +231,6 @@
     transition: background-color 0.2s;
 }
 
-/* Badge styles */
 .badge {
     padding: 6px 12px;
     border-radius: 20px;
@@ -249,7 +245,6 @@
 .badge-secondary { background: #6c757d; color: white; }
 .badge-primary { background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); color: white; }
 
-/* Loan amount styling */
 .loan-amount {
     font-weight: 700;
     color: #28a745;
@@ -271,7 +266,6 @@
     font-size: 0.8rem;
 }
 
-/* Stats cards */
 .stats-card {
     background: white;
     border-radius: 15px;
@@ -306,7 +300,6 @@
     letter-spacing: 1px;
 }
 
-/* Status filter buttons */
 .status-filter-group {
     display: flex;
     gap: 10px;
@@ -337,7 +330,6 @@
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
-/* Search input with icon */
 .search-wrapper {
     position: relative;
 }
@@ -354,20 +346,147 @@
     padding-left: 40px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .action-buttons {
-        flex-direction: column;
-    }
-    
-    .table {
-        font-size: 0.75rem;
-    }
-    
-    .badge {
-        padding: 4px 8px;
-        font-size: 0.65rem;
-    }
+/* Payment Modal Styles */
+.payment-modal .modal-dialog {
+    max-width: 800px;
+}
+
+.amortization-schedule {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.schedule-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.schedule-item {
+    background: white;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border-left: 4px solid #ffc107;
+    transition: all 0.2s;
+}
+
+.schedule-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.schedule-item.paid {
+    border-left-color: #28a745;
+    background: #f8fff8;
+}
+
+.schedule-date {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.schedule-amount {
+    font-weight: bold;
+    color: #28a745;
+}
+
+.schedule-status {
+    text-align: left;
+}
+
+.payment-form {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.payment-form-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #495057;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 8px;
+    display: inline-block;
+}
+
+.loan-info-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.loan-info-card h6 {
+    margin: 0 0 5px 0;
+    opacity: 0.9;
+    font-size: 0.85rem;
+}
+
+.loan-info-card h4 {
+    margin: 0;
+    font-weight: bold;
+}
+
+.btn-payment {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 25px;
+    transition: all 0.2s;
+}
+
+.btn-payment:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.clickable-loan {
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.clickable-loan:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+.badge-paid {
+    background: #28a745;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-spinner {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
 }
 </style>
 </head>
@@ -375,11 +494,9 @@
 	<div class="container-scroller">
 		<div th:replace="~{fragments/header_menu :: headerMenu}"></div>
 
-		<!-- partial -->
 		<div class="container-fluid page-body-wrapper">
 			<div th:replace="~{fragments/nav_menu :: navMenu}"></div>
 
-			<!-- partial -->
 			<div class="main-panel">
 				<div class="content-wrapper">
 					<div class="page-header">
@@ -389,12 +506,11 @@
 						<nav aria-label="breadcrumb">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="#">Loans</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Loan Management</li>
+								<li class="breadcrumb-item active">Loan Management</li>
 							</ol>
 						</nav>
 					</div>
 					
-					<!-- Stats Cards Row -->
 					<div class="row mb-4">
 						<div class="col-md-3">
 							<div class="stats-card pending">
@@ -430,64 +546,41 @@
 						<div class="col-12 grid-margin stretch-card">
 							<div class="card">
 								<div class="card-body">
-									<h4 class="card-title">
-										<i class="mdi mdi-filter"></i> Filter Loans
-									</h4>
+									<h4 class="card-title"><i class="mdi mdi-filter"></i> Filter Loans</h4>
 									<p class="card-description">Search and filter loan applications</p>
 									
-									<!-- Quick Status Filter Buttons -->
 									<div class="status-filter-group">
-										<button class="status-filter-btn active" data-status="ALL">
-											<i class="mdi mdi-view-dashboard"></i> All Loans
-										</button>
-										<button class="status-filter-btn" data-status="PENDING">
-											<i class="mdi mdi-clock"></i> Pending
-										</button>
-										<button class="status-filter-btn" data-status="APPROVED">
-											<i class="mdi mdi-check-circle"></i> Approved
-										</button>
-										<button class="status-filter-btn" data-status="ACTIVE">
-											<i class="mdi mdi-cash"></i> Active
-										</button>
-										<button class="status-filter-btn" data-status="FULLY_PAID">
-											<i class="mdi mdi-check-all"></i> Fully Paid
-										</button>
-										<button class="status-filter-btn" data-status="REJECTED">
-											<i class="mdi mdi-close-circle"></i> Rejected
-										</button>
-										<button class="status-filter-btn" data-status="CANCELLED">
-											<i class="mdi mdi-cancel"></i> Cancelled
-										</button>
+										<button class="status-filter-btn active" data-status="ALL">All Loans</button>
+										<button class="status-filter-btn" data-status="PENDING">Pending</button>
+										<button class="status-filter-btn" data-status="APPROVED">Approved</button>
+										<button class="status-filter-btn" data-status="ACTIVE">Active</button>
+										<button class="status-filter-btn" data-status="FULLY_PAID">Fully Paid</button>
+										<button class="status-filter-btn" data-status="REJECTED">Rejected</button>
+										<button class="status-filter-btn" data-status="CANCELLED">Cancelled</button>
 									</div>
 									
-									<!-- Filter Section -->
 									<div class="filter-section">
 										<div class="row align-items-end">
 											<div class="col-md-5">
 												<div class="form-group">
-													<label class="filter-label">
-														<i class="mdi mdi-account"></i> Borrower Name
-													</label>
+													<label class="filter-label">Borrower Name</label>
 													<div class="search-wrapper">
 														<i class="mdi mdi-magnify"></i>
-														<input type="text" class="form-control filter-input" id="borrowerName" 
-															   placeholder="Search by borrower name or member code...">
+														<input type="text" class="form-control filter-input" id="borrowerName" placeholder="Search by borrower name or member code...">
 													</div>
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="filter-label">
-														<i class="mdi mdi-filter"></i> Loan Status
-													</label>
+													<label class="filter-label">Loan Status</label>
 													<select class="form-select filter-input" id="loanStatus">
 														<option value="ALL" selected>ALL STATUSES</option>
-														<option value="PENDING">⏳ PENDING</option>
-														<option value="APPROVED">✓ APPROVED</option>
-														<option value="ACTIVE">💰 ACTIVE</option>
-														<option value="FULLY_PAID">🏆 FULLY PAID</option>
-														<option value="REJECTED">✗ REJECTED</option>
-														<option value="CANCELLED">⊗ CANCELLED</option>
+														<option value="PENDING">PENDING</option>
+														<option value="APPROVED">APPROVED</option>
+														<option value="ACTIVE">ACTIVE</option>
+														<option value="FULLY_PAID">FULLY PAID</option>
+														<option value="REJECTED">REJECTED</option>
+														<option value="CANCELLED">CANCELLED</option>
 													</select>
 												</div>
 											</div>
@@ -495,213 +588,279 @@
 												<div class="form-group">
 													<label class="filter-label">&nbsp;</label>
 													<div>
-														<button class="btn btn-gradient-primary btn-fw me-2" id="applyFilterBtn">
-															<i class="mdi mdi-filter"></i> Apply Filter
-														</button>
-														<button class="btn btn-outline-secondary btn-fw" id="resetFilterBtn">
-															<i class="mdi mdi-refresh"></i> Reset
-														</button>
+														<button class="btn btn-gradient-primary btn-fw me-2" id="applyFilterBtn">Apply Filter</button>
+														<button class="btn btn-outline-secondary btn-fw" id="resetFilterBtn">Reset</button>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 									
-									<!-- Loans Table -->
 									<div class="table-responsive">
 										<table class="table table-hover">
-											<thead>
-												<!-- Header will be dynamically updated by JavaScript -->
-											</thead>
-											<tbody>
-												<!-- Data will be loaded here via AJAX -->
-											</tbody>
-										</table>
+											<thead></thead>
+											<tbody></tbody>
+										8~
 									</div>
-
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<!-- content-wrapper ends -->
-				<!-- partial:../../partials/_footer.html -->
+				
 				<footer class="footer">
-					<div
-						class="d-sm-flex justify-content-center justify-content-sm-between">
-						<span
-							class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright
-							© 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>.
-							All rights reserved.
-						</span> <span
-							class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted
-							& made with <i class="mdi mdi-heart text-danger"></i>
-						</span>
+					<div class="d-sm-flex justify-content-center justify-content-sm-between">
+						<span class="text-muted">Copyright © 2023 BootstrapDash. All rights reserved.</span>
+						<span class="float-none float-sm-right">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
 					</div>
 				</footer>
-				<!-- partial -->
 			</div>
-			<!-- main-panel ends -->
 		</div>
-		<!-- page-body-wrapper ends -->
 	</div>
-	<!-- container-scroller -->
 	
-	<!-- ========== MODALS ========== -->
+	<!-- Loading Overlay -->
+	<div class="loading-overlay" id="loadingOverlay">
+		<div class="loading-spinner">
+			<div class="spinner-border text-primary" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+			<p class="mt-2 mb-0">Processing...</p>
+		</div>
+	</div>
 	
 	<!-- Success Modal -->
-	<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered modal-sm">
-	    <div class="modal-content text-center">
-	      <div class="modal-header justify-content-center border-0">
-	        <div class="icon-circle success animate-bounce">
-	          <i class="mdi mdi-check"></i>
-	        </div>
-	      </div>
-	      <div class="modal-body pt-0">
-	        <h4 class="mb-3">Success!</h4>
-	        <p class="mb-0" id="successMessage">Operation completed successfully!</p>
-	      </div>
-	      <div class="modal-footer justify-content-center border-0">
-	        <button type="button" class="btn btn-gradient-success btn-rounded" data-bs-dismiss="modal">OK</button>
-	      </div>
-	    </div>
-	  </div>
+	<div class="modal fade" id="successModal" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered modal-sm">
+			<div class="modal-content text-center">
+				<div class="modal-header justify-content-center border-0">
+					<div class="icon-circle success animate-bounce"><i class="mdi mdi-check"></i></div>
+				</div>
+				<div class="modal-body pt-0">
+					<h4 class="mb-3">Success!</h4>
+					<p class="mb-0" id="successMessage">Operation completed successfully!</p>
+				</div>
+				<div class="modal-footer justify-content-center border-0">
+					<button type="button" class="btn btn-gradient-success btn-rounded" data-bs-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 	<!-- Error Modal -->
-	<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered modal-sm">
-	    <div class="modal-content text-center">
-	      <div class="modal-header justify-content-center border-0">
-	        <div class="icon-circle error animate-pulse">
-	          <i class="mdi mdi-close"></i>
-	        </div>
-	      </div>
-	      <div class="modal-body pt-0">
-	        <h4 class="mb-3">Oops!</h4>
-	        <p class="mb-0" id="errorMessage">Something went wrong.</p>
-	      </div>
-	      <div class="modal-footer justify-content-center border-0">
-	        <button type="button" class="btn btn-gradient-danger btn-rounded" data-bs-dismiss="modal">Close</button>
-	      </div>
-	    </div>
-	  </div>
+	<div class="modal fade" id="errorModal" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered modal-sm">
+			<div class="modal-content text-center">
+				<div class="modal-header justify-content-center border-0">
+					<div class="icon-circle error animate-pulse"><i class="mdi mdi-close"></i></div>
+				</div>
+				<div class="modal-body pt-0">
+					<h4 class="mb-3">Oops!</h4>
+					<p class="mb-0" id="errorMessage">Something went wrong.</p>
+				</div>
+				<div class="modal-footer justify-content-center border-0">
+					<button type="button" class="btn btn-gradient-danger btn-rounded" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 	<!-- Warning Modal -->
-	<div class="modal fade" id="warningModal" tabindex="-1" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered modal-sm">
-	    <div class="modal-content text-center">
-	      <div class="modal-header justify-content-center border-0">
-	        <div class="icon-circle warning animate-pulse">
-	          <i class="mdi mdi-alert"></i>
-	        </div>
-	      </div>
-	      <div class="modal-body pt-0">
-	        <h4 class="mb-3">Warning!</h4>
-	        <p class="mb-0" id="warningMessage">Please check your input.</p>
-	      </div>
-	      <div class="modal-footer justify-content-center border-0">
-	        <button type="button" class="btn btn-gradient-warning btn-rounded" data-bs-dismiss="modal">OK</button>
-	      </div>
-	    </div>
-	  </div>
+	<div class="modal fade" id="warningModal" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered modal-sm">
+			<div class="modal-content text-center">
+				<div class="modal-header justify-content-center border-0">
+					<div class="icon-circle warning animate-pulse"><i class="mdi mdi-alert"></i></div>
+				</div>
+				<div class="modal-body pt-0">
+					<h4 class="mb-3">Warning!</h4>
+					<p class="mb-0" id="warningMessage">Please check your input.</p>
+				</div>
+				<div class="modal-footer justify-content-center border-0">
+					<button type="button" class="btn btn-gradient-warning btn-rounded" data-bs-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 	<!-- Info Modal -->
-	<div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered modal-sm">
-	    <div class="modal-content text-center">
-	      <div class="modal-header justify-content-center border-0">
-	        <div class="icon-circle info">
-	          <i class="mdi mdi-information"></i>
-	        </div>
-	      </div>
-	      <div class="modal-body pt-0">
-	        <h4 class="mb-3">Information</h4>
-	        <p class="mb-0" id="infoMessage">Loan information loaded.</p>
-	      </div>
-	      <div class="modal-footer justify-content-center border-0">
-	        <button type="button" class="btn btn-gradient-info btn-rounded" data-bs-dismiss="modal">OK</button>
-	      </div>
-	    </div>
-	  </div>
+	<div class="modal fade" id="infoModal" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered modal-sm">
+			<div class="modal-content text-center">
+				<div class="modal-header justify-content-center border-0">
+					<div class="icon-circle info"><i class="mdi mdi-information"></i></div>
+				</div>
+				<div class="modal-body pt-0">
+					<h4 class="mb-3">Information</h4>
+					<p class="mb-0" id="infoMessage">Loan information loaded.</p>
+				</div>
+				<div class="modal-footer justify-content-center border-0">
+					<button type="button" class="btn btn-gradient-info btn-rounded" data-bs-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 	<!-- Confirmation Modal -->
-	<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered">
-	    <div class="modal-content text-center">
-	      <div class="modal-header justify-content-center border-0">
-	        <div class="confirm-icon warning">
-	          <i class="mdi mdi-help"></i>
-	        </div>
-	      </div>
-	      <div class="modal-body pt-0">
-	        <h4 class="confirm-title" id="confirmTitle">Are you sure?</h4>
-	        <p class="confirm-message" id="confirmMessage">Do you want to proceed with this action?</p>
-	      </div>
-	      <div class="modal-footer justify-content-center border-0">
-	        <button type="button" class="btn btn-outline-secondary btn-rounded me-2" data-bs-dismiss="modal" id="confirmCancelBtn">Cancel</button>
-	        <button type="button" class="btn btn-gradient-primary btn-rounded" id="confirmOkBtn">Yes, Proceed</button>
-	      </div>
-	    </div>
-	  </div>
+	<div class="modal fade" id="confirmModal" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content text-center">
+				<div class="modal-header justify-content-center border-0">
+					<div class="confirm-icon warning"><i class="mdi mdi-help"></i></div>
+				</div>
+				<div class="modal-body pt-0">
+					<h4 class="confirm-title" id="confirmTitle">Are you sure?</h4>
+					<p class="confirm-message" id="confirmMessage">Do you want to proceed with this action?</p>
+				</div>
+				<div class="modal-footer justify-content-center border-0">
+					<button type="button" class="btn btn-outline-secondary btn-rounded me-2" data-bs-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-gradient-primary btn-rounded" id="confirmOkBtn">Yes, Proceed</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Payment Modal -->
+	<div class="modal fade payment-modal" id="paymentModal" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content">
+				<div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+					<h5 class="modal-title"><i class="mdi mdi-cash-multiple"></i> Loan Payment</h5>
+					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<div class="loan-info-card">
+						<div class="row">
+							<div class="col-md-6">
+								<h6>Loan Code</h6>
+								<h4 id="modalLoanCode">-</h4>
+							</div>
+							<div class="col-md-6">
+								<h6>Borrower</h6>
+								<h4 id="modalBorrowerName">-</h4>
+							</div>
+						</div>
+						<div class="row mt-3">
+							<div class="col-md-4">
+								<h6>Loan Amount</h6>
+								<h5 id="modalLoanAmount">Php 0.00</h5>
+							</div>
+							<div class="col-md-4">
+								<h6>Total Amount</h6>
+								<h5 id="modalTotalAmount">Php 0.00</h5>
+							</div>
+							<div class="col-md-4">
+								<h6>Amortization</h6>
+								<h5 id="modalAmortization">Php 0.00</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div class="amortization-schedule">
+						<h6 class="mb-3"><i class="mdi mdi-calendar-clock"></i> Payment Schedule</h6>
+						<div id="amortizationScheduleList"></div>
+					</div>
+					
+					<!-- Payment Form - Updated with Payment Date -->
+					<div class="payment-form">
+					    <h6 class="payment-form-title"><i class="mdi mdi-cash"></i> Make a Payment</h6>
+					    <form id="paymentForm">
+					        <div class="row">
+					            <div class="col-md-6">
+					                <div class="form-group">
+					                    <label><i class="mdi mdi-calendar"></i> Pay In Term</label>
+					                    <select class="form-select" id="payInTerm" required>
+					                        <option value="">Select term to pay</option>
+					                    </select>
+					                </div>
+					            </div>
+					            <div class="col-md-6">
+					                <div class="form-group">
+					                    <label><i class="mdi mdi-currency-php"></i> Amount</label>
+					                    <input type="number" class="form-control" id="paymentAmount" readonly>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="row">
+					            <div class="col-md-6">
+					                <div class="form-group">
+					                    <label><i class="mdi mdi-calendar-check"></i> Payment Date</label>
+					                    <input type="date" class="form-control" id="paymentDate" required>
+					                </div>
+					            </div>
+					            <div class="col-md-6">
+					                <div class="form-group">
+					                    <label><i class="mdi mdi-credit-card"></i> Payment Method</label>
+					                    <select class="form-select" id="paymentMethod" required>
+					                        <option value="">Select Payment Method</option>
+					                        <option value="GCASH">GCASH</option>
+					                        <option value="CASH">CASH</option>
+					                        <option value="MAYA">MAYA</option>
+					                        <option value="MARIBANK">MARIBANK</option>
+					                        <option value="BANK_TRANSFER">BANK TRANSFER</option>
+					                    </select>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="row">
+					            <div class="col-md-12">
+					                <div class="form-group">
+					                    <label><i class="mdi mdi-receipt"></i> Reference Number</label>
+					                    <input type="text" class="form-control" id="referenceNumber" placeholder="Enter reference number" required>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="form-group text-right mt-3">
+					            <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+					            <button type="submit" class="btn btn-gradient-success btn-payment">
+					                <i class="mdi mdi-check"></i> Process Payment
+					            </button>
+					        </div>
+					    </form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<!-- plugins:js -->
 	<script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
-	<!-- endinject -->
-	<!-- Plugin js for this page -->
 	<script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
-	<script
-		th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
-	<!-- End plugin js for this page -->
-	<!-- inject:js -->
+	<script th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
 	<script th:src="@{/assets/js/off-canvas.js}"></script>
 	<script th:src="@{/assets/js/misc.js}"></script>
 	<script th:src="@{/assets/js/settings.js}"></script>
 	<script th:src="@{/assets/js/todolist.js}"></script>
 	<script th:src="@{/assets/js/jquery.cookie.js}"></script>
-	<!-- endinject -->
-	<!-- Custom js for this page -->
 	<script th:src="@{/assets/js/file-upload.js}"></script>
 	<script th:src="@{/assets/js/typeahead.js}"></script>
 	<script th:src="@{/assets/js/select2.js}"></script>
-	<!-- End custom js for this page -->
 
 	<script type="text/javascript">
 	    $(document).ready(function() {
 	        const LoanManager = {
+	            currentLoanData: null,
+	            
 	            init: function() {
 	                this.bindEvents();
-	                this.loadLoans(); // Load all loans by default
+	                this.loadLoans();
 	                this.bindStatusFilterButtons();
 	            },
 	            
 	            bindEvents: function() {
-	                // Apply filter button
-	                $('#applyFilterBtn').on('click', $.proxy(function() {
-	                    this.loadLoans();
-	                }, this));
-	                
-	                // Reset filter button
-	                $('#resetFilterBtn').on('click', $.proxy(function() {
-	                    $('#borrowerName').val('');
-	                    $('#loanStatus').val('ALL');
-	                    this.loadLoans();
-	                    // Reset active status filter buttons
-	                    $('.status-filter-btn').removeClass('active');
-	                    $('.status-filter-btn[data-status="ALL"]').addClass('active');
-	                }, this));
-	                
-	                // Enter key in search field
+	                $('#applyFilterBtn').on('click', $.proxy(this.loadLoans, this));
+	                $('#resetFilterBtn').on('click', $.proxy(this.resetFilters, this));
 	                $('#borrowerName').on('keypress', $.proxy(function(e) {
-	                    if (e.which === 13) {
-	                        this.loadLoans();
-	                    }
+	                    if (e.which === 13) this.loadLoans();
 	                }, this));
+	                $('#paymentForm').on('submit', $.proxy(this.processPayment, this));
+	                $('#payInTerm').on('change', $.proxy(this.updatePaymentAmount, this));
+	            },
+	            
+	            resetFilters: function() {
+	                $('#borrowerName').val('');
+	                $('#loanStatus').val('ALL');
+	                $('.status-filter-btn').removeClass('active');
+	                $('.status-filter-btn[data-status="ALL"]').addClass('active');
+	                this.loadLoans();
 	            },
 	            
 	            bindStatusFilterButtons: function() {
@@ -714,429 +873,329 @@
 	                }, this));
 	            },
 	            
-	            // ========== UPDATE STATS CARDS ==========
 	            updateStatsCards: function(members) {
 	                let pending = 0, approved = 0, active = 0, fullyPaid = 0;
-	                
-	                $.each(members, function(memberIndex, member) {
+	                $.each(members, function(i, member) {
 	                    if (member.loans) {
-	                        $.each(member.loans, function(loanIndex, loan) {
-	                            switch(loan.loanStatus) {
-	                                case 'PENDING': pending++; break;
-	                                case 'APPROVED': approved++; break;
-	                                case 'ACTIVE': active++; break;
-	                                case 'FULLY_PAID': fullyPaid++; break;
-	                            }
+	                        $.each(member.loans, function(j, loan) {
+	                            if (loan.loanStatus === 'PENDING') pending++;
+	                            else if (loan.loanStatus === 'APPROVED') approved++;
+	                            else if (loan.loanStatus === 'ACTIVE') active++;
+	                            else if (loan.loanStatus === 'FULLY_PAID') fullyPaid++;
 	                        });
 	                    }
 	                });
-	                
 	                $('#pendingCount').text(pending);
 	                $('#approvedCount').text(approved);
 	                $('#activeCount').text(active);
 	                $('#fullyPaidCount').text(fullyPaid);
 	            },
 	            
-	            // ========== ADJUST TABLE HEADER ==========
-	            adjustTableHeader: function(status) {
-	                const thead = $('.table thead');
-	                thead.empty();
-	                
-	                // MAY ACTION COLUMN para sa PENDING, ACTIVE, at APPROVED
-	                if (status === 'PENDING' || status === 'ACTIVE' || status === 'APPROVED') {
-	                    thead.html(`
-	                        <tr>
-	                            <th>Loan Code</th>
-	                            <th>Member Code</th>
-	                            <th>Borrower Name</th>
-	                            <th>Loan Amount</th>
-	                            <th>Terms</th>
-	                            <th>Amortization</th>
-	                            <th>Date Applied</th>
-	                            <th>Status</th>
-	                            <th>Actions</th>
-	                        </tr>
-	                    `);
-	                } else {
-	                    // WALANG ACTION COLUMN - para sa lahat ng ibang status
-	                    thead.html(`
-	                        <tr>
-	                            <th>Loan Code</th>
-	                            <th>Member Code</th>
-	                            <th>Borrower Name</th>
-	                            <th>Loan Amount</th>
-	                            <th>Terms</th>
-	                            <th>Amortization</th>
-	                            <th>Date Applied</th>
-	                            <th>Status</th>
-	                        </tr>
-	                    `);
-	                }
-	            },
-	            
-	            // ========== LOAD LOANS FROM API ==========
 	            loadLoans: function() {
 	                const borrowerName = $('#borrowerName').val().trim();
 	                const loanStatus = $('#loanStatus').val();
+	                const hasAction = (loanStatus === 'PENDING' || loanStatus === 'ACTIVE' || loanStatus === 'APPROVED');
+	                const colspan = hasAction ? 9 : 8;
 	                
-	                // Prepare request payload
-	                const requestPayload = {
-	                    name: borrowerName,
-	                    status: loanStatus
-	                };
+	                this.updateTableHeader(loanStatus);
+	                $('.table tbody').html(`<tr><td colspan="${colspan}" class="text-center"><div class="spinner-border text-primary"></div><br>Loading loans...</td></tr>`);
 	                
-	                // Adjust table header based on selected status
-	                this.adjustTableHeader(loanStatus);
-	                
-	                // Determine colspan for loading message
-	                const hasActionColumn = (loanStatus === 'PENDING' || loanStatus === 'ACTIVE' || loanStatus === 'APPROVED');
-	                const colspan = hasActionColumn ? 9 : 8;
-	                
-	                // Show loading indicator
-	                const tbody = $('.table tbody');
-	                tbody.html(`
-	                    <tr>
-	                        <td colspan="${colspan}" class="text-center">
-	                            <div class="spinner-border text-primary" role="status">
-	                                <span class="visually-hidden">Loading...</span>
-	                            </div>
-	                            <br>Loading loans...
-	                         </td>
-	                     </tr>
-	                `);
-	                
-	                // POST API call
 	                $.ajax({
 	                    url: 'http://localhost:8080/groupsavings/api/v1/loan/manage/member-loans',
 	                    type: 'POST',
 	                    contentType: 'application/json',
-	                    dataType: 'json',
-	                    data: JSON.stringify(requestPayload),
-	                    success: $.proxy(function(response) {
-	                        console.log('Response received:', response);
-	                        
-	                        // Check if response is an array or single object
-	                        const members = Array.isArray(response) ? response : [response];
-	                        
-	                        // Update stats cards
+	                    data: JSON.stringify({ name: borrowerName, status: loanStatus }),
+	                    success: $.proxy(function(res) {
+	                        const members = Array.isArray(res) ? res : [res];
 	                        this.updateStatsCards(members);
-	                        
-	                        this.displayLoans(members, loanStatus);
-	                        
-	                        let message = 'Loans loaded successfully';
-	                        if (borrowerName || loanStatus !== 'ALL') {
-	                            message = 'Filtered loans loaded successfully';
-	                        }
-	                        this.showModal('success', message);
+	                        this.renderTable(members, loanStatus);
+	                        this.showModal('success', 'Loans loaded successfully');
 	                    }, this),
-	                    error: $.proxy(function(xhr) {
-	                        console.error('Error:', xhr.responseText);
-	                        
-	                        const hasActionColumn = (loanStatus === 'PENDING' || loanStatus === 'ACTIVE' || loanStatus === 'APPROVED');
-	                        const colspan = hasActionColumn ? 9 : 8;
-	                        
-	                        if (xhr.status === 404) {
-	                            this.showModal('warning', 'No loans found matching your criteria.');
-	                            $('.table tbody').html(`
-	                                <tr>
-	                                    <td colspan="${colspan}" class="text-center">No loans found</td>
-	                                </tr>
-	                            `);
-	                        } else {
-	                            this.showModal('error', 'Failed to load loan information. Please try again.');
-	                        }
+	                    error: $.proxy(function() {
+	                        this.showModal('error', 'Failed to load loans');
 	                    }, this)
 	                });
 	            },
 	            
-	            // ========== DISPLAY LOANS IN TABLE ==========
-	            displayLoans: function(members, status) {
+	            updateTableHeader: function(status) {
+	                const hasAction = (status === 'PENDING' || status === 'ACTIVE' || status === 'APPROVED');
+	                const thead = $('.table thead');
+	                thead.empty();
+	                if (hasAction) {
+	                    thead.html(`<tr><th>Loan Code</th><th>Member Code</th><th>Borrower Name</th><th>Loan Amount</th><th>Terms</th><th>Amortization</th><th>Date Applied</th><th>Status</th><th>Actions</th></tr>`);
+	                } else {
+	                    thead.html(`<tr><th>Loan Code</th><th>Member Code</th><th>Borrower Name</th><th>Loan Amount</th><th>Terms</th><th>Amortization</th><th>Date Applied</th><th>Status</th></tr>`);
+	                }
+	            },
+	            
+	            renderTable: function(members, status) {
 	                const tbody = $('.table tbody');
 	                tbody.empty();
+	                const hasAction = (status === 'PENDING' || status === 'ACTIVE' || status === 'APPROVED');
+	                let hasLoans = false;
+	                let prevMember = null;
 	                
-	                const hasActionColumn = (status === 'PENDING' || status === 'ACTIVE' || status === 'APPROVED');
-	                const colspan = hasActionColumn ? 9 : 8;
+	                $.each(members, function(mi, member) {
+	                    if (member.loans && member.loans.length) {
+	                        hasLoans = true;
+	                        const memberCode = member.memberCode;
+	                        const fullName = member.firstname + ' ' + member.lastname;
+	                        
+	                        $.each(member.loans, function(li, loan) {
+	                            const isSame = (memberCode === prevMember);
+	                            const loanLink = `<a href="#" class="clickable-loan" data-loan='${JSON.stringify(loan)}' data-member="${fullName}" data-code="${memberCode}"><i class="mdi mdi-cash-multiple"></i> ${loan.loanCode}</a>`;
+	                            
+	                            if (hasAction) {
+	                                let actions = '';
+	                                if (loan.loanStatus === 'PENDING') {
+	                                    actions = `<div class="action-buttons"><button class="btn btn-gradient-info btn-sm btn-approve" data-code="${loan.loanCode}">Approve</button><button class="btn btn-gradient-danger btn-sm btn-reject" data-code="${loan.loanCode}">Reject</button><button class="btn btn-gradient-secondary btn-sm btn-cancel" data-code="${loan.loanCode}">Cancel</button></div>`;
+	                                } else if (loan.loanStatus === 'APPROVED') {
+	                                    actions = `<div class="action-buttons"><button class="btn btn-gradient-warning btn-sm btn-release" data-code="${loan.loanCode}">Release</button></div>`;
+	                                } else if (loan.loanStatus === 'ACTIVE') {
+	                                    actions = `<div class="action-buttons"><button class="btn btn-gradient-success btn-sm btn-fully-paid" data-code="${loan.loanCode}">Fully Paid</button></div>`;
+	                                }
+	                                
+	                                if (isSame) {
+	                                    tbody.append(`<tr><td>${loanLink}</td><td></td><td></td><td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td><td>${loan.terms} term</td><td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td><td>${this.formatDate(loan.dateApplied)}</td><td><span class="badge badge-${this.getBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td><td>${actions}</td></tr>`);
+	                                } else {
+	                                    tbody.append(`<tr><td>${loanLink}</td><td><span class="member-code-badge">${memberCode}</span></td><td><strong>${fullName}</strong></td><td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td><td>${loan.terms} term</td><td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td><td>${this.formatDate(loan.dateApplied)}</td><td><span class="badge badge-${this.getBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td><td>${actions}</td></tr>`);
+	                                }
+	                            } else {
+	                                if (isSame) {
+	                                    tbody.append(`<tr><td>${loanLink}</td><td></td><td></td><td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td><td>${loan.terms} term</td><td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td><td>${this.formatDate(loan.dateApplied)}</td><td><span class="badge badge-${this.getBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td></tr>`);
+	                                } else {
+	                                    tbody.append(`<tr><td>${loanLink}</td><td><span class="member-code-badge">${memberCode}</span></td><td><strong>${fullName}</strong></td><td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td><td>${loan.terms} term</td><td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td><td>${this.formatDate(loan.dateApplied)}</td><td><span class="badge badge-${this.getBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td></tr>`);
+	                                }
+	                            }
+	                            prevMember = memberCode;
+	                        }.bind(this));
+	                    }
+	                }.bind(this));
 	                
-	                // Check if there are any members with loans
-	                const hasAnyLoans = members.some(member => member.loans && member.loans.length > 0);
+	                if (!hasLoans) {
+	                    const colspan = hasAction ? 9 : 8;
+	                    tbody.html(`<tr><td colspan="${colspan}" class="text-center">No loans found</td></tr>`);
+	                }
 	                
-	                if (!hasAnyLoans) {
-	                    tbody.append(`
-	                        <tr>
-	                            <td colspan="${colspan}" class="text-center">
-	                                <i class="mdi mdi-information"></i> No loans found
-	                            </td>
-	                        </tr>
-	                    `);
+	                $('.clickable-loan').on('click', $.proxy(this.showPaymentModal, this));
+	                if (hasAction) this.bindActionButtons();
+	            },
+	            
+	            // ========== FIXED: showPaymentModal - Both table and dropdown ascending ==========
+	            showPaymentModal: function(e) {
+	                e.preventDefault();
+	                const loan = $(e.currentTarget).data('loan');
+	                const borrowerName = $(e.currentTarget).data('member');
+	                const schedule = this.generateSchedule(loan);
+	                this.currentLoanData = { loan: loan, schedule: schedule };
+	                
+	                $('#modalLoanCode').text(loan.loanCode);
+	                $('#modalBorrowerName').text(borrowerName);
+	                $('#modalLoanAmount').text(`Php ${this.formatNumber(loan.loanAmount)}`);
+	                $('#modalTotalAmount').text(`Php ${this.formatNumber(loan.totalAmount || loan.loanAmount)}`);
+	                $('#modalAmortization').text(`Php ${this.formatNumber(loan.amortization)}`);
+	                
+	                // Sort by term ascending (Term 1, Term 2, Term 3...)
+	                const sortedByTerm = [...schedule].sort((a, b) => a.term - b.term);
+	                
+	                // Display schedule in ascending order (Term 1 first)
+	                let scheduleHtml = `<div class="schedule-header"><div class="row"><div class="col-3">Due Date</div><div class="col-3">Term</div><div class="col-3">Amount</div><div class="col-3">Status</div></div></div>`;
+	                sortedByTerm.forEach(item => {
+	                    scheduleHtml += `<div class="schedule-item"><div class="row"><div class="col-3 schedule-date">${item.dueDate}</div><div class="col-3">Term ${item.term}</div><div class="col-3 schedule-amount">Php ${this.formatNumber(item.amount)}</div><div class="col-3 schedule-status"><span class="badge badge-warning">PENDING</span></div></div></div>`;
+	                });
+	                $('#amortizationScheduleList').html(scheduleHtml);
+	                
+	                // Dropdown in ascending order (Term 1 first)
+	                const termSelect = $('#payInTerm');
+	                termSelect.html('<option value="">Select term to pay</option>');
+	                
+	                sortedByTerm.forEach(item => {
+	                    termSelect.append(`<option value="${item.term}">Term ${item.term} - Due: ${item.dueDate} (Php ${this.formatNumber(item.amount)})</option>`);
+	                });
+	                
+	                // Set default payment date to today
+	                const today = new Date().toISOString().split('T')[0];
+	                $('#paymentDate').val(today);
+	                
+	                $('#paymentAmount').val('');
+	                $('#paymentMethod').val('');
+	                $('#referenceNumber').val('');
+	                $('#paymentModal').modal('show');
+	            },
+	            
+	            // ========== CORRECT: processPayment (ONLY ONE VERSION) ==========
+	            processPayment: function(e) {
+	                e.preventDefault();
+	                const term = $('#payInTerm').val();
+	                const amount = $('#paymentAmount').val();
+	                const paymentDate = $('#paymentDate').val();
+	                const method = $('#paymentMethod').val();
+	                const ref = $('#referenceNumber').val();
+	                
+	                if (!term || !method || !ref || !paymentDate) {
+	                    this.showModal('warning', 'Please fill in all payment details');
 	                    return;
 	                }
 	                
-	                let previousMemberCode = null;
-	                let rowCount = 0;
-	                
-	                // Loop through each member and their loans
-	                $.each(members, function(memberIndex, member) {
-	                    if (!member.loans || member.loans.length === 0) {
-	                        return;
-	                    }
-	                    
-	                    const memberCode = member.memberCode || 'N/A';
-	                    const fullName = (member.firstname || '') + ' ' + (member.lastname || '');
-	                    
-	                    // Loop through each loan of this member
-	                    $.each(member.loans, function(loanIndex, loan) {
-	                        let row = '';
-	                        rowCount++;
-	                        
-	                        const isSameMember = (memberCode === previousMemberCode);
-	                        
-	                        if (hasActionColumn) {
-	                            let actionButtons = '';
-	                            
-	                            if (loan.loanStatus === 'PENDING') {
-	                                actionButtons = `
-	                                    <div class="action-buttons">
-	                                        <button type="button" class="btn btn-gradient-info btn-sm btn-approve" 
-	                                                data-loan-code="${loan.loanCode}">
-	                                            <i class="mdi mdi-check"></i> Approve
-	                                        </button>
-	                                        <button type="button" class="btn btn-gradient-danger btn-sm btn-reject" 
-	                                                data-loan-code="${loan.loanCode}">
-	                                            <i class="mdi mdi-close"></i> Reject
-	                                        </button>
-	                                        <button type="button" class="btn btn-gradient-secondary btn-sm btn-cancel" 
-	                                                data-loan-code="${loan.loanCode}">
-	                                            <i class="mdi mdi-cancel"></i> Cancel
-	                                        </button>
-	                                    </div>
-	                                `;
-	                            } else if (loan.loanStatus === 'APPROVED') {
-	                                actionButtons = `
-	                                    <div class="action-buttons">
-	                                        <button type="button" class="btn btn-gradient-warning btn-sm btn-release" 
-	                                                data-loan-code="${loan.loanCode}">
-	                                            <i class="mdi mdi-cash"></i> Release
-	                                        </button>
-	                                    </div>
-	                                `;
-	                            } else if (loan.loanStatus === 'ACTIVE') {
-	                                actionButtons = `
-	                                    <div class="action-buttons">
-	                                        <button type="button" class="btn btn-gradient-success btn-sm btn-fully-paid" 
-	                                                data-loan-code="${loan.loanCode}">
-	                                            <i class="mdi mdi-check-circle"></i> Fully Paid
-	                                        </button>
-	                                    </div>
-	                                `;
-	                            }
-	                            
-	                            if (isSameMember) {
-	                                row = `
-	                                    <tr data-loan-code="${loan.loanCode}" data-loan-status="${loan.loanStatus}" data-member-code="${memberCode}">
-	                                        <td><code class="loan-code">${loan.loanCode}</code></td>
-	                                        <td></td>
-	                                        <td></td>
-	                                        <td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td>
-	                                        <td>${loan.terms} months</td>
-	                                        <td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td>
-	                                        <td>${this.formatDate(loan.dateApplied)}</td>
-	                                        <td><span class="badge badge-${this.getStatusBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td>
-	                                        <td>${actionButtons}</td>
-	                                     </tr>
-	                                `;
-	                            } else {
-	                                row = `
-	                                    <tr data-loan-code="${loan.loanCode}" data-loan-status="${loan.loanStatus}" data-member-code="${memberCode}">
-	                                        <td><code class="loan-code">${loan.loanCode}</code></td>
-	                                        <td><span class="member-code-badge">${memberCode}</span></td>
-	                                        <td><strong>${fullName}</strong></td>
-	                                        <td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td>
-	                                        <td>${loan.terms} months</td>
-	                                        <td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td>
-	                                        <td>${this.formatDate(loan.dateApplied)}</td>
-	                                        <td><span class="badge badge-${this.getStatusBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td>
-	                                        <td>${actionButtons}</td>
-	                                     </tr>
-	                                `;
-	                            }
-	                        } else {
-	                            if (isSameMember) {
-	                                row = `
-	                                    <tr data-loan-code="${loan.loanCode}" data-loan-status="${loan.loanStatus}" data-member-code="${memberCode}">
-	                                        <td><code class="loan-code">${loan.loanCode}</code></td>
-	                                        <td></td>
-	                                        <td></td>
-	                                        <td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td>
-	                                        <td>${loan.terms} months</td>
-	                                        <td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td>
-	                                        <td>${this.formatDate(loan.dateApplied)}</td>
-	                                        <td><span class="badge badge-${this.getStatusBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td>
-	                                     </tr>
-	                                `;
-	                            } else {
-	                                row = `
-	                                    <tr data-loan-code="${loan.loanCode}" data-loan-status="${loan.loanStatus}" data-member-code="${memberCode}">
-	                                        <td><code class="loan-code">${loan.loanCode}</code></td>
-	                                        <td><span class="member-code-badge">${memberCode}</span></td>
-	                                        <td><strong>${fullName}</strong></td>
-	                                        <td class="loan-amount">Php ${this.formatNumber(loan.loanAmount)}</td>
-	                                        <td>${loan.terms} months</td>
-	                                        <td class="loan-amount">Php ${this.formatNumber(loan.amortization)}</td>
-	                                        <td>${this.formatDate(loan.dateApplied)}</td>
-	                                        <td><span class="badge badge-${this.getStatusBadgeClass(loan.loanStatus)}">${loan.loanStatus}</span></td>
-	                                     </tr>
-	                                `;
-	                            }
-	                        }
-	                        
-	                        tbody.append(row);
-	                        previousMemberCode = memberCode;
-	                        
-	                    }.bind(this));
-	                }.bind(this));
-	                
-	                if (hasActionColumn) {
-	                    this.bindActionButtons();
-	                }
-	                
-	                console.log(`Displayed ${rowCount} loan rows`);
-	            },
-	            
-	            formatNumber: function(number) {
-	                if (!number) return '0';
-	                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	            },
-	            
-	            formatDate: function(dateString) {
-	                if (!dateString) return 'N/A';
-	                try {
-	                    const date = new Date(dateString);
-	                    return date.toLocaleDateString('en-US', {
-	                        year: 'numeric',
-	                        month: 'short',
-	                        day: 'numeric'
-	                    });
-	                } catch(e) {
-	                    return dateString;
-	                }
-	            },
-	            
-	            getStatusBadgeClass: function(status) {
-	                const badges = {
-	                    'PENDING': 'warning',
-	                    'APPROVED': 'success',
-	                    'REJECTED': 'danger',
-	                    'CANCELLED': 'secondary',
-	                    'ACTIVE': 'info',
-	                    'FULLY_PAID': 'primary'
-	                };
-	                return badges[status] || 'info';
-	            },
-	            
-	            bindActionButtons: function() {
-	                // Approve button
-	                $('.btn-approve').on('click', $.proxy(function(e) {
-	                    e.preventDefault();
-	                    const button = $(e.currentTarget);
-	                    if (button.prop('disabled') || button.data('processing')) return;
-	                    const loanCode = button.data('loan-code');
-	                    this.showConfirmModal('Approve Loan', 'Are you sure you want to approve this loan?',
-	                        function() { this.processLoanAction(loanCode, 'APPROVED', button); }.bind(this));
-	                }, this));
-	                
-	                // Reject button
-	                $('.btn-reject').on('click', $.proxy(function(e) {
-	                    e.preventDefault();
-	                    const button = $(e.currentTarget);
-	                    if (button.prop('disabled') || button.data('processing')) return;
-	                    const loanCode = button.data('loan-code');
-	                    this.showConfirmModal('Reject Loan', 'Are you sure you want to reject this loan?',
-	                        function() { this.processLoanAction(loanCode, 'REJECTED', button); }.bind(this));
-	                }, this));
-	                
-	                // Cancel button
-	                $('.btn-cancel').on('click', $.proxy(function(e) {
-	                    e.preventDefault();
-	                    const button = $(e.currentTarget);
-	                    if (button.prop('disabled') || button.data('processing')) return;
-	                    const loanCode = button.data('loan-code');
-	                    this.showConfirmModal('Cancel Loan', 'Are you sure you want to cancel this loan?',
-	                        function() { this.processLoanAction(loanCode, 'CANCELLED', button); }.bind(this));
-	                }, this));
-	                
-	                // Release button
-	                $('.btn-release').on('click', $.proxy(function(e) {
-	                    e.preventDefault();
-	                    const button = $(e.currentTarget);
-	                    if (button.prop('disabled') || button.data('processing')) return;
-	                    const loanCode = button.data('loan-code');
-	                    this.showConfirmModal('Release Loan', 'Release this loan? This will change status to ACTIVE.',
-	                        function() { this.processLoanAction(loanCode, 'ACTIVE', button); }.bind(this));
-	                }, this));
-	                
-	                // Fully Paid button
-	                $('.btn-fully-paid').on('click', $.proxy(function(e) {
-	                    e.preventDefault();
-	                    const button = $(e.currentTarget);
-	                    if (button.prop('disabled') || button.data('processing')) return;
-	                    const loanCode = button.data('loan-code');
-	                    this.showConfirmModal('Mark as Fully Paid', 'Mark this loan as FULLY PAID?',
-	                        function() { this.processLoanAction(loanCode, 'FULLY_PAID', button); }.bind(this));
-	                }, this));
-	            },
-	            
-	            processLoanAction: function(loanCode, action, button) {
-	                button.data('processing', true);
-	                const row = button.closest('tr');
-	                const originalText = button.html();
-	                button.html('<span class="spinner-border spinner-border-sm" role="status"></span>');
-	                button.prop('disabled', true);
-	                
-	                const payload = { loanCode: loanCode, actionStatus: action };
-	                
+	                this.showLoading(true);
 	                $.ajax({
-	                    url: 'http://localhost:8080/groupsavings/api/v1/loan/status',
+	                    url: 'http://localhost:8080/groupsavings/api/v1/loan/payment',
 	                    type: 'POST',
 	                    contentType: 'application/json',
-	                    dataType: 'json',
-	                    data: JSON.stringify(payload),
-	                    success: $.proxy(function(response) {
+	                    data: JSON.stringify({
+	                        loanCode: this.currentLoanData.loan.loanCode,
+	                        amount: amount,
+	                        payInTerm: term,
+	                        paymentDate: paymentDate,
+	                        paymentMethod: method,
+	                        referenceNumber: ref
+	                    }),
+	                    success: $.proxy(function() {
+	                        $('#paymentModal').modal('hide');
 	                        this.loadLoans();
-	                        let actionDisplay = action === 'ACTIVE' ? 'released' : payload.actionStatus.toLowerCase().replace('_', ' ');
-	                        this.showModal('success', `Loan ${actionDisplay} successfully!`);
-	                        button.removeData('processing');
+	                        this.showModal('success', 'Payment recorded successfully!');
 	                    }, this),
 	                    error: $.proxy(function(xhr) {
-	                        button.html(originalText);
-	                        button.prop('disabled', false);
-	                        this.showModal('error', 'Failed to process loan. Please try again.');
-	                        button.removeData('processing');
+	                        let msg = 'Failed to process payment';
+	                        try {
+	                            const res = JSON.parse(xhr.responseText);
+	                            msg = res.message || msg;
+	                        } catch(e) {}
+	                        this.showModal('error', msg);
+	                    }, this),
+	                    complete: $.proxy(function() {
+	                        this.showLoading(false);
 	                    }, this)
 	                });
 	            },
 	            
-	            showModal: function(type, message) {
-	                let modalId = '', messageId = '';
-	                switch(type) {
-	                    case 'success': modalId = '#successModal'; messageId = '#successMessage'; break;
-	                    case 'error': modalId = '#errorModal'; messageId = '#errorMessage'; break;
-	                    case 'warning': modalId = '#warningModal'; messageId = '#warningMessage'; break;
-	                    default: modalId = '#infoModal'; messageId = '#infoMessage';
+	         	// ========== GENERATE AMORTIZATION SCHEDULE (15th and End of Month) ==========
+	            generateSchedule: function(loan) {
+	                const schedule = [];
+	                const terms = loan.terms;
+	                const amortization = loan.amortization;
+	                const dueDate = new Date(loan.dueDate);
+	                
+	                const dueDay = dueDate.getDate();
+	                const isEndOfMonth = dueDay > 15;
+	                
+	                // Generate terms from last to first, then reverse
+	                const tempSchedule = [];
+	                
+	                for (let i = 0; i < terms; i++) {
+	                    let termDate = new Date(dueDate);
+	                    let termNumber = terms - i;
+	                    
+	                    // Calculate months to subtract
+	                    let monthsToSubtract = Math.floor(i / 2);
+	                    let isHalfMonth = i % 2 === 1;
+	                    
+	                    termDate.setMonth(termDate.getMonth() - monthsToSubtract);
+	                    
+	                    if (isEndOfMonth) {
+	                        // Due date is end of month
+	                        if (isHalfMonth) {
+	                            // Go to 15th
+	                            termDate.setDate(15);
+	                        } else {
+	                            // Stay at end of month
+	                            termDate = new Date(termDate.getFullYear(), termDate.getMonth() + 1, 0);
+	                        }
+	                    } else {
+	                        // Due date is 15th
+	                        if (isHalfMonth) {
+	                            // Go to end of month
+	                            termDate = new Date(termDate.getFullYear(), termDate.getMonth() + 1, 0);
+	                        } else {
+	                            // Stay at 15th
+	                            termDate.setDate(15);
+	                        }
+	                    }
+	                    
+	                    const year = termDate.getFullYear();
+	                    const month = String(termDate.getMonth() + 1).padStart(2, '0');
+	                    const day = String(termDate.getDate()).padStart(2, '0');
+	                    
+	                    tempSchedule.push({
+	                        term: termNumber,
+	                        dueDate: `${year}-${month}-${day}`,
+	                        amount: amortization,
+	                        status: 'PENDING'
+	                    });
 	                }
-	                $(messageId).text(message);
-	                $(modalId).modal('show');
-	                setTimeout(() => { $(modalId).modal('hide'); }, 3000);
+	                
+	                // Sort by due date (oldest first) to get ascending order
+	                return tempSchedule.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 	            },
 	            
-	            showConfirmModal: function(title, message, callback) {
-	                $('#confirmTitle').text(title);
-	                $('#confirmMessage').text(message);
-	                $('#confirmOkBtn').off('click').on('click', $.proxy(function() {
-	                    $('#confirmModal').modal('hide');
-	                    if (callback) callback();
+	            updatePaymentAmount: function() {
+	                const term = $('#payInTerm').val();
+	                if (term && this.currentLoanData) {
+	                    const schedule = this.currentLoanData.schedule.find(s => s.term === parseInt(term));
+	                    if (schedule) $('#paymentAmount').val(schedule.amount);
+	                }
+	            },
+	            
+	            bindActionButtons: function() {
+	                $('.btn-approve').on('click', $.proxy(function(e) {
+	                    const code = $(e.currentTarget).data('code');
+	                    this.showConfirm('Approve Loan', 'Approve this loan?', () => this.processAction(code, 'APPROVED', e.currentTarget));
 	                }, this));
+	                $('.btn-reject').on('click', $.proxy(function(e) {
+	                    const code = $(e.currentTarget).data('code');
+	                    this.showConfirm('Reject Loan', 'Reject this loan?', () => this.processAction(code, 'REJECTED', e.currentTarget));
+	                }, this));
+	                $('.btn-cancel').on('click', $.proxy(function(e) {
+	                    const code = $(e.currentTarget).data('code');
+	                    this.showConfirm('Cancel Loan', 'Cancel this loan?', () => this.processAction(code, 'CANCELLED', e.currentTarget));
+	                }, this));
+	                $('.btn-release').on('click', $.proxy(function(e) {
+	                    const code = $(e.currentTarget).data('code');
+	                    this.showConfirm('Release Loan', 'Release this loan?', () => this.processAction(code, 'ACTIVE', e.currentTarget));
+	                }, this));
+	                $('.btn-fully-paid').on('click', $.proxy(function(e) {
+	                    const code = $(e.currentTarget).data('code');
+	                    this.showConfirm('Fully Paid', 'Mark as fully paid?', () => this.processAction(code, 'FULLY_PAID', e.currentTarget));
+	                }, this));
+	            },
+	            
+	            processAction: function(code, action, btn) {
+	                const original = $(btn).html();
+	                $(btn).html('<span class="spinner-border spinner-border-sm"></span>').prop('disabled', true);
+	                $.ajax({
+	                    url: 'http://localhost:8080/groupsavings/api/v1/loan/status',
+	                    type: 'POST',
+	                    data: JSON.stringify({ loanCode: code, actionStatus: action }),
+	                    contentType: 'application/json',
+	                    success: $.proxy(function() {
+	                        this.loadLoans();
+	                        this.showModal('success', `Loan ${action.toLowerCase().replace('_', ' ')} successfully!`);
+	                    }, this),
+	                    error: $.proxy(function() {
+	                        $(btn).html(original).prop('disabled', false);
+	                        this.showModal('error', 'Failed to process');
+	                    }, this)
+	                });
+	            },
+	            
+	            formatNumber: function(n) { return n ? n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '0'; },
+	            formatDate: function(d) { return d ? new Date(d).toLocaleDateString() : 'N/A'; },
+	            getBadgeClass: function(s) {
+	                return { 'PENDING':'warning', 'APPROVED':'success', 'REJECTED':'danger', 'CANCELLED':'secondary', 'ACTIVE':'info', 'FULLY_PAID':'primary' }[s] || 'info';
+	            },
+	            showModal: function(type, msg) {
+	                const map = { success:'#successModal', error:'#errorModal', warning:'#warningModal', info:'#infoModal' };
+	                $(map[type] + ' .modal-body p').text(msg);
+	                $(map[type]).modal('show');
+	                setTimeout(() => $(map[type]).modal('hide'), 3000);
+	            },
+	            showConfirm: function(title, msg, cb) {
+	                $('#confirmTitle').text(title);
+	                $('#confirmMessage').text(msg);
+	                $('#confirmOkBtn').off('click').on('click', function() { $('#confirmModal').modal('hide'); cb(); });
 	                $('#confirmModal').modal('show');
-	            }
+	            },
+	            showLoading: function(show) { $('#loadingOverlay').fadeToggle(show ? 200 : 200); }
 	        };
 	        
 	        LoanManager.init();
