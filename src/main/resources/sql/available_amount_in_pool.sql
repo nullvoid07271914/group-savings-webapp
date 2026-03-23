@@ -40,4 +40,5 @@ FROM (
     GROUP BY m.member_code
 ) combined
 GROUP BY code
-ORDER BY code;
+ORDER BY code
+;

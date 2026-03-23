@@ -594,6 +594,12 @@
 	                isValid = false;
 	            }
 	            
+	         	// Validate reference number
+	            if (!this.referenceNumberInput.val()) {
+	                this.showFieldError(this.referenceNumberInput, 'Reference number is required');
+	                isValid = false;
+	            }
+	            
 	            // NEW: Optional file validation (if file is required, uncomment)
 	            // const fileInput = this.fileUploadInput[0];
 	            // if (fileInput.files.length === 0) {

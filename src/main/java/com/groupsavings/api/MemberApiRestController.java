@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.groupsavings.model.dto.MemberContributions;
 import com.groupsavings.model.dto.MemberNameRequestDto;
 import com.groupsavings.model.dto.MemberRequestDto;
 import com.groupsavings.model.dto.MemberResponseDto;
+import com.groupsavings.model.dto.MemberTotalContribution;
 import com.groupsavings.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -40,9 +43,27 @@ public class MemberApiRestController {
 		return new ResponseEntity<>(memberList, HttpStatus.CREATED);
 	}
 
+	@GetMapping("/list")
+	public ResponseEntity<List<MemberResponseDto>> members(@RequestParam String status, @RequestParam String type) {
+		List<MemberResponseDto> memberList = memberService.fetchMembers(status, type);
+		return new ResponseEntity<>(memberList, HttpStatus.CREATED);
+	}
+
 	@GetMapping("/info/{code}")
 	public ResponseEntity<MemberResponseDto> memberInfo(@PathVariable String code) {
 		MemberResponseDto member = memberService.findMemberByMemberCode(code);
 		return new ResponseEntity<>(member, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/contributions")
+	public ResponseEntity<List<MemberTotalContribution>> memberContributions() {
+		List<MemberTotalContribution> memberTotalContributions = memberService.fetchMemberTotalContributions();
+		return new ResponseEntity<>(memberTotalContributions, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/contributions/{memberCode}")
+	public ResponseEntity<MemberContributions> memberContributions(@PathVariable String memberCode) {
+		MemberContributions memberContributions = memberService.fetchMemberContributions(memberCode);
+		return new ResponseEntity<>(memberContributions, HttpStatus.CREATED);
 	}
 }

@@ -21,4 +21,16 @@ public class MemberViewController {
 		model.addAttribute("currentUri", request.getRequestURI());
 		return "apply_loan";
 	}
+
+	@GetMapping("/member/list")
+	public String viewMemberList(Model model, HttpServletRequest request) {
+		model.addAttribute("currentUri", request.getRequestURI());
+		return "member_list";
+	}
+	
+	@GetMapping("/member/contributions")
+	public String viewMemberContributions(Model model, HttpServletRequest request) {
+		model.addAttribute("currentUri", request.getRequestURI());
+		return "member_contributions";
+	}
 }

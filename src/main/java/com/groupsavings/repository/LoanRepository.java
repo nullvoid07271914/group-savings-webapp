@@ -20,13 +20,15 @@ public interface LoanRepository extends JpaRepository<Loan, Long>, LoanRepositor
 	Optional<Loan> findByLoanCode(String loanCode);
 
 	@Query("SELECT l FROM Loan l WHERE l.member = :member AND l.loanStatus = :loanStatus")
-	Loan findByBorrowerIdAndLoanStatus(@Param("member") Member member, @Param("loanStatus") LoanStatus loanStatus);
+	List<Loan> findByBorrowerIdAndLoanStatus(@Param("member") Member member,
+			@Param("loanStatus") LoanStatus loanStatus);
 
 	List<Loan> findByMember(Member member);
 
 	List<Loan> findByMemberMemberId(Long memberId);
 
-	List<Loan> findByLoanStatus(LoanStatus loanStatus);
+	@Query("SELECT l FROM Loan l WHERE l.loanStatus = :status ORDER BY l.member")
+	List<Loan> findByLoanStatus(@Param("status") LoanStatus loanStatus);
 
 	List<Loan> findByDateAppliedBetween(LocalDate startDate, LocalDate endDate);
 

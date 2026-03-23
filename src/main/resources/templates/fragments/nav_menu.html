@@ -25,12 +25,27 @@
         <i class="mdi mdi-home menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item" th:classappend="${currentUri.contains('/member/')} ? 'active' : ''">
-      <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
-        <span class="menu-title">Accounts</span>
-        <i class="mdi mdi-contacts menu-icon"></i>
+    <li class="nav-item" th:classappend="${currentUri.contains('/contribution/')} ? 'active' : ''">
+      <a class="nav-link" data-bs-toggle="collapse" href="#contri" aria-expanded="false" aria-controls="icons">
+        <span class="menu-title">Contribution</span>
+        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
       </a>
-      <div class="collapse" id="icons">
+      <div class="collapse" id="contri">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item">
+            <a class="nav-link"
+            	th:classappend="${currentUri.endsWith('/contribution/search-member')} ? 'active' : ''"
+            	th:href="@{/contribution/search-member}">Contribute</a>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" th:classappend="${currentUri.contains('/member/')} ? 'active' : ''">
+      <a class="nav-link" data-bs-toggle="collapse" href="#mem" aria-expanded="false" aria-controls="icons">
+        <span class="menu-title">Accounts</span>
+        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+      </a>
+      <div class="collapse" id="mem">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
             <a class="nav-link"
@@ -38,21 +53,28 @@
             	th:href="@{/member/register}">Member Registration</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/pages/icons/font.html}">View Members</a>
+            <a class="nav-link"
+            	th:classappend="${currentUri.endsWith('/member/list')} ? 'active' : ''"
+            	th:href="@{/member/list}">View Members</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"
+            	th:classappend="${currentUri.endsWith('/member/contributions')} ? 'active' : ''"
+            	th:href="@{/member/contributions}">View Member Contributions</a>
           </li>
         </ul>
       </div>
     </li>
     <li class="nav-item" th:classappend="${currentUri.contains('/loan/')} ? 'active' : ''">
-      <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="forms">
+      <a class="nav-link" data-bs-toggle="collapse" href="#loan" aria-expanded="false" aria-controls="forms">
         <span class="menu-title">Loans</span>
         <i class="mdi mdi-format-list-bulleted menu-icon"></i>
       </a>
-      <div class="collapse" id="forms">
+      <div class="collapse" id="loan">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
             <a class="nav-link"
-            	th:classappend="${currentUri.endsWith('/loan/apply')} ? 'active' : ''"
+            	th:classappend="${currentUri.endsWith('/loan/manage')} ? 'active' : ''"
             	th:href="@{/loan/manage}">Manage Loans</a>
           </li>
           <li class="nav-item">

@@ -102,4 +102,11 @@ public class MemberRequestDto {
 		this.zipcode = zipcode;
 	}
 
+	@Override
+	public String toString() {
+		return "MemberRequestDto [firstname=" + firstname + ", lastname=" + lastname + ", mobileNumber=" + mobileNumber
+				+ ", email=" + email + ", memberType=" + memberType + ", street=" + street + ", barangay=" + barangay
+				+ ", city=" + city + ", province=" + province + ", zipcode=" + zipcode + "]";
+	}
+
 }

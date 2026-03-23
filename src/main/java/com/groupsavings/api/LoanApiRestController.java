@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.groupsavings.model.dto.LoanRequestDto;
 import com.groupsavings.model.dto.LoanResponseDto;
 import com.groupsavings.model.dto.LoanStatusRequestDto;
+import com.groupsavings.model.dto.MemberLoanDto;
+import com.groupsavings.model.dto.MemberLoanRequestDto;
+import com.groupsavings.model.dto.MemberLoansDto;
 import com.groupsavings.model.enums.LoanStatus;
 import com.groupsavings.service.LoanService;
 
@@ -44,6 +47,18 @@ public class LoanApiRestController {
 	@PostMapping("/status")
 	public ResponseEntity<LoanResponseDto> apply(@Valid @RequestBody LoanStatusRequestDto request) {
 		LoanResponseDto loan = loanService.loanStatusProcess(request);
+		return new ResponseEntity<>(loan, HttpStatus.CREATED);
+	}
+
+	@PostMapping("/manage/member-loans")
+	public ResponseEntity<List<MemberLoansDto>> manageLoan(@Valid @RequestBody MemberLoanRequestDto request) {
+		List<MemberLoansDto> memberLoans = loanService.memberLoans(request);
+		return new ResponseEntity<>(memberLoans, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/manage/{memberCode}/{loanCode}")
+	public ResponseEntity<MemberLoanDto> manageLoan(@PathVariable String memberCode, @PathVariable String loanCode) {
+		MemberLoanDto loan = null;//loanService.memberLoan(memberCode, loanCode);
 		return new ResponseEntity<>(loan, HttpStatus.CREATED);
 	}
 }

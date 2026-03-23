@@ -212,4 +212,5 @@ public class Member {
 	public int hashCode() {
 		return Objects.hash(memberId, memberCode);
 	}
+
 }

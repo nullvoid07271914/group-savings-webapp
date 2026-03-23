@@ -54,10 +54,12 @@ public class ContributionServiceImpl implements ContributionService {
 			throw new MemberNotFoundException("Member with code " + contributionDto.getMemberCode() + " not found.");
 		}
 
-		try {
-			fileService.storePaymentReceipt(paymentReceipt, contributionDto.getMemberCode());
-		} catch (IOException e) {
-			throw new PaymentReceiptException(e.getMessage());
+		if (Objects.nonNull(paymentReceipt)) {
+			try {
+				fileService.storePaymentReceipt(paymentReceipt, contributionDto.getMemberCode());
+			} catch (IOException e) {
+				throw new PaymentReceiptException(e.getMessage());
+			}
 		}
 
 		SavingsPool savingsPool = configRepositoty.findConfigByIdOne().getSavingsPool();

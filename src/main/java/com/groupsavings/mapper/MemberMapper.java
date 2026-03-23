@@ -1,6 +1,7 @@
 package com.groupsavings.mapper;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -51,21 +52,7 @@ public interface MemberMapper {
 	@Mapping(target = "zipcode", expression = "java(fetchAddressZipCode(member))")
 	MemberResponseDto toResponseDto(Member member);
 
-	// ========== UPDATE ENTITY ==========
-//	@Mapping(target = "memberId", ignore = true)
-//	@Mapping(target = "memberCode", ignore = true)
-//	@Mapping(target = "address", expression = "java(mapAddress(requestDto))")
-//	@Mapping(target = "joinDate", ignore = true)
-//	@Mapping(target = "memberType", source = "memberType", qualifiedByName = "stringToMemberType")
-//	@Mapping(target = "memberStatus", ignore = true)
-//	@Mapping(target = "contributions", ignore = true)
-//	@Mapping(target = "loans", ignore = true)
-//	@Mapping(target = "loanAllocations", ignore = true)
-//	@Mapping(target = "createdDate", ignore = true)
-//	@Mapping(target = "updatedDate", expression = "java(LocalDateTime.now())")
-//	void updateEntity(@MappingTarget Member member, MemberRequestDto requestDto);
-
-	// ========== CUSTOM MAPPING METHODS ==========
+	List<MemberResponseDto> toResponseDto(List<Member> member);
 
 	@Named("stringToMemberType")
 	default MemberType stringToMemberType(String memberType) {

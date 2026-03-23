@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Member Contributions - Group Savings</title>
+<!-- plugins:css -->
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/mdi/css/materialdesignicons.min.css}">
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/css/vendor.bundle.base.css}">
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/font-awesome/css/font-awesome.min.css}">
+<!-- endinject -->
+<!-- Plugin css for this page -->
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/select2/select2.min.css}">
+<link rel="stylesheet"
+	th:href="@{/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css}">
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<!-- endinject -->
+<!-- Layout styles -->
+<link rel="stylesheet" th:href="@{/assets/css/style.css}">
+<!-- End layout styles -->
+<link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
+
+<!-- Add this CSS -->
+<style>
+.spinner-border-sm {
+	width: 1rem;
+	height: 1rem;
+	border-width: 0.2em;
+	margin-right: 0.5rem;
+}
+
+/* Modal animations */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: scale(0.8);
+}
+.modal.fade.show .modal-dialog {
+    transform: scale(1);
+}
+
+.modal-content {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+}
+
+.modal-body {
+    padding: 1rem 1.5rem;
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+}
+
+/* Icon animations */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-20px);}
+    60% {transform: translateY(-10px);}
+}
+
+.animate-bounce {
+    animation: bounce 1s ease infinite;
+}
+
+@keyframes pulse {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.1);}
+    100% {transform: scale(1);}
+}
+
+.animate-pulse {
+    animation: pulse 0.5s ease 2;
+}
+
+/* Icon circle background */
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px auto;
+}
+
+.icon-circle i {
+    font-size: 35px;
+}
+
+.icon-circle.success {
+    background: linear-gradient(135deg, #84d9d2 0%, #07cdae 100%);
+    color: white;
+}
+
+.icon-circle.error {
+    background: linear-gradient(135deg, #f86a6a 0%, #f83b3b 100%);
+    color: white;
+}
+
+.icon-circle.warning {
+    background: linear-gradient(135deg, #ffb64d 0%, #ff9f1a 100%);
+    color: white;
+}
+
+.icon-circle.info {
+    background: linear-gradient(135deg, #6ab0f8 0%, #2f80ed 100%);
+    color: white;
+}
+
+/* Confirmation modal specific */
+.confirm-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+    font-size: 40px;
+    box-shadow: 0 10px 30px rgba(255, 82, 82, 0.4);
+}
+
+.confirm-icon.warning {
+    background: linear-gradient(135deg, #ffb64d 0%, #ff9f1a 100%);
+    box-shadow: 0 10px 30px rgba(255, 159, 26, 0.4);
+}
+
+.confirm-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.confirm-message {
+    font-size: 16px;
+    color: #6c757d;
+    margin-bottom: 25px;
+}
+
+/* Filter section styles */
+.filter-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+}
+
+/* Member info card */
+.member-info-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.member-info-card h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.member-info-card p {
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+}
+
+/* Table styles */
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.contribution-amount {
+    font-weight: 600;
+    color: #28a745;
+}
+
+.total-card {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.total-card h4 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.total-card p {
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+}
+</style>
+</head>
+<body>
+	<div class="container-scroller">
+		<div th:replace="~{fragments/header_menu :: headerMenu}"></div>
+
+		<!-- partial -->
+		<div class="container-fluid page-body-wrapper">
+			<div th:replace="~{fragments/nav_menu :: navMenu}"></div>
+
+			<!-- partial -->
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="page-header">
+						<h3 class="page-title">Member Contributions</h3>
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item"><a href="#">Contributions</a></li>
+								<li class="breadcrumb-item active" aria-current="page">Member Contributions List</li>
+							</ol>
+						</nav>
+					</div>
+					<div class="row">
+						<div class="col-12 grid-margin stretch-card">
+							<div class="card">
+								<div class="card-body">
+									<h4 class="card-title">Member Contributions</h4>
+									<p class="card-description">View contributions by member</p>
+									
+									<!-- Filter Section -->
+									<div class="filter-section">
+										<div class="row">
+											<div class="col-md-8">
+												<div class="form-group">
+													<label class="filter-label">Select Member</label>
+													<select class="form-select" id="memberFilter">
+														<option value="">-- Select a Member --</option>
+														<!-- Members will be populated here -->
+													</select>
+												</div>
+											</div>
+											<div class="col-md-4 d-flex align-items-end">
+												<div class="form-group w-100">
+													<button class="btn btn-gradient-primary btn-fw me-2" id="applyFilterBtn">
+														<i class="mdi mdi-magnify"></i> Filter
+													</button>
+													<button class="btn btn-gradient-secondary btn-fw" id="resetFilterBtn">
+														<i class="mdi mdi-refresh"></i> Reset
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<!-- Member Info Card -->
+									<div class="member-info-card" id="memberInfoCard">
+										<h3 id="memberName"></h3>
+										<p>Member Code: <span id="memberCodeDisplay"></span> | Joined: <span id="joinedDateDisplay"></span></p>
+									</div>
+									
+									<!-- Total Contributions Card -->
+									<div class="total-card" id="totalCard" style="display: none;">
+										<p>Total Contributions</p>
+										<h4 id="totalAmount">Php 0.00</h4>
+									</div>
+									
+									<table class="table table-striped">
+										<thead>
+											 <tr>
+												<th>Contribution Code</th>
+												<th>Amount</th>
+												<th>Contribution Date</th>
+												<th>Payment Method</th>
+												<th>Reference Number</th>
+												<th>Month Term</th>
+											</tr>
+										</thead>
+										<tbody>
+											<!-- Data will be loaded here via AJAX -->
+										</tbody>
+									</table>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+				<!-- partial:../../partials/_footer.html -->
+				<footer class="footer">
+					<div
+						class="d-sm-flex justify-content-center justify-content-sm-between">
+						<span
+							class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright
+							© 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>.
+							All rights reserved.
+						</span> <span
+							class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted
+							& made with <i class="mdi mdi-heart text-danger"></i>
+						</span>
+					</div>
+				</footer>
+				<!-- partial -->
+			</div>
+			<!-- main-panel ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	<!-- container-scroller -->
+	
+	<!-- ========== MODALS ========== -->
+	
+	<!-- Success Modal -->
+	<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered modal-sm">
+	    <div class="modal-content text-center">
+	      <div class="modal-header justify-content-center border-0">
+	        <div class="icon-circle success animate-bounce">
+	          <i class="mdi mdi-check"></i>
+	        </div>
+	      </div>
+	      <div class="modal-body pt-0">
+	        <h4 class="mb-3">Success!</h4>
+	        <p class="mb-0" id="successMessage">Operation completed successfully!</p>
+	      </div>
+	      <div class="modal-footer justify-content-center border-0">
+	        <button type="button" class="btn btn-gradient-success btn-rounded" data-bs-dismiss="modal">OK</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- Error Modal -->
+	<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered modal-sm">
+	    <div class="modal-content text-center">
+	      <div class="modal-header justify-content-center border-0">
+	        <div class="icon-circle error animate-pulse">
+	          <i class="mdi mdi-close"></i>
+	        </div>
+	      </div>
+	      <div class="modal-body pt-0">
+	        <h4 class="mb-3">Oops!</h4>
+	        <p class="mb-0" id="errorMessage">Something went wrong.</p>
+	      </div>
+	      <div class="modal-footer justify-content-center border-0">
+	        <button type="button" class="btn btn-gradient-danger btn-rounded" data-bs-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- Warning Modal -->
+	<div class="modal fade" id="warningModal" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered modal-sm">
+	    <div class="modal-content text-center">
+	      <div class="modal-header justify-content-center border-0">
+	        <div class="icon-circle warning animate-pulse">
+	          <i class="mdi mdi-alert"></i>
+	        </div>
+	      </div>
+	      <div class="modal-body pt-0">
+	        <h4 class="mb-3">Warning!</h4>
+	        <p class="mb-0" id="warningMessage">Please check your input.</p>
+	      </div>
+	      <div class="modal-footer justify-content-center border-0">
+	        <button type="button" class="btn btn-gradient-warning btn-rounded" data-bs-dismiss="modal">OK</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- Info Modal -->
+	<div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered modal-sm">
+	    <div class="modal-content text-center">
+	      <div class="modal-header justify-content-center border-0">
+	        <div class="icon-circle info">
+	          <i class="mdi mdi-information"></i>
+	        </div>
+	      </div>
+	      <div class="modal-body pt-0">
+	        <h4 class="mb-3">Information</h4>
+	        <p class="mb-0" id="infoMessage">Member information loaded.</p>
+	      </div>
+	      <div class="modal-footer justify-content-center border-0">
+	        <button type="button" class="btn btn-gradient-info btn-rounded" data-bs-dismiss="modal">OK</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- plugins:js -->
+	<script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
+	<script
+		th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/assets/js/off-canvas.js}"></script>
+	<script th:src="@{/assets/js/misc.js}"></script>
+	<script th:src="@{/assets/js/settings.js}"></script>
+	<script th:src="@{/assets/js/todolist.js}"></script>
+	<script th:src="@{/assets/js/jquery.cookie.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page -->
+	<script th:src="@{/assets/js/file-upload.js}"></script>
+	<script th:src="@{/assets/js/typeahead.js}"></script>
+	<script th:src="@{/assets/js/select2.js}"></script>
+	<!-- End custom js for this page -->
+
+	<script type="text/javascript">
+	    $(document).ready(function() {
+	        const ContributionManager = {
+	            init: function() {
+	                this.bindEvents();
+	                this.loadMembers(); // Load member list on init
+	            },
+	            
+	            bindEvents: function() {
+	                // Apply filter button
+	                $('#applyFilterBtn').on('click', $.proxy(function() {
+	                    const memberCode = $('#memberFilter').val();
+	                    if (!memberCode) {
+	                        this.showModal('warning', 'Please select a member first');
+	                        return;
+	                    }
+	                    this.loadMemberContributions(memberCode);
+	                }, this));
+	                
+	                // Reset filter button
+	                $('#resetFilterBtn').on('click', $.proxy(function() {
+	                    $('#memberFilter').val('');
+	                    this.resetDisplay();
+	                    this.showModal('info', 'Filter reset. Please select a member.');
+	                }, this));
+	            },
+	            
+	            // ========== LOAD MEMBERS FROM API ==========
+	            loadMembers: function() {
+	                const url = 'http://localhost:8080/groupsavings/api/v1/member/contributions';
+	                
+	                // Show loading in dropdown
+	                $('#memberFilter').html('<option value="">Loading members...</option>');
+	                
+	                $.ajax({
+	                    url: url,
+	                    type: 'GET',
+	                    contentType: 'application/json',
+	                    dataType: 'json',
+	                    success: $.proxy(function(response) {
+	                        console.log('Members loaded:', response);
+	                        this.populateMemberDropdown(response);
+	                        this.showModal('success', 'Members loaded successfully!');
+	                    }, this),
+	                    error: $.proxy(function(xhr) {
+	                        console.error('Error:', xhr.responseText);
+	                        this.showModal('error', 'Failed to load members. Please try again.');
+	                        $('#memberFilter').html('<option value="">-- Select a Member --</option>');
+	                    }, this)
+	                });
+	            },
+	            
+	            // ========== POPULATE MEMBER DROPDOWN ==========
+	            populateMemberDropdown: function(members) {
+	                const dropdown = $('#memberFilter');
+	                dropdown.empty();
+	                dropdown.append('<option value="">-- Select a Member --</option>');
+	                
+	                if (!members || members.length === 0) {
+	                    dropdown.append('<option value="" disabled>No members found</option>');
+	                    return;
+	                }
+	                
+	                // Sort by firstname
+	                members.sort((a, b) => a.firstname.localeCompare(b.firstname));
+	                
+	                $.each(members, function(index, member) {
+	                    const fullName = `${member.firstname} ${member.lastname}`;
+	                    dropdown.append(`<option value="${member.memberCode}">${fullName}</option>`);
+	                });
+	            },
+	            
+	            // ========== LOAD MEMBER CONTRIBUTIONS ==========
+	            loadMemberContributions: function(memberCode) {
+	                const url = `http://localhost:8080/groupsavings/api/v1/member/contributions/${memberCode}`;
+	                
+	                // Show loading indicator
+	                const tbody = $('.table tbody');
+	                tbody.html(`
+	                    <tr>
+	                        <td colspan="6" class="text-center">
+	                            <div class="spinner-border text-primary" role="status">
+	                                <span class="visually-hidden">Loading...</span>
+	                            </div>
+	                            <br>Loading contributions...
+	                        </td>
+	                    </tr>
+	                `);
+	                
+	                $.ajax({
+	                    url: url,
+	                    type: 'GET',
+	                    contentType: 'application/json',
+	                    dataType: 'json',
+	                    success: $.proxy(function(response) {
+	                        console.log('Contributions loaded:', response);
+	                        this.displayMemberInfo(response);
+	                        this.displayContributions(response.contributions);
+	                        this.showModal('success', 'Contributions loaded successfully!');
+	                    }, this),
+	                    error: $.proxy(function(xhr) {
+	                        console.error('Error:', xhr.responseText);
+	                        
+	                        if (xhr.status === 404) {
+	                            this.showModal('warning', 'No contributions found for this member.');
+	                        } else {
+	                            this.showModal('error', 'Failed to load contributions. Please try again.');
+	                        }
+	                        
+	                        this.resetDisplay();
+	                    }, this)
+	                });
+	            },
+	            
+	            // ========== DISPLAY MEMBER INFO ==========
+	            displayMemberInfo: function(memberData) {
+	                // Show member info card
+	                $('#memberInfoCard').show();
+	                $('#memberName').text(`${memberData.firstname} ${memberData.lastname}`);
+	                $('#memberCodeDisplay').text(memberData.memberCode);
+	                
+	                // Format joined date
+	                if (memberData.joinedDate) {
+	                    const joinedDate = new Date(memberData.joinedDate).toLocaleDateString();
+	                    $('#joinedDateDisplay').text(joinedDate);
+	                } else {
+	                    $('#joinedDateDisplay').text('N/A');
+	                }
+	                
+	                // Calculate and display total contributions
+	                let total = 0;
+	                if (memberData.contributions && memberData.contributions.length > 0) {
+	                    $.each(memberData.contributions, function(index, contribution) {
+	                        total += contribution.amount;
+	                    });
+	                }
+	                
+	                $('#totalAmount').text(`Php ${total.toLocaleString()}`);
+	                $('#totalCard').show();
+	            },
+	            
+	            // ========== DISPLAY CONTRIBUTIONS IN TABLE ==========
+	            displayContributions: function(contributions) {
+	                const tbody = $('.table tbody');
+	                tbody.empty();
+	                
+	                if (!contributions || contributions.length === 0) {
+	                    tbody.append(`
+	                        <tr>
+	                            <td colspan="6" class="text-center">No contributions found for this member</td>
+	                        </tr>
+	                    `);
+	                    return;
+	                }
+	                
+	                // Sort by contribution date (newest first)
+	                contributions.sort((a, b) => new Date(b.contributionDate) - new Date(a.contributionDate));
+	                
+	                $.each(contributions, function(index, contribution) {
+	                    // Format date
+	                    const contribDate = contribution.contributionDate ? new Date(contribution.contributionDate).toLocaleDateString() : 'N/A';
+	                    
+	                    // Format amount
+	                    const amount = `Php ${contribution.amount.toLocaleString()}`;
+	                    
+	                    const row = `
+	                        <tr>
+	                            <td><code>${contribution.contributionCode || 'N/A'}</code></td>
+	                            <td class="contribution-amount">${amount}</td>
+	                            <td>${contribDate}</td>
+	                            <td><span class="badge badge-info">${contribution.paymentMethod || 'N/A'}</span></td>
+	                            <td><small>${contribution.referenceNumber || 'N/A'}</small></td>
+	                            <td><span class="badge badge-primary">${contribution.monthTerm || 0} Term</span></td>
+	                        </tr>
+	                    `;
+	                    tbody.append(row);
+	                });
+	            },
+	            
+	            // ========== RESET DISPLAY ==========
+	            resetDisplay: function() {
+	                // Hide info card and total card
+	                $('#memberInfoCard').hide();
+	                $('#totalCard').hide();
+	                
+	                // Clear table
+	                const tbody = $('.table tbody');
+	                tbody.html(`
+	                    <tr>
+	                        <td colspan="6" class="text-center">Select a member to view contributions</td>
+	                    </tr>
+	                `);
+	            },
+	            
+	            // ========== SHOW MODAL ==========
+	            showModal: function(type, message) {
+	                let modalId = '';
+	                let messageId = '';
+	                
+	                switch(type) {
+	                    case 'success':
+	                        modalId = '#successModal';
+	                        messageId = '#successMessage';
+	                        break;
+	                    case 'error':
+	                        modalId = '#errorModal';
+	                        messageId = '#errorMessage';
+	                        break;
+	                    case 'warning':
+	                        modalId = '#warningModal';
+	                        messageId = '#warningMessage';
+	                        break;
+	                    case 'info':
+	                        modalId = '#infoModal';
+	                        messageId = '#infoMessage';
+	                        break;
+	                    default:
+	                        modalId = '#infoModal';
+	                        messageId = '#infoMessage';
+	                }
+	                
+	                // Set message
+	                $(messageId).text(message);
+	                
+	                // Show modal
+	                $(modalId).modal('show');
+	                
+	                // Auto hide after 3 seconds for success/info, 4 seconds for error/warning
+	                let timeout = 3000;
+	                if (type === 'error' || type === 'warning') {
+	                    timeout = 4000;
+	                }
+	                
+	                setTimeout(() => {
+	                    $(modalId).modal('hide');
+	                }, timeout);
+	            }
+	        };
+	        
+	        // Initialize
+	        ContributionManager.init();
+	    });
+	</script>
+</body>
+</html>

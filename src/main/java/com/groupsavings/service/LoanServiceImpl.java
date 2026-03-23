@@ -3,8 +3,11 @@ package com.groupsavings.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.groupsavings.component.AmountInPoolPerMemberMapper;
+import com.groupsavings.component.MemberLoansMapper;
 import com.groupsavings.constants.LoanConstants;
 import com.groupsavings.exception.BorrowerLoanExistException;
 import com.groupsavings.exception.BorrowerNotFoundException;
@@ -24,6 +28,10 @@ import com.groupsavings.model.dto.AmountPerMemberDto;
 import com.groupsavings.model.dto.LoanRequestDto;
 import com.groupsavings.model.dto.LoanResponseDto;
 import com.groupsavings.model.dto.LoanStatusRequestDto;
+import com.groupsavings.model.dto.MemberLoanAmortizationDto;
+import com.groupsavings.model.dto.MemberLoanDto;
+import com.groupsavings.model.dto.MemberLoanRequestDto;
+import com.groupsavings.model.dto.MemberLoansDto;
 import com.groupsavings.model.entity.Loan;
 import com.groupsavings.model.entity.LoanMemberAllocation;
 import com.groupsavings.model.entity.Member;
@@ -53,6 +61,8 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 
 	private final AmountInPoolPerMemberMapper amountInPoolPerMemberMapper;
 
+	private final MemberLoansMapper memberLoansMapper;
+
 	private final LoanMapper loanMapper;
 
 	@Transactional
@@ -66,9 +76,10 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 		if (Objects.nonNull(borrower)) {
 			Loan loan = new Loan();
 
-			Loan activeLoan = loanRepository.findByBorrowerIdAndLoanStatus(borrower, LoanStatus.ACTIVE);
-			if (Objects.nonNull(activeLoan)) {
-				Optional<Member> member = memberRepository.findById(activeLoan.getMember().getMemberId());
+			List<Loan> activeLoans = loanRepository.findByBorrowerIdAndLoanStatus(borrower, LoanStatus.ACTIVE);
+			if (Objects.nonNull(activeLoans) && activeLoans.size() > 0) {
+				Member fetchMember = activeLoans.get(0).getMember();
+				Optional<Member> member = memberRepository.findById(fetchMember.getMemberId());
 				if (member.isPresent() && MemberType.BORROWER.equals(member.get().getMemberType())) {
 					throw new BorrowerLoanExistException(
 							"Borrower " + borrower.getFirstname() + " has existing active loan.");
@@ -200,5 +211,55 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 		}
 
 		return new LoanResponseDto();
+	}
+
+	@Override
+	public List<MemberLoansDto> memberLoans(MemberLoanRequestDto request) {
+		List<Object[]> fetchedMemberLoans = loanRepository.fetchMemberLoans(request.getName(), request.getStatus());
+		log.info("fetchedMemberLoans: {}", fetchedMemberLoans);
+		List<MemberLoansDto> memberLoans = memberLoansMapper.toDtoList(fetchedMemberLoans);
+		return memberLoans;
+	}
+
+	@Override
+	public MemberLoanAmortizationDto memberLoanAmortizations(String memberCode, String loanCode) {
+//		Object[] fetchMemberLoan = loanRepository.fetchMemberLoan(memberCode, loanCode);
+//		log.info("fetchMemberLoan: {}", fetchMemberLoan);
+//		MemberLoanDto memberLoan = memberLoansMapper.toSingleDto(fetchMemberLoan);
+//
+//		if (Objects.isNull(memberLoan)) {
+//			// throw exception
+//		}
+//
+//		int terms = memberLoan.getLoan().getTerms();
+//		LocalDate dueDate = memberLoan.getLoan().getDueDate();
+//
+//		Map<Integer, LocalDate> schedule = generateSchedule(terms, dueDate);
+//
+//		return memberLoan;
+		return null;
+	}
+
+	private Map<Integer, LocalDate> generateSchedule(int term, LocalDate dueDate) {
+		Map<Integer, LocalDate> result = new HashMap<>();
+		LocalDate current = dueDate;
+
+		for (int i = term; i >= 1; i--) {
+			result.put(i, current);
+			if (i > 1) {
+				current = getPreviousCutoff(current);
+			}
+		}
+
+		return result;
+	}
+
+	private LocalDate getPreviousCutoff(LocalDate date) {
+		if (date.getDayOfMonth() == 15) {
+			LocalDate prevMonth = date.minusMonths(1);
+			return prevMonth.withDayOfMonth(YearMonth.from(prevMonth).lengthOfMonth());
+		} else {
+			return date.withDayOfMonth(15);
+		}
 	}
 }

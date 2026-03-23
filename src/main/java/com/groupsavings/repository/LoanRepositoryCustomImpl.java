@@ -2,6 +2,7 @@ package com.groupsavings.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Repository;
 
@@ -9,18 +10,15 @@ import com.groupsavings.service.SqlQueryLoader;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import lombok.RequiredArgsConstructor;
 
 @Repository
+@RequiredArgsConstructor
 public class LoanRepositoryCustomImpl implements LoanRepositoryCustom {
 
 	private final EntityManager entityManager;
 
 	private final SqlQueryLoader sqlLoader;
-
-	public LoanRepositoryCustomImpl(EntityManager entityManager, SqlQueryLoader sqlLoader) {
-		this.entityManager = entityManager;
-		this.sqlLoader = sqlLoader;
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -30,6 +28,55 @@ public class LoanRepositoryCustomImpl implements LoanRepositoryCustom {
 		query.setParameter(1, poolId);
 		query.setParameter(2, loanDateApplied);
 		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object[]> fetchMemberLoans(String name, String status) {
+		String sql = sqlLoader.getQuery("borrower_loans.sql");
+
+		boolean hasName = false;
+		boolean hasStatus = false;
+
+		boolean hasAppend = false;
+		if (Objects.nonNull(name) && !name.isBlank()) {
+			sql = sql + " WHERE (m.firstname LIKE ?1 OR m.lastname LIKE ?2) ";
+			hasAppend = true;
+			hasName = true;
+		}
+
+		if (!Objects.equals("ALL", status)) {
+			sql = sql + (hasAppend ? " AND " : " WHERE ");
+			sql = sql + " l.loan_status = ?" + (hasAppend ? "3" : "1");
+			hasStatus = true;
+		}
+
+		sql = sql + " ORDER BY m.member_code";
+
+		Query query = entityManager.createNativeQuery(sql);
+
+		if (hasName) {
+			String queryName = "%" + name + "%";
+			query.setParameter(1, queryName);
+			query.setParameter(2, queryName);
+		}
+
+		if (hasName && hasStatus) {
+			query.setParameter(3, status);
+		} else if (hasStatus) {
+			query.setParameter(1, status);
+		}
+
+		return query.getResultList();
+	}
+
+	@Override
+	public Object[] fetchMemberLoan(String memberCode, String loanCode) {
+		String sql = sqlLoader.getQuery("borrower_single_loan.sql");
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter(1, memberCode);
+		query.setParameter(2, loanCode);
+		return (Object[]) query.getSingleResult();
 	}
 
 //	@Override

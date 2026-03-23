@@ -258,15 +258,4 @@ public class Loan {
 		return Objects.hash(loanId, loanCode);
 	}
 
-	@Override
-	public String toString() {
-		return "Loan [loanId=" + loanId + ", loanCode=" + loanCode + ", member=" + member + ", savingsPool="
-				+ savingsPool + ", loanMembersAllocation=" + loanMembersAllocation + ", payments=" + payments
-				+ ", loanAmount=" + loanAmount + ", interestRate=" + interestRate + ", terms=" + terms + ", loanStatus="
-				+ loanStatus + ", dateApplied=" + dateApplied + ", dateApproved=" + dateApproved + ", dateReleased="
-				+ dateReleased + ", dateFullyPaid=" + dateFullyPaid + ", totalAmount=" + totalAmount + ", dueDate="
-				+ dueDate + ", amortization=" + amortization + ", createdDate=" + createdDate + ", updatedDate="
-				+ updatedDate + "]";
-	}
-
 }

@@ -9,10 +9,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.groupsavings.model.entity.Member;
+import com.groupsavings.model.enums.MemberStatus;
 import com.groupsavings.model.enums.MemberType;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
 	@Query("SELECT CASE WHEN COUNT(m) > 0 THEN true ELSE false END FROM Member m WHERE m.email = :email")
 	boolean isEmailExist(@Param("email") String email);
@@ -22,7 +23,14 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	Member findByMemberCode(String memberCode);
 
-	List<Member> findByMemberType(MemberType memberType);
+	@Query("SELECT m FROM Member m WHERE m.memberType LIKE :type")
+	List<Member> findByMemberType(@Param("type") MemberType type);
+
+	@Query("SELECT m FROM Member m WHERE m.memberStatus LIKE :status")
+	List<Member> findByMemberStatus(@Param("status") MemberStatus status);
+
+	@Query("SELECT m FROM Member m WHERE m.memberStatus LIKE :status AND m.memberType LIKE :type")
+	List<Member> findByMemberStatusAndType(@Param("status") MemberStatus status, @Param("type") MemberType type);
 
 	List<Member> findByJoinDateBetween(LocalDate startDate, LocalDate endDate);
 
