@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.groupsavings.model.dto.MemberTotalContribution;
+import com.groupsavings.model.dto.MemberTotalContributionDto;
 
 @Component
 public class MemberTotalContributionMapper {
@@ -26,14 +26,14 @@ public class MemberTotalContributionMapper {
 		}
 	}
 
-	public List<MemberTotalContribution> toMemberTotalContributionDto(List<Object[]> rows) {
+	public List<MemberTotalContributionDto> toMemberTotalContributionDto(List<Object[]> rows) {
 		if (rows == null || rows.isEmpty()) {
 			return List.of();
 		}
 
-		List<MemberTotalContribution> memberContributions = new ArrayList<MemberTotalContribution>();
+		List<MemberTotalContributionDto> memberContributions = new ArrayList<MemberTotalContributionDto>();
 		for (Object[] row : rows) {
-			MemberTotalContribution details = new MemberTotalContribution();
+			MemberTotalContributionDto details = new MemberTotalContributionDto();
 			extract(row, details);
 			memberContributions.add(details);
 		}
@@ -41,7 +41,7 @@ public class MemberTotalContributionMapper {
 		return memberContributions;
 	}
 
-	private void extract(Object[] row, MemberTotalContribution memberDto) {
+	private void extract(Object[] row, MemberTotalContributionDto memberDto) {
 		memberDto.setMemberCode(getString(row, RowColumn.MEMBER_CODE));
 		memberDto.setFirstname(getString(row, RowColumn.FIRSTNAME));
 		memberDto.setLastname(getString(row, RowColumn.LASTNAME));

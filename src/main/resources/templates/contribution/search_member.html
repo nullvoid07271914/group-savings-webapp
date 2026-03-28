@@ -119,11 +119,21 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
         }
         
         .member-link:hover {
             color: #764ba2;
             transform: translateX(5px);
+        }
+        
+        .member-row {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .member-row:hover {
+            background-color: #f8f9fa;
         }
         
         /* Contribution Form */
@@ -275,6 +285,11 @@
             font-weight: 500;
         }
         
+        .badge-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
         /* Empty State */
         .empty-state {
             text-align: center;
@@ -286,6 +301,94 @@
             font-size: 3rem;
             margin-bottom: 15px;
             opacity: 0.5;
+        }
+        
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 20px;
+            overflow: hidden;
+            animation: modalSlideIn 0.3s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: scaleIn 0.5s ease;
+        }
+        
+        .modal-error-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: scaleIn 0.5s ease;
+        }
+        
+        .modal-warning-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: scaleIn 0.5s ease;
+        }
+        
+        .modal-icon {
+            font-size: 3rem;
+            color: white;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .modal-button {
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .confirm-details {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
         }
         
         /* Responsive */
@@ -456,26 +559,25 @@
                                             </div>
                                         </div>
                                         
-                                        <!-- CORRECTED FILE UPLOAD SECTION - Remove the duplicate -->
-										<div class="row">
-										    <div class="col-md-12">
-										        <div class="form-group-modern">
-										            <label><i class="mdi mdi-file-document"></i> Payment Receipt</label>
-										            <div class="file-upload-wrapper">
-										                <div class="input-group">
-										                    <input type="text" class="form-control file-upload-info" id="receiptFileName" disabled placeholder="Upload payment receipt (JPG, PNG, PDF)">
-										                    <span class="input-group-append">
-										                        <button class="file-upload-browse btn btn-gradient-primary" type="button">
-										                            <i class="mdi mdi-folder-open"></i> Browse File
-										                        </button>
-										                    </span>
-										                </div>
-										                <input type="file" class="file-upload-default" id="paymentReceipt" name="paymentReceipt" accept="image/jpeg,image/png,application/pdf" style="display: none;">
-										                <small class="text-muted">Max file size: 5MB. Allowed formats: JPG, PNG, PDF</small>
-										            </div>
-										        </div>
-										    </div>
-										</div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group-modern">
+                                                    <label><i class="mdi mdi-file-document"></i> Payment Receipt</label>
+                                                    <div class="file-upload-wrapper">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control file-upload-info" id="receiptFileName" disabled placeholder="Upload payment receipt (JPG, PNG, PDF)">
+                                                            <span class="input-group-append">
+                                                                <button class="file-upload-browse btn btn-gradient-primary" type="button">
+                                                                    <i class="mdi mdi-folder-open"></i> Browse File
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                        <input type="file" class="file-upload-default" id="paymentReceipt" name="paymentReceipt" accept="image/jpeg,image/png,application/pdf" style="display: none;">
+                                                        <small class="text-muted">Max file size: 5MB. Allowed formats: JPG, PNG, PDF</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         
                                         <div class="row">
                                             <div class="col-md-12">
@@ -526,8 +628,63 @@
         </div>
     </div>
     
-    <!-- Modals (reuse from previous, include them here) -->
-    <!-- Include all modals from previous version -->
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmSubmitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="mdi mdi-alert-circle-outline" style="font-size: 4rem; color: #ffc107;"></i>
+                    </div>
+                    <h5 class="mb-3">Confirm Contribution</h5>
+                    <p class="text-muted mb-4">Please review the contribution details before submitting.</p>
+                    
+                    <div class="confirm-details mb-4">
+                        <div class="row mb-2">
+                            <div class="col-6 text-muted">Member:</div>
+                            <div class="col-6 fw-bold" id="confirmMemberName">-</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6 text-muted">Amount:</div>
+                            <div class="col-6 fw-bold text-success" id="confirmAmount">₱0.00</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6 text-muted">Payment Method:</div>
+                            <div class="col-6 fw-bold" id="confirmPaymentMethod">-</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6 text-muted">Reference #:</div>
+                            <div class="col-6 fw-bold" id="confirmReference">-</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 text-muted">Term:</div>
+                            <div class="col-6 fw-bold" id="confirmTerm">-</div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-radius: 10px; padding: 10px 25px;">
+                            <i class="mdi mdi-close"></i> Cancel
+                        </button>
+                        <button type="button" class="btn btn-gradient-primary" id="confirmSubmitBtn" style="border-radius: 10px; padding: 10px 25px;">
+                            <i class="mdi mdi-check"></i> Confirm & Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Transaction Result Modal -->
+    <div class="modal fade" id="transactionResultModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-body text-center p-5" id="modalContent">
+                    <!-- Content will be dynamically populated -->
+                </div>
+            </div>
+        </div>
+    </div>
     
     <script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
     <script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
@@ -546,11 +703,22 @@
         
         const ContributionManager = {
             currentMember: null,
+            currentMemberName: null,
             
             init: function() {
                 this.bindEvents();
                 this.setDefaultDate();
                 this.setupFileUpload();
+                this.initModals();
+            },
+            
+            initModals: function() {
+                // Initialize Bootstrap modals
+                this.transactionModal = new bootstrap.Modal(document.getElementById('transactionResultModal'));
+                this.confirmModal = new bootstrap.Modal(document.getElementById('confirmSubmitModal'));
+                
+                // Bind confirm submit button
+                $('#confirmSubmitBtn').on('click', $.proxy(this.submitContribution, this));
             },
             
             bindEvents: function() {
@@ -576,30 +744,26 @@
             },
             
             setupFileUpload: function() {
-                // Single file upload browse button
                 $('.file-upload-browse').off('click').on('click', function(e) {
                     e.preventDefault();
                     $('#paymentReceipt').click();
                 });
                 
-                // Handle file selection
                 $('#paymentReceipt').off('change').on('change', function(e) {
                     const file = e.target.files[0];
                     if (file) {
                         $('#receiptFileName').val(file.name);
                         
-                        // Validate file size (max 5MB)
                         if (file.size > 5 * 1024 * 1024) {
-                            ContributionManager.showAlert('warning', 'File size should not exceed 5MB');
+                            ContributionManager.showModal('error', 'File Too Large', 'File size should not exceed 5MB');
                             $(this).val('');
                             $('#receiptFileName').val('');
                             return;
                         }
                         
-                        // Validate file type
                         const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
                         if (!allowedTypes.includes(file.type)) {
-                            ContributionManager.showAlert('warning', 'Only JPG, PNG, and PDF files are allowed');
+                            ContributionManager.showModal('error', 'Invalid File Type', 'Only JPG, PNG, and PDF files are allowed');
                             $(this).val('');
                             $('#receiptFileName').val('');
                             return;
@@ -704,14 +868,14 @@
                 
                 $.each(members, function(index, member) {
                     const fullName = `${member.firstname} ${member.lastname}`;
-                    const dateRegistered = this.formatDate(member.joinedDate);
+                    const dateRegistered = ContributionManager.formatDate(member.joinedDate);
                     const memberCode = member.memberCode;
                     
                     const row = `
-                        <tr class="member-row" data-member-code="${memberCode}" data-member-name="${fullName}" style="cursor: pointer;">
+                        <tr class="member-row" data-member-code="${memberCode}" data-member-name="${fullName}" data-member-id="${member.memberId}" style="cursor: pointer;">
                             <td>
                                 <a href="#" class="member-link" data-member-code="${memberCode}">
-                                    <i class="mdi mdi-account-circle"></i> ${this.escapeHtml(fullName)}
+                                    <i class="mdi mdi-account-circle"></i> ${ContributionManager.escapeHtml(fullName)}
                                 </a>
                             </td>
                             <td>${dateRegistered}</td>
@@ -719,7 +883,7 @@
                         </tr>
                     `;
                     tbody.append(row);
-                }.bind(this));
+                });
                 
                 // Bind click events to rows
                 $('.member-row').on('click', $.proxy(function(e) {
@@ -739,6 +903,7 @@
                     contentType: 'application/json',
                     success: $.proxy(function(response) {
                         this.currentMember = response;
+                        this.currentMemberName = memberName;
                         this.populateMemberForm(memberCode, memberName);
                         this.showSelectedMemberCard(memberCode, memberName);
                         this.showAlert('success', `Member ${memberName} selected`);
@@ -769,6 +934,7 @@
             
             clearSelectedMember: function() {
                 this.currentMember = null;
+                this.currentMemberName = null;
                 $('#selectedMemberCard').hide();
                 $('#memberCode').val('');
                 this.showAlert('info', 'Member selection cleared');
@@ -779,8 +945,8 @@
                 $('#paymentMethod').val('');
                 $('#referenceNumber').val('');
                 $('#notes').val('');
-                $('#paymentReceipt').val('');  // Clear file input
-                $('#receiptFileName').val(''); // Clear filename display
+                $('#paymentReceipt').val('');
+                $('#receiptFileName').val('');
                 this.setDefaultDate();
                 this.showAlert('info', 'Form cleared');
             },
@@ -791,6 +957,30 @@
                 if (!this.validateContributionForm()) {
                     return;
                 }
+                
+                // Show confirmation modal with details
+                this.showConfirmationModal();
+            },
+            
+            showConfirmationModal: function() {
+                // Populate confirmation details
+                const memberName = $('#selectedMemberName').text();
+                const amount = parseFloat($('#amount').val()).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
+                const paymentMethod = $('#paymentMethod option:selected').text();
+                const referenceNumber = $('#referenceNumber').val();
+                const term = $('#term').val();
+                
+                $('#confirmMemberName').text(memberName);
+                $('#confirmAmount').text(amount);
+                $('#confirmPaymentMethod').text(paymentMethod);
+                $('#confirmReference').text(referenceNumber);
+                $('#confirmTerm').text(term);
+                
+                this.confirmModal.show();
+            },
+            
+            submitContribution: function() {
+                this.confirmModal.hide();
                 
                 const contributionData = {
                     memberCode: $('#memberCode').val(),
@@ -805,7 +995,6 @@
                 const formData = new FormData();
                 formData.append('contributionDto', new Blob([JSON.stringify(contributionData)], { type: 'application/json' }));
                 
-                // FIXED: Use the correct file input ID
                 const fileInput = $('#paymentReceipt')[0];
                 if (fileInput && fileInput.files.length > 0) {
                     formData.append('paymentReceipt', fileInput.files[0]);
@@ -821,28 +1010,146 @@
                     processData: false,
                     contentType: false,
                     success: $.proxy(function(response) {
-                        this.showAlert('success', 'Contribution recorded successfully!');
-                        this.clearContributionForm();
-                        // Reset file upload
-                        $('#paymentReceipt').val('');
-                        $('#receiptFileName').val('');
-                        if (this.currentMember) {
-                            this.populateMemberForm(this.currentMember.memberCode, `${this.currentMember.firstname} ${this.currentMember.lastname}`);
-                        }
+                        this.handleSuccessResponse(response);
                     }, this),
                     error: $.proxy(function(xhr) {
-                        let message = 'Failed to record contribution';
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            message = response.message || message;
-                        } catch(e) {}
-                        this.showAlert('danger', message);
+                        this.handleErrorResponse(xhr);
                     }, this),
                     complete: $.proxy(function() {
                         this.showLoading(false);
                         $('#submitContributionBtn').prop('disabled', false).html('<i class="mdi mdi-check"></i> Record Contribution');
                     }, this)
                 });
+            },
+            
+            handleSuccessResponse: function(response) {
+                const amount = parseFloat($('#amount').val()).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
+                const memberName = $('#selectedMemberName').text();
+                const referenceNumber = $('#referenceNumber').val();
+                
+                const successContent = `
+                    <div class="modal-success-icon">
+                        <i class="mdi mdi-check-bold modal-icon"></i>
+                    </div>
+                    <h4 class="mb-3" style="color: #11998e;">Successfully Recorded!</h4>
+                    <p class="text-muted mb-4">Your contribution has been recorded successfully.</p>
+                    
+                    <div class="confirm-details mb-4">
+                        <div class="row mb-2">
+                            <div class="col-6 text-muted">Member:</div>
+                            <div class="col-6 fw-bold">${this.escapeHtml(memberName)}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6 text-muted">Amount:</div>
+                            <div class="col-6 fw-bold text-success">${amount}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6 text-muted">Payment Method:</div>
+                            <div class="col-6 fw-bold">${$('#paymentMethod option:selected').text()}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6 text-muted">Reference Number:</div>
+                            <div class="col-6 fw-bold">${this.escapeHtml(referenceNumber)}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 text-muted">Term:</div>
+                            <div class="col-6 fw-bold">${$('#term').val()}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button type="button" class="btn btn-gradient-primary modal-button" data-bs-dismiss="modal" id="successDoneBtn">
+                            <i class="mdi mdi-check"></i> Done
+                        </button>
+                        <button type="button" class="btn btn-outline-primary modal-button" id="recordAnotherBtn">
+                            <i class="mdi mdi-plus"></i> Record Another
+                        </button>
+                    </div>
+                `;
+                
+                $('#modalContent').html(successContent);
+                this.transactionModal.show();
+                
+                // Bind record another button
+                $('#recordAnotherBtn').off('click').on('click', $.proxy(function() {
+                    this.transactionModal.hide();
+                    this.clearContributionForm();
+                }, this));
+                
+                // Bind done button
+                $('#successDoneBtn').off('click').on('click', $.proxy(function() {
+                    this.transactionModal.hide();
+                }, this));
+            },
+            
+            handleErrorResponse: function(xhr) {
+                let message = 'Failed to record contribution';
+                let errorDetails = '';
+                
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    message = response.message || message;
+                    errorDetails = response.details || '';
+                } catch(e) {}
+                
+                const errorContent = `
+                    <div class="modal-error-icon">
+                        <i class="mdi mdi-close-circle modal-icon"></i>
+                    </div>
+                    <h4 class="mb-3" style="color: #eb3349;">Transaction Failed</h4>
+                    <p class="text-muted mb-2">${this.escapeHtml(message)}</p>
+                    ${errorDetails ? `<small class="text-muted d-block mb-4">${this.escapeHtml(errorDetails)}</small>` : '<div class="mb-4"></div>'}
+                    
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button type="button" class="btn btn-gradient-primary modal-button" data-bs-dismiss="modal">
+                            <i class="mdi mdi-close"></i> Close
+                        </button>
+                        <button type="button" class="btn btn-outline-primary modal-button" id="tryAgainBtn">
+                            <i class="mdi mdi-refresh"></i> Try Again
+                        </button>
+                    </div>
+                `;
+                
+                $('#modalContent').html(errorContent);
+                this.transactionModal.show();
+                
+                // Bind try again button
+                $('#tryAgainBtn').off('click').on('click', $.proxy(function() {
+                    this.transactionModal.hide();
+                }, this));
+            },
+            
+            showModal: function(type, title, message) {
+                let iconClass = 'modal-error-icon';
+                let iconName = 'mdi-close-circle';
+                let color = '#eb3349';
+                
+                if (type === 'success') {
+                    iconClass = 'modal-success-icon';
+                    iconName = 'mdi-check-bold';
+                    color = '#11998e';
+                } else if (type === 'warning') {
+                    iconClass = 'modal-warning-icon';
+                    iconName = 'mdi-alert';
+                    color = '#f5576c';
+                }
+                
+                const content = `
+                    <div class="${iconClass}">
+                        <i class="mdi ${iconName} modal-icon"></i>
+                    </div>
+                    <h4 class="mb-3" style="color: ${color};">${title}</h4>
+                    <p class="text-muted mb-4">${message}</p>
+                    
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-gradient-primary modal-button" data-bs-dismiss="modal">
+                            <i class="mdi mdi-check"></i> OK
+                        </button>
+                    </div>
+                `;
+                
+                $('#modalContent').html(content);
+                this.transactionModal.show();
             },
             
             validateContributionForm: function() {

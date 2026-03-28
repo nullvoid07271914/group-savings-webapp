@@ -3,7 +3,7 @@ package com.groupsavings.model.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class MemberTotalContribution {
+public class MemberTotalContributionDto {
 
 	private String memberCode;
 

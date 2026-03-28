@@ -2,6 +2,7 @@ package com.groupsavings.model.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.groupsavings.model.enums.LoanStatus;
 
@@ -30,6 +31,8 @@ public class LoanDto {
 	private LocalDate dueDate;
 
 	private BigDecimal amortization;
+
+	private List<PaymentDto> payments;
 
 	public String getLoanCode() {
 		return loanCode;
@@ -125,6 +128,14 @@ public class LoanDto {
 
 	public void setAmortization(BigDecimal amortization) {
 		this.amortization = amortization;
+	}
+
+	public List<PaymentDto> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(List<PaymentDto> payments) {
+		this.payments = payments;
 	}
 
 }

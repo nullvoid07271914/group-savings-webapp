@@ -10,7 +10,7 @@ public class MemberLoansDto {
 
 	private String lastname;
 
-	List<LoanDto> loans;
+	private List<LoanDto> loans;
 
 	public String getMemberCode() {
 		return memberCode;

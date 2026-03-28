@@ -348,7 +348,27 @@
 
 /* Payment Modal Styles */
 .payment-modal .modal-dialog {
-    max-width: 800px;
+    max-width: 1100px;
+    width: 95%;
+}
+
+.payment-modal .modal-content {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* Schedule grid responsive */
+@media (max-width: 768px) {
+    .payment-modal .modal-dialog {
+        max-width: 95%;
+        margin: 0.5rem auto;
+    }
+    
+    .schedule-header .row > div,
+    .schedule-item .row > div {
+        font-size: 0.75rem;
+        padding: 0 4px;
+    }
 }
 
 .amortization-schedule {
@@ -600,7 +620,7 @@
 										<table class="table table-hover">
 											<thead></thead>
 											<tbody></tbody>
-										8~
+										</table>
 									</div>
 								</div>
 							</div>
@@ -909,7 +929,6 @@
 	                        const members = Array.isArray(res) ? res : [res];
 	                        this.updateStatsCards(members);
 	                        this.renderTable(members, loanStatus);
-	                        this.showModal('success', 'Loans loaded successfully');
 	                    }, this),
 	                    error: $.proxy(function() {
 	                        this.showModal('error', 'Failed to load loans');
@@ -981,11 +1000,12 @@
 	                if (hasAction) this.bindActionButtons();
 	            },
 	            
-	            // ========== FIXED: showPaymentModal - Both table and dropdown ascending ==========
+	            // ========== UPDATED: showPaymentModal with PAID terms ==========
 	            showPaymentModal: function(e) {
 	                e.preventDefault();
 	                const loan = $(e.currentTarget).data('loan');
 	                const borrowerName = $(e.currentTarget).data('member');
+	                
 	                const schedule = this.generateSchedule(loan);
 	                this.currentLoanData = { loan: loan, schedule: schedule };
 	                
@@ -995,35 +1015,147 @@
 	                $('#modalTotalAmount').text(`Php ${this.formatNumber(loan.totalAmount || loan.loanAmount)}`);
 	                $('#modalAmortization').text(`Php ${this.formatNumber(loan.amortization)}`);
 	                
-	                // Sort by term ascending (Term 1, Term 2, Term 3...)
+	                // Get paid terms from API response payments array
+	                const paidTerms = this.getPaidTermsFromPayments(loan.payments);
 	                const sortedByTerm = [...schedule].sort((a, b) => a.term - b.term);
 	                
-	                // Display schedule in ascending order (Term 1 first)
-	                let scheduleHtml = `<div class="schedule-header"><div class="row"><div class="col-3">Due Date</div><div class="col-3">Term</div><div class="col-3">Amount</div><div class="col-3">Status</div></div></div>`;
+	                // Display schedule with PAID status and payment details
+	                let scheduleHtml = `<div class="schedule-header">
+	                    <div class="row">
+	                        <div class="col-2">Due Date</div>
+	                        <div class="col-2">Term</div>
+	                        <div class="col-2">Amount</div>
+	                        <div class="col-2">Status</div>
+	                        <div class="col-2">Payment Code</div>
+	                        <div class="col-2">Payment Date</div>
+	                    </div>
+	                </div>`;
+	                
 	                sortedByTerm.forEach(item => {
-	                    scheduleHtml += `<div class="schedule-item"><div class="row"><div class="col-3 schedule-date">${item.dueDate}</div><div class="col-3">Term ${item.term}</div><div class="col-3 schedule-amount">Php ${this.formatNumber(item.amount)}</div><div class="col-3 schedule-status"><span class="badge badge-warning">PENDING</span></div></div></div>`;
+	                    const paidInfo = paidTerms.find(p => p.term === item.term);
+	                    const isPaid = !!paidInfo;
+	                    const statusClass = isPaid ? 'badge-success' : 'badge-warning';
+	                    const statusText = isPaid ? 'PAID' : 'PENDING';
+	                    
+	                    scheduleHtml += `
+	                        <div class="schedule-item ${isPaid ? 'paid' : ''}">
+	                            <div class="row">
+	                                <div class="col-2 schedule-date">${item.dueDate}</div>
+	                                <div class="col-2">Term ${item.term}</div>
+	                                <div class="col-2 schedule-amount">Php ${this.formatNumber(item.amount)}</div>
+	                                <div class="col-2"><span class="badge ${statusClass}">${statusText}</span></div>
+	                                <div class="col-2">
+	                                    ${isPaid ? `<span class="badge badge-info" style="font-family: monospace;">${paidInfo.paymentCode || 'N/A'}</span>` : '<span class="text-muted">-</span>'}
+	                                </div>
+	                                <div class="col-2">
+	                                    ${isPaid ? `<span class="badge badge-secondary">${this.formatDate(paidInfo.paymentDate)}</span>` : '<span class="text-muted">-</span>'}
+	                                </div>
+	                            </div>
+	                        </div>
+	                    `;
 	                });
 	                $('#amortizationScheduleList').html(scheduleHtml);
 	                
-	                // Dropdown in ascending order (Term 1 first)
+	                // Build dropdown with disabled paid terms
 	                const termSelect = $('#payInTerm');
 	                termSelect.html('<option value="">Select term to pay</option>');
 	                
 	                sortedByTerm.forEach(item => {
-	                    termSelect.append(`<option value="${item.term}">Term ${item.term} - Due: ${item.dueDate} (Php ${this.formatNumber(item.amount)})</option>`);
+	                    const isPaid = paidTerms.some(p => p.term === item.term);
+	                    const disabledAttr = isPaid ? 'disabled' : '';
+	                    const paidText = isPaid ? ' (PAID)' : '';
+	                    termSelect.append(`<option value="${item.term}" ${disabledAttr}>Term ${item.term} - Due: ${item.dueDate} (Php ${this.formatNumber(item.amount)})${paidText}</option>`);
 	                });
 	                
 	                // Set default payment date to today
 	                const today = new Date().toISOString().split('T')[0];
 	                $('#paymentDate').val(today);
 	                
+	                // Clear form fields
 	                $('#paymentAmount').val('');
 	                $('#paymentMethod').val('');
 	                $('#referenceNumber').val('');
+	                
+	                // If all terms are paid, disable submit button
+	                const allPaid = sortedByTerm.every(item => paidTerms.some(p => p.term === item.term));
+	                if (allPaid) {
+	                    $('#paymentForm button[type="submit"]').prop('disabled', true);
+	                    this.showModal('info', 'This loan is already fully paid!');
+	                } else {
+	                    $('#paymentForm button[type="submit"]').prop('disabled', false);
+	                }
+	                
 	                $('#paymentModal').modal('show');
 	            },
 	            
-	            // ========== CORRECT: processPayment (ONLY ONE VERSION) ==========
+	            // ========== Helper: Get paid terms from API payments ==========
+	            getPaidTermsFromPayments: function(payments) {
+	                if (!payments || !Array.isArray(payments) || payments.length === 0) {
+	                    return [];
+	                }
+	                return payments.map(payment => ({
+	                    term: payment.term,
+	                    paymentCode: payment.paymentCode,
+	                    paymentDate: payment.paymentDate,
+	                    amountPaid: payment.amountPaid,
+	                    status: payment.status
+	                }));
+	            },
+	            
+	            generateSchedule: function(loan) {
+	                const schedule = [];
+	                const terms = loan.terms;
+	                const amortization = loan.amortization;
+	                const dueDate = new Date(loan.dueDate);
+	                const dueDay = dueDate.getDate();
+	                const isEndOfMonth = dueDay > 15;
+	                const tempSchedule = [];
+	                
+	                for (let i = 0; i < terms; i++) {
+	                    let termDate = new Date(dueDate);
+	                    let termNumber = terms - i;
+	                    let monthsToSubtract = Math.floor(i / 2);
+	                    let isHalfMonth = i % 2 === 1;
+	                    
+	                    termDate.setMonth(termDate.getMonth() - monthsToSubtract);
+	                    
+	                    if (isEndOfMonth) {
+	                        if (isHalfMonth) {
+	                            termDate.setDate(15);
+	                        } else {
+	                            termDate = new Date(termDate.getFullYear(), termDate.getMonth() + 1, 0);
+	                        }
+	                    } else {
+	                        if (isHalfMonth) {
+	                            termDate = new Date(termDate.getFullYear(), termDate.getMonth() + 1, 0);
+	                        } else {
+	                            termDate.setDate(15);
+	                        }
+	                    }
+	                    
+	                    const year = termDate.getFullYear();
+	                    const month = String(termDate.getMonth() + 1).padStart(2, '0');
+	                    const day = String(termDate.getDate()).padStart(2, '0');
+	                    
+	                    tempSchedule.push({
+	                        term: termNumber,
+	                        dueDate: `${year}-${month}-${day}`,
+	                        amount: amortization,
+	                        status: 'PENDING'
+	                    });
+	                }
+	                
+	                return tempSchedule.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+	            },
+	            
+	            updatePaymentAmount: function() {
+	                const term = $('#payInTerm').val();
+	                if (term && this.currentLoanData) {
+	                    const schedule = this.currentLoanData.schedule.find(s => s.term === parseInt(term));
+	                    if (schedule) $('#paymentAmount').val(schedule.amount);
+	                }
+	            },
+	            
 	            processPayment: function(e) {
 	                e.preventDefault();
 	                const term = $('#payInTerm').val();
@@ -1067,73 +1199,6 @@
 	                        this.showLoading(false);
 	                    }, this)
 	                });
-	            },
-	            
-	         	// ========== GENERATE AMORTIZATION SCHEDULE (15th and End of Month) ==========
-	            generateSchedule: function(loan) {
-	                const schedule = [];
-	                const terms = loan.terms;
-	                const amortization = loan.amortization;
-	                const dueDate = new Date(loan.dueDate);
-	                
-	                const dueDay = dueDate.getDate();
-	                const isEndOfMonth = dueDay > 15;
-	                
-	                // Generate terms from last to first, then reverse
-	                const tempSchedule = [];
-	                
-	                for (let i = 0; i < terms; i++) {
-	                    let termDate = new Date(dueDate);
-	                    let termNumber = terms - i;
-	                    
-	                    // Calculate months to subtract
-	                    let monthsToSubtract = Math.floor(i / 2);
-	                    let isHalfMonth = i % 2 === 1;
-	                    
-	                    termDate.setMonth(termDate.getMonth() - monthsToSubtract);
-	                    
-	                    if (isEndOfMonth) {
-	                        // Due date is end of month
-	                        if (isHalfMonth) {
-	                            // Go to 15th
-	                            termDate.setDate(15);
-	                        } else {
-	                            // Stay at end of month
-	                            termDate = new Date(termDate.getFullYear(), termDate.getMonth() + 1, 0);
-	                        }
-	                    } else {
-	                        // Due date is 15th
-	                        if (isHalfMonth) {
-	                            // Go to end of month
-	                            termDate = new Date(termDate.getFullYear(), termDate.getMonth() + 1, 0);
-	                        } else {
-	                            // Stay at 15th
-	                            termDate.setDate(15);
-	                        }
-	                    }
-	                    
-	                    const year = termDate.getFullYear();
-	                    const month = String(termDate.getMonth() + 1).padStart(2, '0');
-	                    const day = String(termDate.getDate()).padStart(2, '0');
-	                    
-	                    tempSchedule.push({
-	                        term: termNumber,
-	                        dueDate: `${year}-${month}-${day}`,
-	                        amount: amortization,
-	                        status: 'PENDING'
-	                    });
-	                }
-	                
-	                // Sort by due date (oldest first) to get ascending order
-	                return tempSchedule.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-	            },
-	            
-	            updatePaymentAmount: function() {
-	                const term = $('#payInTerm').val();
-	                if (term && this.currentLoanData) {
-	                    const schedule = this.currentLoanData.schedule.find(s => s.term === parseInt(term));
-	                    if (schedule) $('#paymentAmount').val(schedule.amount);
-	                }
 	            },
 	            
 	            bindActionButtons: function() {

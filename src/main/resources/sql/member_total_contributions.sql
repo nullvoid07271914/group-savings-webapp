@@ -9,4 +9,4 @@ FROM member_tbl m
 		ON c.member_id = m.member_id
 	WHERE m.member_type = 'CONTRIBUTOR'
 		AND m.member_status = 'ACTIVE'
-GROUP BY m.member_code;
+GROUP BY m.member_code

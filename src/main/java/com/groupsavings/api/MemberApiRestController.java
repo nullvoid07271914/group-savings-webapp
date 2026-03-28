@@ -16,7 +16,7 @@ import com.groupsavings.model.dto.MemberContributions;
 import com.groupsavings.model.dto.MemberNameRequestDto;
 import com.groupsavings.model.dto.MemberRequestDto;
 import com.groupsavings.model.dto.MemberResponseDto;
-import com.groupsavings.model.dto.MemberTotalContribution;
+import com.groupsavings.model.dto.MemberTotalContributionDto;
 import com.groupsavings.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -56,8 +56,8 @@ public class MemberApiRestController {
 	}
 
 	@GetMapping("/contributions")
-	public ResponseEntity<List<MemberTotalContribution>> memberContributions() {
-		List<MemberTotalContribution> memberTotalContributions = memberService.fetchMemberTotalContributions();
+	public ResponseEntity<List<MemberTotalContributionDto>> memberContributions() {
+		List<MemberTotalContributionDto> memberTotalContributions = memberService.fetchMemberTotalContributions();
 		return new ResponseEntity<>(memberTotalContributions, HttpStatus.CREATED);
 	}
 

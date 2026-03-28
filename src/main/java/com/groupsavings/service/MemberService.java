@@ -6,7 +6,7 @@ import com.groupsavings.model.dto.MemberContributions;
 import com.groupsavings.model.dto.MemberNameRequestDto;
 import com.groupsavings.model.dto.MemberRequestDto;
 import com.groupsavings.model.dto.MemberResponseDto;
-import com.groupsavings.model.dto.MemberTotalContribution;
+import com.groupsavings.model.dto.MemberTotalContributionDto;
 
 public interface MemberService {
 
@@ -18,7 +18,7 @@ public interface MemberService {
 
 	List<MemberResponseDto> fetchMembers(String status, String type);
 
-	List<MemberTotalContribution> fetchMemberTotalContributions();
+	List<MemberTotalContributionDto> fetchMemberTotalContributions();
 
 	MemberContributions fetchMemberContributions(String memberCode);
 }

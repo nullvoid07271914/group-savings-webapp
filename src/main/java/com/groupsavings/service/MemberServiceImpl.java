@@ -19,7 +19,7 @@ import com.groupsavings.model.dto.MemberContributions;
 import com.groupsavings.model.dto.MemberNameRequestDto;
 import com.groupsavings.model.dto.MemberRequestDto;
 import com.groupsavings.model.dto.MemberResponseDto;
-import com.groupsavings.model.dto.MemberTotalContribution;
+import com.groupsavings.model.dto.MemberTotalContributionDto;
 import com.groupsavings.model.entity.Member;
 import com.groupsavings.model.enums.MemberStatus;
 import com.groupsavings.model.enums.MemberType;
@@ -125,9 +125,9 @@ public class MemberServiceImpl implements MemberService, LoanConstants {
 	}
 
 	@Override
-	public List<MemberTotalContribution> fetchMemberTotalContributions() {
+	public List<MemberTotalContributionDto> fetchMemberTotalContributions() {
 		List<Object[]> listResult = memberRepository.fetchMemberTotalContributions();
-		List<MemberTotalContribution> memberTotalContribution = memberTotalContributionMapper
+		List<MemberTotalContributionDto> memberTotalContribution = memberTotalContributionMapper
 				.toMemberTotalContributionDto(listResult);
 		log.info("memberTotalContribution: {}", memberTotalContribution);
 		return memberTotalContribution;
