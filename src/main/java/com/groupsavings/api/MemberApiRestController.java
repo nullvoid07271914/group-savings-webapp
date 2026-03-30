@@ -16,20 +16,19 @@ import com.groupsavings.model.dto.MemberContributions;
 import com.groupsavings.model.dto.MemberNameRequestDto;
 import com.groupsavings.model.dto.MemberRequestDto;
 import com.groupsavings.model.dto.MemberResponseDto;
+import com.groupsavings.model.dto.MemberSummaryProfit;
 import com.groupsavings.model.dto.MemberTotalContributionDto;
 import com.groupsavings.service.MemberService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/member")
 public class MemberApiRestController {
 
 	private final MemberService memberService;
-
-	public MemberApiRestController(MemberService memberService) {
-		this.memberService = memberService;
-	}
 
 	@PostMapping("/register")
 	public ResponseEntity<MemberResponseDto> createMember(@Valid @RequestBody MemberRequestDto request) {
@@ -65,5 +64,11 @@ public class MemberApiRestController {
 	public ResponseEntity<MemberContributions> memberContributions(@PathVariable String memberCode) {
 		MemberContributions memberContributions = memberService.fetchMemberContributions(memberCode);
 		return new ResponseEntity<>(memberContributions, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/profits")
+	public ResponseEntity<List<MemberSummaryProfit>> profits() {
+		List<MemberSummaryProfit> summaryProfits = memberService.membersSummaryProfits();
+		return new ResponseEntity<>(summaryProfits, HttpStatus.CREATED);
 	}
 }

@@ -21,4 +21,5 @@ public interface LoanService {
 	public List<MemberLoansDto> memberLoans(MemberLoanRequestDto request);
 
 	public MemberLoanAmortizationDto memberLoanAmortizations(String memberCode, String loanCode);
+
 }

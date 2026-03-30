@@ -59,6 +59,11 @@
           </li>
           <li class="nav-item">
             <a class="nav-link"
+            	th:classappend="${currentUri.endsWith('/member/profits')} ? 'active' : ''"
+            	th:href="@{/member/profits}">View Members Profits</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"
             	th:classappend="${currentUri.endsWith('/member/contributions')} ? 'active' : ''"
             	th:href="@{/member/contributions}">View Member Contributions</a>
           </li>

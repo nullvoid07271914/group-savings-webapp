@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.groupsavings.component.MemberContributionMapper;
+import com.groupsavings.component.MemberSummaryProfitMapper;
 import com.groupsavings.component.MemberTotalContributionMapper;
 import com.groupsavings.constants.LoanConstants;
 import com.groupsavings.exception.DuplicateResourceException;
@@ -19,10 +20,14 @@ import com.groupsavings.model.dto.MemberContributions;
 import com.groupsavings.model.dto.MemberNameRequestDto;
 import com.groupsavings.model.dto.MemberRequestDto;
 import com.groupsavings.model.dto.MemberResponseDto;
+import com.groupsavings.model.dto.MemberSummaryProfit;
 import com.groupsavings.model.dto.MemberTotalContributionDto;
 import com.groupsavings.model.entity.Member;
+import com.groupsavings.model.entity.SavingsPool;
 import com.groupsavings.model.enums.MemberStatus;
 import com.groupsavings.model.enums.MemberType;
+import com.groupsavings.repository.ConfigRepositoty;
+import com.groupsavings.repository.LoanRepository;
 import com.groupsavings.repository.MemberRepository;
 import com.groupsavings.utils.LoanUtils;
 
@@ -37,11 +42,17 @@ public class MemberServiceImpl implements MemberService, LoanConstants {
 
 	private final MemberRepository memberRepository;
 
+	private final LoanRepository loanRepository;
+
+	private final ConfigRepositoty configRepositoty;
+
 	private final MemberMapper memberMapper;
 
 	private final MemberTotalContributionMapper memberTotalContributionMapper;
 
 	private final MemberContributionMapper memberContributionMapper;
+
+	private final MemberSummaryProfitMapper memberSummaryProfitMapper;
 
 	@Override
 	public MemberResponseDto createMember(MemberRequestDto member) {
@@ -139,6 +150,14 @@ public class MemberServiceImpl implements MemberService, LoanConstants {
 		MemberContributions memberContributions = memberContributionMapper.toMemberContributionsDto(listResult);
 		log.info("memberContributions: {}", memberContributions);
 		return memberContributions;
+	}
+
+	@Override
+	public List<MemberSummaryProfit> membersSummaryProfits() {
+		SavingsPool savingsPool = configRepositoty.findConfigByIdOne().getSavingsPool();
+		List<Object[]> membersProfits = loanRepository.fetchMembersSummaryProfit(savingsPool.getPoolId());
+		List<MemberSummaryProfit> profits = memberSummaryProfitMapper.toMemberSummaryProfitList(membersProfits);
+		return profits;
 	}
 
 }

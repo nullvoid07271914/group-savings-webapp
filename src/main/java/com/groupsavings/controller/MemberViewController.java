@@ -33,4 +33,10 @@ public class MemberViewController {
 		model.addAttribute("currentUri", request.getRequestURI());
 		return "member_contributions";
 	}
+	
+	@GetMapping("/member/profits")
+	public String viewMemberProfits(Model model, HttpServletRequest request) {
+		model.addAttribute("currentUri", request.getRequestURI());
+		return "member_profits";
+	}
 }

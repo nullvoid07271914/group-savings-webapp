@@ -10,4 +10,6 @@ public interface LoanRepositoryCustom {
 	List<Object[]> fetchMemberLoans(String name, String status);
 
 	Object[] fetchMemberLoan(String memberCode, String loanCode);
+	
+	List<Object[]> fetchMembersSummaryProfit(Long poolId);
 }

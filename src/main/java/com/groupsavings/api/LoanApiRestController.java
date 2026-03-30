@@ -26,8 +26,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/loan")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/loan")
 public class LoanApiRestController {
 
 	private final LoanService loanService;

@@ -29,7 +29,6 @@ import com.groupsavings.model.dto.LoanRequestDto;
 import com.groupsavings.model.dto.LoanResponseDto;
 import com.groupsavings.model.dto.LoanStatusRequestDto;
 import com.groupsavings.model.dto.MemberLoanAmortizationDto;
-import com.groupsavings.model.dto.MemberLoanDto;
 import com.groupsavings.model.dto.MemberLoanRequestDto;
 import com.groupsavings.model.dto.MemberLoansDto;
 import com.groupsavings.model.entity.Loan;
@@ -262,4 +261,5 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 			return date.withDayOfMonth(15);
 		}
 	}
+
 }

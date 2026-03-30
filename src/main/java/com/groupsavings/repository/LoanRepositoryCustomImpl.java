@@ -79,6 +79,15 @@ public class LoanRepositoryCustomImpl implements LoanRepositoryCustom {
 		return (Object[]) query.getSingleResult();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object[]> fetchMembersSummaryProfit(Long poolId) {
+		String sql = sqlLoader.getQuery("member_summry_profit.sql");
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter(1, poolId);
+		return query.getResultList();
+	}
+
 //	@Override
 //    public BigDecimal getTotalLoanAmountByStatusNative(String status) {
 //        String sql = sqlLoader.getQuery("total_loan_by_status.sql");

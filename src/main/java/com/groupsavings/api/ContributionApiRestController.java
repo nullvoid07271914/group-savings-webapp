@@ -16,18 +16,16 @@ import com.groupsavings.model.dto.ContributionResponseDto;
 import com.groupsavings.service.ContributionService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/contribution")
 public class ContributionApiRestController {
 
 	private static final Logger log = LoggerFactory.getLogger(ContributionApiRestController.class);
 
 	private final ContributionService contributionService;
-
-	public ContributionApiRestController(ContributionService contributionService) {
-		this.contributionService = contributionService;
-	}
 
 	@PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ContributionResponseDto> createContribution(
