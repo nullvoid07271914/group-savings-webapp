@@ -1,861 +1,732 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Member Contributions - Group Savings</title>
-<!-- plugins:css -->
-<link rel="stylesheet"
-	th:href="@{/assets/vendors/mdi/css/materialdesignicons.min.css}">
-<link rel="stylesheet"
-	th:href="@{/assets/vendors/ti-icons/css/themify-icons.css}">
-<link rel="stylesheet"
-	th:href="@{/assets/vendors/css/vendor.bundle.base.css}">
-<link rel="stylesheet"
-	th:href="@{/assets/vendors/font-awesome/css/font-awesome.min.css}">
-<!-- endinject -->
-<!-- Plugin css for this page -->
-<link rel="stylesheet"
-	th:href="@{/assets/vendors/select2/select2.min.css}">
-<link rel="stylesheet"
-	th:href="@{/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css}">
-<!-- End plugin css for this page -->
-<!-- inject:css -->
-<!-- endinject -->
-<!-- Layout styles -->
-<link rel="stylesheet" th:href="@{/assets/css/style.css}">
-<!-- End layout styles -->
-<link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Contributions - Group Savings</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <!-- Select2 CSS & JS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<!-- Add this CSS -->
-<style>
-.spinner-border-sm {
-	width: 1rem;
-	height: 1rem;
-	border-width: 0.2em;
-	margin-right: 0.5rem;
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            overflow-x: hidden;
+        }
 
-/* Modal animations */
-.modal.fade .modal-dialog {
-    transition: transform 0.3s ease-out;
-    transform: scale(0.8);
-}
-.modal.fade.show .modal-dialog {
-    transform: scale(1);
-}
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; }
 
-.modal-content {
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-}
+        /* Sidebar Navigation */
+        .nav-sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            width: 280px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
 
-.modal-header {
-    border-bottom: none;
-    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
-}
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+        }
 
-.modal-body {
-    padding: 1rem 1.5rem;
-}
+        /* Logo */
+        .logo-area {
+            padding: 30px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon {
+            width: 45px; height: 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .logo-icon i { font-size: 24px; color: white; }
+        .logo-text h3 { color: white; font-weight: 700; font-size: 18px; }
+        .logo-text p { color: rgba(255,255,255,0.5); font-size: 11px; }
 
-.modal-footer {
-    border-top: none;
-    padding: 0.5rem 1.5rem 1.5rem 1.5rem;
-}
+        /* Navigation Items */
+        .nav-item {
+            padding: 12px 24px;
+            margin: 4px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: rgba(255,255,255,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-item:hover { background: rgba(102, 126, 234, 0.2); color: white; }
+        .nav-item.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 15px rgba(102,126,234,0.3); }
+        .nav-item-left { display: flex; align-items: center; gap: 12px; }
+        .nav-item-left i { width: 24px; font-size: 18px; }
+        .nav-toggle { transition: transform 0.3s ease; }
+        .nav-toggle.rotated { transform: rotate(180deg); }
 
-/* Icon animations */
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-    40% {transform: translateY(-20px);}
-    60% {transform: translateY(-10px);}
-}
+        .submenu {
+            margin-left: 52px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .submenu.open { max-height: 300px; }
+        .submenu-item {
+            padding: 10px 16px;
+            margin: 4px 0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .submenu-item:hover { background: rgba(255,255,255,0.1); color: white; transform: translateX(5px); }
+        .submenu-item.active { color: #a78bfa; }
 
-.animate-bounce {
-    animation: bounce 1s ease infinite;
-}
+        .nav-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 16px 24px;
+        }
 
-@keyframes pulse {
-    0% {transform: scale(1);}
-    50% {transform: scale(1.1);}
-    100% {transform: scale(1);}
-}
+        /* Modern Card */
+        .modern-card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+        }
+        .modern-card:hover { transform: translateY(-3px); box-shadow: 0 25px 40px -12px rgba(0,0,0,0.15); }
 
-.animate-pulse {
-    animation: pulse 0.5s ease 2;
-}
+        .card-header-modern {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 24px 30px;
+            color: white;
+        }
+        .card-header-modern h4 { margin: 0; font-size: 1.3rem; font-weight: 600; }
+        .card-header-modern p { margin: 8px 0 0; opacity: 0.9; font-size: 0.9rem; }
 
-/* Icon circle background */
-.icon-circle {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 15px auto;
-}
+        .card-body { padding: 30px; }
 
-.icon-circle i {
-    font-size: 35px;
-}
+        /* Filter Section */
+        .filter-section {
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+        .filter-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
 
-.icon-circle.success {
-    background: linear-gradient(135deg, #84d9d2 0%, #07cdae 100%);
-    color: white;
-}
+        /* Buttons */
+        .btn-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-gradient-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        
+        .btn-gradient-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-gradient-secondary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(108,117,125,0.4); }
 
-.icon-circle.error {
-    background: linear-gradient(135deg, #f86a6a 0%, #f83b3b 100%);
-    color: white;
-}
+        .btn-outline-secondary {
+            background: white;
+            border: 1px solid #cbd5e0;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .btn-outline-secondary:hover { background: #f7fafc; transform: translateY(-2px); }
 
-.icon-circle.warning {
-    background: linear-gradient(135deg, #ffb64d 0%, #ff9f1a 100%);
-    color: white;
-}
+        /* Stats Cards */
+        .summary-card {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .summary-card h3 { font-size: 32px; font-weight: bold; margin: 10px 0; }
+        .summary-card p { opacity: 0.9; margin: 0; }
 
-.icon-circle.info {
-    background: linear-gradient(135deg, #6ab0f8 0%, #2f80ed 100%);
-    color: white;
-}
+        .member-info-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .total-card {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        .total-card h4 { font-size: 28px; font-weight: bold; margin: 0; }
 
-/* Filter section styles */
-.filter-section {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th {
+            text-align: left;
+            padding: 14px;
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .data-table td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+        .data-table tr:hover { background: #f8fafc; cursor: pointer; }
 
-.filter-label {
-    font-weight: 600;
-    color: #495057;
-    margin-bottom: 5px;
-}
+        .contribution-amount { color: #48bb78; font-weight: 700; }
 
-/* Member info card */
-.member-info-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    display: none;
-}
+        /* Badges */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        .badge-info { background: #bee3f8; color: #2c5282; }
+        .badge-primary { background: #c7d2fe; color: #3730a3; }
 
-.member-info-card h3 {
-    margin: 0;
-    font-size: 20px;
-}
+        /* Summary Row */
+        .summary-row {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .summary-row:hover { background: #f8fafc; transform: translateX(5px); }
 
-.member-info-card p {
-    margin: 5px 0 0 0;
-    opacity: 0.9;
-}
+        /* Select2 Custom - FIXED */
+        .select2-container--bootstrap {
+            width: 100% !important;
+        }
+        .select2-container--bootstrap .select2-selection {
+            border-radius: 12px !important;
+            border: 1px solid #e2e8f0 !important;
+            padding: 8px 12px !important;
+            height: 50px !important;
+            background: white !important;
+        }
+        .select2-container--bootstrap .select2-selection--single .select2-selection__rendered {
+            line-height: 32px !important;
+            padding-left: 8px !important;
+            color: #1a202c !important;
+        }
+        .select2-container--bootstrap .select2-selection--single .select2-selection__arrow {
+            height: 48px !important;
+            right: 10px !important;
+        }
+        .select2-dropdown {
+            border-radius: 12px !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1) !important;
+        }
+        .select2-search__field {
+            border-radius: 8px !important;
+            border: 1px solid #e2e8f0 !important;
+            padding: 8px 12px !important;
+            margin: 8px !important;
+        }
+        .select2-results__option {
+            padding: 10px 15px !important;
+        }
+        .select2-results__option--highlighted {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+        }
+        .select2-container--bootstrap .select2-results__option[aria-selected=true] {
+            background: #f0f4ff !important;
+            color: #667eea !important;
+        }
 
-/* Summary card */
-.summary-card {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    text-align: center;
-}
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: modalSlideIn 0.3s ease;
+        }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header { padding: 20px; border-bottom: 1px solid #e2e8f0; }
+        .modal-body { padding: 24px; }
+        .modal-footer { padding: 20px; border-top: 1px solid #e2e8f0; display: flex; justify-content: center; gap: 12px; }
 
-.summary-card h3 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: bold;
-}
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+        .icon-circle i { font-size: 35px; }
+        .icon-circle.success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        .icon-circle.error { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); color: white; }
+        .icon-circle.warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .icon-circle.info { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
 
-.summary-card p {
-    margin: 5px 0 0 0;
-    opacity: 0.9;
-}
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Table styles */
-.table th {
-    font-weight: 600;
-    background-color: #f8f9fa;
-}
+        .empty-state { text-align: center; padding: 40px; color: #a0aec0; }
 
-.contribution-amount {
-    font-weight: 600;
-    color: #28a745;
-}
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-sidebar { transform: translateX(-100%); position: fixed; z-index: 1000; }
+            .nav-sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .mobile-menu-btn {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1001;
+                background: #667eea;
+                color: white;
+                border: none;
+                width: 45px;
+                height: 45px;
+                border-radius: 12px;
+                font-size: 20px;
+                cursor: pointer;
+            }
+            .filter-section .row { flex-direction: column; gap: 12px; }
+        }
+        .mobile-menu-btn { display: none; }
 
-.total-card {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.total-card h4 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.total-card p {
-    margin: 5px 0 0 0;
-    opacity: 0.9;
-}
-
-/* Summary table row hover */
-.summary-row {
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.summary-row:hover {
-    background-color: #f0f0f0;
-    transform: translateX(5px);
-}
-
-/* Select2 custom styling */
-.select2-container--bootstrap .select2-selection {
-    border-radius: 10px;
-    border: 1px solid #ced4da;
-    padding: 5px;
-}
-
-.select2-container--bootstrap .select2-selection--single {
-    height: 45px;
-}
-
-.select2-container--bootstrap .select2-selection--single .select2-selection__rendered {
-    line-height: 35px;
-    padding-left: 15px;
-}
-
-.select2-container--bootstrap .select2-selection--single .select2-selection__arrow {
-    height: 43px;
-}
-
-.select2-container--bootstrap .select2-search--dropdown .select2-search__field {
-    border-radius: 8px;
-    border: 1px solid #ced4da;
-    padding: 8px;
-}
-
-.select2-dropdown {
-    border-radius: 10px;
-    border: 1px solid #ced4da;
-}
-</style>
+        .text-center { text-align: center; }
+        .mt-3 { margin-top: 1rem; }
+        .mb-3 { margin-bottom: 1rem; }
+        .me-2 { margin-right: 0.5rem; }
+        .w-100 { width: 100%; }
+    </style>
 </head>
 <body>
-	<div class="container-scroller">
-		<div th:replace="~{fragments/header_menu :: headerMenu}"></div>
+    <button class="mobile-menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
 
-		<!-- partial -->
-		<div class="container-fluid page-body-wrapper">
-			<div th:replace="~{fragments/nav_menu :: navMenu}"></div>
+    <!-- Sidebar Navigation -->
+    <div class="nav-sidebar" id="sidebar">
+        <div class="logo-area">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-piggy-bank"></i></div>
+                <div class="logo-text">
+                    <h3>GroupSavings</h3>
+                    <p>v2.0 Ultimate</p>
+                </div>
+            </div>
+        </div>
 
-			<!-- partial -->
-			<div class="main-panel">
-				<div class="content-wrapper">
-					<div class="page-header">
-						<h3 class="page-title">Member Contributions</h3>
-						<nav aria-label="breadcrumb">
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="#">Contributions</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Member Contributions List</li>
-							</ol>
-						</nav>
-					</div>
-					<div class="row">
-						<div class="col-12 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">Member Contributions</h4>
-									<p class="card-description">View contributions by member</p>
-									
-									<!-- Filter Section with Autocomplete Dropdown -->
-									<div class="filter-section">
-										<div class="row">
-											<div class="col-md-8">
-												<div class="form-group">
-													<label class="filter-label">Search Member</label>
-													<select class="form-select" id="memberFilter" style="width: 100%;">
-														<option value="">-- Search or Select a Member --</option>
-														<!-- Members will be populated here via Select2 -->
-													</select>
-													<small class="text-muted">Type to search member by name or member code</small>
-												</div>
-											</div>
-											<div class="col-md-4 d-flex align-items-end">
-												<div class="form-group w-100">
-													<button class="btn btn-gradient-primary btn-fw me-2" id="applyFilterBtn">
-														<i class="mdi mdi-magnify"></i> View Details
-													</button>
-													<button class="btn btn-gradient-secondary btn-fw" id="resetFilterBtn">
-														<i class="mdi mdi-refresh"></i> Show All
-													</button>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<!-- Summary Card -->
-									<div class="summary-card" id="summaryCard">
-										<p>Total Members</p>
-										<h3 id="totalMembers">0</h3>
-										<p>Total Contributions: <span id="grandTotal">Php 0.00</span></p>
-									</div>
-									
-									<!-- Member Info Card (for detailed view) -->
-									<div class="member-info-card" id="memberInfoCard">
-										<h3 id="memberName"></h3>
-										<p>Member Code: <span id="memberCodeDisplay"></span> | Joined: <span id="joinedDateDisplay"></span></p>
-									</div>
-									
-									<!-- Total Contributions Card (for detailed view) -->
-									<div class="total-card" id="totalCard" style="display: none;">
-										<p>Total Contributions</p>
-										<h4 id="totalAmount">Php 0.00</h4>
-									</div>
-									
-									<!-- Summary Table (for all members) -->
-									<div id="summaryTableView">
-										<table class="table table-striped">
-											<thead>
-												   <tr>
-													<th>Member Code</th>
-													<th>Full Name</th>
-													<th>Joined Date</th>
-													<th>Total Contribution</th>
-													<th>Action</th>
-												   </tr>
-											</thead>
-											<tbody id="summaryTableBody">
-												<!-- Summary data will be loaded here -->
-											</tbody>
-										</table>
-									</div>
-									
-									<!-- Detailed Table (for selected member) -->
-									<div id="detailedTableView" style="display: none;">
-										<h5 class="mb-3">Contribution Details</h5>
-										<table class="table table-striped">
-											<thead>
-												   <tr>
-													<th>Contribution Code</th>
-													<th>Amount</th>
-													<th>Contribution Date</th>
-													<th>Payment Method</th>
-													<th>Reference Number</th>
-													<th>Month Term</th>
-												   </tr>
-											</thead>
-											<tbody id="detailedTableBody">
-												<!-- Detailed data will be loaded here -->
-											</tbody>
-										</table>
-									</div>
+        <nav>
+            <div class="nav-item" th:onclick="|location.href='@{/dashboard}'|">
+                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Dashboard</span></div>
+            </div>
 
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- content-wrapper ends -->
-				<!-- partial:../../partials/_footer.html -->
-				<footer class="footer">
-					<div
-						class="d-sm-flex justify-content-center justify-content-sm-between">
-						<span
-							class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright
-							© 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>.
-							All rights reserved.
-						</span> <span
-							class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted
-							& made with <i class="mdi mdi-heart text-danger"></i>
-						</span>
-					</div>
-				</footer>
-				<!-- partial -->
-			</div>
-			<!-- main-panel ends -->
-		</div>
-		<!-- page-body-wrapper ends -->
-	</div>
-	<!-- container-scroller -->
-	
-	<!-- ========== MODALS ========== -->
-	
-	<!-- Success Modal -->
-	<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered modal-sm">
-	    <div class="modal-content text-center">
-	      <div class="modal-header justify-content-center border-0">
-	        <div class="icon-circle success animate-bounce">
-	          <i class="mdi mdi-check"></i>
-	        </div>
-	      </div>
-	      <div class="modal-body pt-0">
-	        <h4 class="mb-3">Success!</h4>
-	        <p class="mb-0" id="successMessage">Operation completed successfully!</p>
-	      </div>
-	      <div class="modal-footer justify-content-center border-0">
-	        <button type="button" class="btn btn-gradient-success btn-rounded" data-bs-dismiss="modal">OK</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	
-	<!-- Error Modal -->
-	<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered modal-sm">
-	    <div class="modal-content text-center">
-	      <div class="modal-header justify-content-center border-0">
-	        <div class="icon-circle error animate-pulse">
-	          <i class="mdi mdi-close"></i>
-	        </div>
-	      </div>
-	      <div class="modal-body pt-0">
-	        <h4 class="mb-3">Oops!</h4>
-	        <p class="mb-0" id="errorMessage">Something went wrong.</p>
-	      </div>
-	      <div class="modal-footer justify-content-center border-0">
-	        <button type="button" class="btn btn-gradient-danger btn-rounded" data-bs-dismiss="modal">Close</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	
-	<!-- Warning Modal -->
-	<div class="modal fade" id="warningModal" tabindex="-1" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered modal-sm">
-	    <div class="modal-content text-center">
-	      <div class="modal-header justify-content-center border-0">
-	        <div class="icon-circle warning animate-pulse">
-	          <i class="mdi mdi-alert"></i>
-	        </div>
-	      </div>
-	      <div class="modal-body pt-0">
-	        <h4 class="mb-3">Warning!</h4>
-	        <p class="mb-0" id="warningMessage">Please check your input.</p>
-	      </div>
-	      <div class="modal-footer justify-content-center border-0">
-	        <button type="button" class="btn btn-gradient-warning btn-rounded" data-bs-dismiss="modal">OK</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	
-	<!-- Info Modal -->
-	<div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered modal-sm">
-	    <div class="modal-content text-center">
-	      <div class="modal-header justify-content-center border-0">
-	        <div class="icon-circle info">
-	          <i class="mdi mdi-information"></i>
-	        </div>
-	      </div>
-	      <div class="modal-body pt-0">
-	        <h4 class="mb-3">Information</h4>
-	        <p class="mb-0" id="infoMessage">Member information loaded.</p>
-	      </div>
-	      <div class="modal-footer justify-content-center border-0">
-	        <button type="button" class="btn btn-gradient-info btn-rounded" data-bs-dismiss="modal">OK</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+            <div>
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-users"></i><span>Members</span></div>
+                    <i class="fas fa-chevron-down nav-toggle"></i>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/register}'|"><i class="fas fa-user-plus"></i> Member Registration</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/list}'|"><i class="fas fa-list"></i> All Members</div>
+                </div>
+            </div>
 
-	<!-- plugins:js -->
-	<script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
-	<!-- endinject -->
-	<!-- Plugin js for this page -->
-	<script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
-	<script
-		th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
-	<!-- End plugin js for this page -->
-	<!-- inject:js -->
-	<script th:src="@{/assets/js/off-canvas.js}"></script>
-	<script th:src="@{/assets/js/misc.js}"></script>
-	<script th:src="@{/assets/js/settings.js}"></script>
-	<script th:src="@{/assets/js/todolist.js}"></script>
-	<script th:src="@{/assets/js/jquery.cookie.js}"></script>
-	<!-- endinject -->
-	<!-- Custom js for this page -->
-	<script th:src="@{/assets/js/file-upload.js}"></script>
-	<script th:src="@{/assets/js/typeahead.js}"></script>
-	<script th:src="@{/assets/js/select2.js}"></script>
-	<!-- End custom js for this page -->
+            <div>
+                <div class="nav-item active" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-coins"></i><span>Contributions</span></div>
+                    <i class="fas fa-chevron-down nav-toggle rotated"></i>
+                </div>
+                <div class="submenu open">
+                    <div class="submenu-item active" th:onclick="|location.href='@{/contribution/search-member}'|"><i class="fas fa-plus-circle"></i> Add Contribution</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/contributions}'|"><i class="fas fa-chart-simple"></i> Member Contributions</div>
+                </div>
+            </div>
 
-	<script type="text/javascript">
-	    $(document).ready(function() {
-	        const ContributionManager = {
-	            membersData: [], // Store members data for summary view
-	            select2Initialized: false,
-	            
-	            init: function() {
-	                this.bindEvents();
-	                this.loadSummary(); // Load summary on init
-	            },
-	            
-	            bindEvents: function() {
-	                // View Details button (for selected member)
-	                $('#applyFilterBtn').on('click', $.proxy(function() {
-	                    const memberCode = $('#memberFilter').val();
-	                    if (!memberCode) {
-	                        this.showModal('warning', 'Please search and select a member first');
-	                        return;
-	                    }
-	                    this.loadMemberContributions(memberCode);
-	                }, this));
-	                
-	                // Show All button (reset to summary)
-	                $('#resetFilterBtn').on('click', $.proxy(function() {
-	                    this.showSummaryView();
-	                    $('#memberFilter').val('').trigger('change');
-	                    this.showModal('info', 'Showing all members summary');
-	                }, this));
-	                
-	                // Enter key in select2 search
-	                $('#memberFilter').on('select2:select', $.proxy(function(e) {
-	                    const memberCode = e.params.data.id;
-	                    if (memberCode) {
-	                        this.loadMemberContributions(memberCode);
-	                    }
-	                }, this));
-	            },
-	            
-	            // ========== INITIALIZE SELECT2 AUTOCOMPLETE ==========
-	            initSelect2: function(members) {
-	                if (this.select2Initialized) {
-	                    $('#memberFilter').select2('destroy');
-	                }
-	                
-	                // Prepare data for Select2
-	                const select2Data = [
-	                    { id: '', text: '-- Search or Select a Member --', disabled: true }
-	                ];
-	                
-	                $.each(members, function(index, member) {
-	                    const fullName = `${member.firstname} ${member.lastname}`;
-	                    select2Data.push({
-	                        id: member.memberCode,
-	                        text: `${fullName} (${member.memberCode})`,
-	                        fullName: fullName,
-	                        memberCode: member.memberCode
-	                    });
-	                });
-	                
-	                // Initialize Select2 with search
-	                $('#memberFilter').select2({
-	                    theme: 'bootstrap',
-	                    placeholder: 'Type to search member by name or member code...',
-	                    allowClear: true,
-	                    data: select2Data,
-	                    dropdownParent: $('.filter-section'),
-	                    matcher: function(params, data) {
-	                        // Custom search matcher that searches in both name and member code
-	                        if ($.trim(params.term) === '') {
-	                            return data;
-	                        }
-	                        
-	                        const searchTerm = params.term.toLowerCase();
-	                        const text = data.text.toLowerCase();
-	                        const fullName = data.fullName ? data.fullName.toLowerCase() : '';
-	                        const memberCode = data.memberCode ? data.memberCode.toLowerCase() : '';
-	                        
-	                        if (text.indexOf(searchTerm) > -1 || 
-	                            fullName.indexOf(searchTerm) > -1 || 
-	                            memberCode.indexOf(searchTerm) > -1) {
-	                            return data;
-	                        }
-	                        
-	                        return null;
-	                    },
-	                    templateResult: function(data) {
-	                        if (!data.id) return data.text;
-	                        return $('<span><strong>' + data.fullName + '</strong><br><small class="text-muted">' + data.memberCode + '</small></span>');
-	                    },
-	                    templateSelection: function(data) {
-	                        if (!data.id) return data.text;
-	                        return data.fullName + ' (' + data.memberCode + ')';
-	                    }
-	                });
-	                
-	                this.select2Initialized = true;
-	            },
-	            
-	            // ========== LOAD SUMMARY (ALL MEMBERS) ==========
-	            loadSummary: function() {
-	                const url = 'http://localhost:8080/groupsavings/api/v1/member/contributions';
-	                
-	                // Show loading in summary table
-	                $('#summaryTableBody').html(`
-	                    <tr>
-	                        <td colspan="5" class="text-center">
-	                            <div class="spinner-border text-primary" role="status">
-	                                <span class="visually-hidden">Loading...</span>
-	                            </div>
-	                            <br>Loading members...
-	                        </td>
-	                    </tr>
-	                `);
-	                
-	                $.ajax({
-	                    url: url,
-	                    type: 'GET',
-	                    contentType: 'application/json',
-	                    dataType: 'json',
-	                    success: $.proxy(function(response) {
-	                        console.log('Summary loaded:', response);
-	                        this.membersData = response;
-	                        this.displaySummary(response);
-	                        this.initSelect2(response); // Initialize Select2 with member data
-	                        this.showModal('success', 'Members loaded successfully!');
-	                    }, this),
-	                    error: $.proxy(function(xhr) {
-	                        console.error('Error:', xhr.responseText);
-	                        this.showModal('error', 'Failed to load members. Please try again.');
-	                        $('#summaryTableBody').html(`
-	                            <tr>
-	                                <td colspan="5" class="text-center text-danger">Failed to load members</td>
-	                            </tr>
-	                        `);
-	                    }, this)
-	                });
-	            },
-	            
-	            // ========== DISPLAY SUMMARY TABLE ==========
-	            displaySummary: function(members) {
-	                const tbody = $('#summaryTableBody');
-	                tbody.empty();
-	                
-	                if (!members || members.length === 0) {
-	                    tbody.append(`
-	                        <tr>
-	                            <td colspan="5" class="text-center">No members found</td>
-	                        </tr>
-	                    `);
-	                    $('#totalMembers').text('0');
-	                    $('#grandTotal').text('Php 0.00');
-	                    return;
-	                }
-	                
-	                // Calculate grand total
-	                let grandTotal = 0;
-	                
-	                // Sort by firstname
-	                members.sort((a, b) => a.firstname.localeCompare(b.firstname));
-	                
-	                $.each(members, function(index, member) {
-	                    const fullName = `${member.firstname} ${member.lastname}`;
-	                    const joinedDate = member.joinedDate ? new Date(member.joinedDate).toLocaleDateString() : 'N/A';
-	                    const amount = member.amount || 0;
-	                    grandTotal += amount;
-	                    
-	                    const row = `
-	                        <tr class="summary-row" data-member-code="${member.memberCode}" style="cursor: pointer;">
-	                            <td><code>${member.memberCode}</code></td>
-	                            <td><strong>${fullName}</strong></td>
-	                            <td>${joinedDate}</td>
-	                            <td class="contribution-amount">Php ${amount.toLocaleString()}</td>
-	                            <td>
-	                                <button class="btn btn-gradient-info btn-sm btn-view-details" data-member-code="${member.memberCode}">
-	                                    <i class="mdi mdi-eye"></i> View Details
-	                                </button>
-	                            </td>
-	                        </tr>
-	                    `;
-	                    tbody.append(row);
-	                });
-	                
-	                // Update summary card
-	                $('#totalMembers').text(members.length);
-	                $('#grandTotal').text(`Php ${grandTotal.toLocaleString()}`);
-	                
-	                // Bind click events for view details buttons and rows
-	                $('.btn-view-details').on('click', $.proxy(function(e) {
-	                    e.stopPropagation();
-	                    const memberCode = $(e.currentTarget).data('member-code');
-	                    this.loadMemberContributions(memberCode);
-	                    // Update select2 value
-	                    $('#memberFilter').val(memberCode).trigger('change');
-	                }, this));
-	                
-	                $('.summary-row').on('click', $.proxy(function(e) {
-	                    if ($(e.target).closest('.btn-view-details').length) return;
-	                    const memberCode = $(e.currentTarget).data('member-code');
-	                    this.loadMemberContributions(memberCode);
-	                    $('#memberFilter').val(memberCode).trigger('change');
-	                }, this));
-	            },
-	            
-	            // ========== LOAD MEMBER CONTRIBUTIONS ==========
-	            loadMemberContributions: function(memberCode) {
-	                const url = `http://localhost:8080/groupsavings/api/v1/member/contributions/${memberCode}`;
-	                
-	                // Show loading in detailed table
-	                $('#detailedTableBody').html(`
-	                    <tr>
-	                        <td colspan="6" class="text-center">
-	                            <div class="spinner-border text-primary" role="status">
-	                                <span class="visually-hidden">Loading...</span>
-	                            </div>
-	                            <br>Loading contributions...
-	                        </td>
-	                    </tr>
-	                `);
-	                
-	                $.ajax({
-	                    url: url,
-	                    type: 'GET',
-	                    contentType: 'application/json',
-	                    dataType: 'json',
-	                    success: $.proxy(function(response) {
-	                        console.log('Contributions loaded:', response);
-	                        this.showDetailedView(response);
-	                        this.showModal('success', 'Contributions loaded successfully!');
-	                    }, this),
-	                    error: $.proxy(function(xhr) {
-	                        console.error('Error:', xhr.responseText);
-	                        
-	                        if (xhr.status === 404) {
-	                            this.showModal('warning', 'No contributions found for this member.');
-	                        } else {
-	                            this.showModal('error', 'Failed to load contributions. Please try again.');
-	                        }
-	                    }, this)
-	                });
-	            },
-	            
-	            // ========== SHOW DETAILED VIEW ==========
-	            showDetailedView: function(memberData) {
-	                // Hide summary view, show detailed view
-	                $('#summaryTableView').hide();
-	                $('#summaryCard').hide();
-	                $('#detailedTableView').show();
-	                $('#memberInfoCard').show();
-	                $('#totalCard').show();
-	                
-	                // Display member info
-	                $('#memberName').text(`${memberData.firstname} ${memberData.lastname}`);
-	                $('#memberCodeDisplay').text(memberData.memberCode);
-	                
-	                if (memberData.joinedDate) {
-	                    const joinedDate = new Date(memberData.joinedDate).toLocaleDateString();
-	                    $('#joinedDateDisplay').text(joinedDate);
-	                } else {
-	                    $('#joinedDateDisplay').text('N/A');
-	                }
-	                
-	                // Calculate and display total contributions
-	                let total = 0;
-	                if (memberData.contributions && memberData.contributions.length > 0) {
-	                    $.each(memberData.contributions, function(index, contribution) {
-	                        total += contribution.amount;
-	                    });
-	                }
-	                
-	                $('#totalAmount').text(`Php ${total.toLocaleString()}`);
-	                
-	                // Display contributions table
-	                this.displayDetailedContributions(memberData.contributions);
-	            },
-	            
-	            // ========== DISPLAY DETAILED CONTRIBUTIONS ==========
-	            displayDetailedContributions: function(contributions) {
-	                const tbody = $('#detailedTableBody');
-	                tbody.empty();
-	                
-	                if (!contributions || contributions.length === 0) {
-	                    tbody.append(`
-	                        <tr>
-	                            <td colspan="6" class="text-center">No contributions found for this member</td>
-	                        </tr>
-	                    `);
-	                    return;
-	                }
-	                
-	                // Sort by contribution date (newest first)
-	                contributions.sort((a, b) => new Date(b.contributionDate) - new Date(a.contributionDate));
-	                
-	                $.each(contributions, function(index, contribution) {
-	                    const contribDate = contribution.contributionDate ? new Date(contribution.contributionDate).toLocaleDateString() : 'N/A';
-	                    const amount = `Php ${contribution.amount.toLocaleString()}`;
-	                    
-	                    const row = `
-	                        <tr>
-	                            <td><code>${contribution.contributionCode || 'N/A'}</code></td>
-	                            <td class="contribution-amount">${amount}</td>
-	                            <td>${contribDate}</td>
-	                            <td><span class="badge badge-info">${contribution.paymentMethod || 'N/A'}</span></td>
-	                            <td><small>${contribution.referenceNumber || 'N/A'}</small></td>
-	                            <td><span class="badge badge-primary">${contribution.monthTerm || 0} Term</span></td>
-	                        </tr>
-	                    `;
-	                    tbody.append(row);
-	                });
-	            },
-	            
-	            // ========== SHOW SUMMARY VIEW ==========
-	            showSummaryView: function() {
-	                // Show summary view, hide detailed view
-	                $('#summaryTableView').show();
-	                $('#summaryCard').show();
-	                $('#detailedTableView').hide();
-	                $('#memberInfoCard').hide();
-	                $('#totalCard').hide();
-	                
-	                // Refresh summary data
-	                this.loadSummary();
-	            },
-	            
-	            // ========== SHOW MODAL ==========
-	            showModal: function(type, message) {
-	                let modalId = '';
-	                let messageId = '';
-	                
-	                switch(type) {
-	                    case 'success':
-	                        modalId = '#successModal';
-	                        messageId = '#successMessage';
-	                        break;
-	                    case 'error':
-	                        modalId = '#errorModal';
-	                        messageId = '#errorMessage';
-	                        break;
-	                    case 'warning':
-	                        modalId = '#warningModal';
-	                        messageId = '#warningMessage';
-	                        break;
-	                    case 'info':
-	                        modalId = '#infoModal';
-	                        messageId = '#infoMessage';
-	                        break;
-	                    default:
-	                        modalId = '#infoModal';
-	                        messageId = '#infoMessage';
-	                }
-	                
-	                $(messageId).text(message);
-	                $(modalId).modal('show');
-	                
-	                let timeout = (type === 'error' || type === 'warning') ? 4000 : 3000;
-	                setTimeout(() => {
-	                    $(modalId).modal('hide');
-	                }, timeout);
-	            }
-	        };
-	        
-	        // Initialize
-	        ContributionManager.init();
-	    });
-	</script>
+            <div>
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-hand-holding-usd"></i><span>Loans</span></div>
+                    <i class="fas fa-chevron-down nav-toggle"></i>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item" th:onclick="|location.href='@{/loan/apply}'|"><i class="fas fa-file-invoice"></i> Apply Loan</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/loan/manage}'|"><i class="fas fa-chart-line"></i> Manage Loan</div>
+                </div>
+            </div>
+
+            <div class="nav-item" th:onclick="|location.href='@{/member/profits}'|">
+                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Profits</span></div>
+            </div>
+
+            <div class="nav-divider"></div>
+            <div class="nav-item" onclick="location.href='reports.html'">
+                <div class="nav-item-left"><i class="fas fa-chart-pie"></i><span>Reports</span></div>
+            </div>
+            <div class="nav-item" onclick="location.href='settings.html'">
+                <div class="nav-item-left"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="modern-card">
+            <div class="card-header-modern">
+                <h4><i class="fas fa-chart-line"></i> Member Contributions</h4>
+                <p>View contributions by member</p>
+            </div>
+            <div class="card-body">
+                <!-- Filter Section -->
+                <div class="filter-section">
+                    <div class="row" style="display: flex; gap: 20px; align-items: flex-end;">
+                        <div style="flex: 1;">
+                            <label class="filter-label"><i class="fas fa-search"></i> Search Member</label>
+                            <select id="memberFilter" style="width: 100%;"></select>
+                            <small class="text-muted">Type to search member by name or member code - may lalabas na options habang nagta-type</small>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-gradient-primary" id="applyFilterBtn"><i class="fas fa-eye"></i> View Details</button>
+                            <button class="btn-gradient-secondary" id="resetFilterBtn"><i class="fas fa-refresh"></i> Show All</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Card -->
+                <div class="summary-card" id="summaryCard">
+                    <p><i class="fas fa-users"></i> Total Members</p>
+                    <h3 id="totalMembers">0</h3>
+                    <p>Total Contributions: <strong id="grandTotal">Php 0.00</strong></p>
+                </div>
+
+                <!-- Member Info Card (Detailed View) -->
+                <div class="member-info-card" id="memberInfoCard">
+                    <h3 id="memberName"></h3>
+                    <p>Member Code: <span id="memberCodeDisplay"></span> | Joined: <span id="joinedDateDisplay"></span></p>
+                </div>
+
+                <!-- Total Card -->
+                <div class="total-card" id="totalCard">
+                    <p><i class="fas fa-coins"></i> Total Contributions</p>
+                    <h4 id="totalAmount">Php 0.00</h4>
+                </div>
+
+                <!-- Summary Table View -->
+                <div id="summaryTableView">
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead> <tr><th>Member Code</th><th>Full Name</th><th>Joined Date</th><th>Total Contribution</th><th>Action</th></tr> </thead>
+                            <tbody id="summaryTableBody"><tr><td colspan="5" class="empty-state"><i class="fas fa-spinner fa-spin"></i> Loading members...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Detailed Table View -->
+                <div id="detailedTableView" style="display: none;">
+                    <h5 class="mb-3"><i class="fas fa-list"></i> Contribution Details</h5>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead> <tr><th>Contribution Code</th><th>Amount</th><th>Contribution Date</th><th>Payment Method</th><th>Reference Number</th><th>Month Term</th></tr> </thead>
+                            <tbody id="detailedTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="successModal"><div class="modal-content"><div class="modal-header"><div class="icon-circle success"><i class="fas fa-check"></i></div></div><div class="modal-body"><h4>Success!</h4><p id="successMessage">Operation completed successfully!</p></div><div class="modal-footer"><button class="btn-gradient-primary" onclick="closeModal('successModal')">OK</button></div></div></div>
+    <div class="modal" id="errorModal"><div class="modal-content"><div class="modal-header"><div class="icon-circle error"><i class="fas fa-times"></i></div></div><div class="modal-body"><h4>Oops!</h4><p id="errorMessage">Something went wrong.</p></div><div class="modal-footer"><button class="btn-gradient-primary" onclick="closeModal('errorModal')">Close</button></div></div></div>
+    <div class="modal" id="warningModal"><div class="modal-content"><div class="modal-header"><div class="icon-circle warning"><i class="fas fa-exclamation-triangle"></i></div></div><div class="modal-body"><h4>Warning!</h4><p id="warningMessage">Please check your input.</p></div><div class="modal-footer"><button class="btn-gradient-primary" onclick="closeModal('warningModal')">OK</button></div></div></div>
+    <div class="modal" id="infoModal"><div class="modal-content"><div class="modal-header"><div class="icon-circle info"><i class="fas fa-info"></i></div></div><div class="modal-body"><h4>Information</h4><p id="infoMessage">Member information loaded.</p></div><div class="modal-footer"><button class="btn-gradient-primary" onclick="closeModal('infoModal')">OK</button></div></div></div>
+
+    <script>
+        // Mobile Menu
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+        function toggleSubmenu(element) {
+            const parent = element.parentElement;
+            const submenu = parent.querySelector('.submenu');
+            const icon = element.querySelector('.nav-toggle');
+            if (submenu) { submenu.classList.toggle('open'); icon.classList.toggle('rotated'); }
+        }
+        function closeModal(modalId) { document.getElementById(modalId).classList.remove('show'); }
+        function showModal(type, message) {
+            const modalId = type === 'success' ? 'successModal' : (type === 'error' ? 'errorModal' : (type === 'warning' ? 'warningModal' : 'infoModal'));
+            const msgId = type === 'success' ? 'successMessage' : (type === 'error' ? 'errorMessage' : (type === 'warning' ? 'warningMessage' : 'infoMessage'));
+            document.getElementById(msgId).innerText = message;
+            document.getElementById(modalId).classList.add('show');
+            setTimeout(() => { document.getElementById(modalId).classList.remove('show'); }, 3000);
+        }
+
+        $(document).ready(function() {
+            let membersData = [];
+            let select2Initialized = false;
+
+            function initSelect2(members) {
+                if (select2Initialized) {
+                    $('#memberFilter').select2('destroy');
+                }
+                
+                // Prepare data for Select2 - with proper format para lumabas sa dropdown
+                const select2Data = [
+                    { id: '', text: '-- Search or Select a Member --', disabled: true }
+                ];
+                
+                members.forEach(member => {
+                    const fullName = `${member.firstname} ${member.lastname}`;
+                    select2Data.push({
+                        id: member.memberCode,
+                        text: `${fullName} (${member.memberCode})`,
+                        fullName: fullName,
+                        memberCode: member.memberCode
+                    });
+                });
+                
+                $('#memberFilter').select2({
+                    theme: 'bootstrap',
+                    placeholder: 'Type to search member by name or member code...',
+                    allowClear: true,
+                    data: select2Data,
+                    dropdownParent: $('.filter-section'),
+                    // Custom search matcher - para mag-search sa name at member code
+                    matcher: function(params, data) {
+                        if ($.trim(params.term) === '') {
+                            return data;
+                        }
+                        
+                        const searchTerm = params.term.toLowerCase();
+                        const text = data.text.toLowerCase();
+                        const fullName = data.fullName ? data.fullName.toLowerCase() : '';
+                        const memberCode = data.memberCode ? data.memberCode.toLowerCase() : '';
+                        
+                        if (text.indexOf(searchTerm) > -1 || 
+                            fullName.indexOf(searchTerm) > -1 || 
+                            memberCode.indexOf(searchTerm) > -1) {
+                            return data;
+                        }
+                        
+                        return null;
+                    },
+                    // Template para sa dropdown options (maganda ang display)
+                    templateResult: function(data) {
+                        if (!data.id) return data.text;
+                        return $('<div><strong>' + data.fullName + '</strong><br><small class="text-muted">' + data.memberCode + '</small></div>');
+                    },
+                    // Template para sa selected value
+                    templateSelection: function(data) {
+                        if (!data.id) return data.text;
+                        return data.fullName + ' (' + data.memberCode + ')';
+                    }
+                });
+                
+                select2Initialized = true;
+            }
+
+            function loadSummary() {
+                $('#summaryTableBody').html('<tr><td colspan="5" class="empty-state"><i class="fas fa-spinner fa-spin"></i> Loading members...</td></tr>');
+                $.ajax({ 
+                    url: 'http://localhost:8080/groupsavings/api/v1/member/contributions', 
+                    type: 'GET',
+                    success: function(res) {
+                        membersData = Array.isArray(res) ? res : (res.data || []);
+                        displaySummary(membersData);
+                        initSelect2(membersData);
+                        showModal('success', 'Members loaded successfully!');
+                    },
+                    error: function() { 
+                        $('#summaryTableBody').html('<tr><td colspan="5" class="empty-state">Failed to load members</td></tr>'); 
+                        showModal('error', 'Failed to load members'); 
+                    }
+                });
+            }
+
+            function displaySummary(members) {
+                const tbody = $('#summaryTableBody');
+                tbody.empty();
+                if (!members || members.length === 0) { 
+                    tbody.html('<tr><td colspan="5" class="empty-state">No members found</td></tr>'); 
+                    $('#totalMembers').text('0'); 
+                    $('#grandTotal').text('Php 0.00'); 
+                    return; 
+                }
+                let grandTotal = 0;
+                members.sort((a,b) => a.firstname.localeCompare(b.firstname));
+                members.forEach(m => {
+                    const amount = m.amount || 0;
+                    grandTotal += amount;
+                    tbody.append(`<tr class="summary-row" data-code="${m.memberCode}"><td><code>${m.memberCode}</code></td><td><strong>${m.firstname} ${m.lastname}</strong></td><td>${m.joinedDate ? new Date(m.joinedDate).toLocaleDateString() : 'N/A'}</td><td class="contribution-amount">Php ${amount.toLocaleString()}</td><td><button class="btn-outline-secondary btn-view" data-code="${m.memberCode}"><i class="fas fa-eye"></i> View Details</button></td></tr>`);
+                });
+                $('#totalMembers').text(members.length);
+                $('#grandTotal').text(`Php ${grandTotal.toLocaleString()}`);
+                $('.summary-row').on('click', function() { loadMemberContributions($(this).data('code')); });
+                $('.btn-view').on('click', function(e) { e.stopPropagation(); loadMemberContributions($(this).data('code')); });
+            }
+
+            function loadMemberContributions(code) {
+                $('#detailedTableBody').html('<tr><td colspan="6" class="empty-state"><i class="fas fa-spinner fa-spin"></i> Loading contributions...</td></tr>');
+                $.ajax({ 
+                    url: `http://localhost:8080/groupsavings/api/v1/member/contributions/${code}`, 
+                    type: 'GET',
+                    success: function(res) {
+                        $('#summaryTableView').hide(); 
+                        $('#summaryCard').hide(); 
+                        $('#detailedTableView').show(); 
+                        $('#memberInfoCard').show(); 
+                        $('#totalCard').show();
+                        $('#memberName').text(`${res.firstname} ${res.lastname}`); 
+                        $('#memberCodeDisplay').text(res.memberCode); 
+                        $('#joinedDateDisplay').text(res.joinedDate ? new Date(res.joinedDate).toLocaleDateString() : 'N/A');
+                        let total = 0; 
+                        if (res.contributions) res.contributions.forEach(c => total += c.amount);
+                        $('#totalAmount').text(`Php ${total.toLocaleString()}`);
+                        displayDetailedContributions(res.contributions || []);
+                        showModal('success', 'Contributions loaded successfully!');
+                    },
+                    error: function(xhr) { 
+                        if (xhr.status === 404) showModal('warning', 'No contributions found for this member.'); 
+                        else showModal('error', 'Failed to load contributions.'); 
+                    }
+                });
+            }
+
+            function displayDetailedContributions(contributions) {
+                const tbody = $('#detailedTableBody');
+                tbody.empty();
+                if (!contributions.length) { 
+                    tbody.html('<tr><td colspan="6" class="empty-state">No contributions found</td></tr>'); 
+                    return; 
+                }
+                contributions.sort((a,b) => new Date(b.contributionDate) - new Date(a.contributionDate));
+                contributions.forEach(c => {
+                    tbody.append(`<tr><td><code>${c.contributionCode || 'N/A'}</code></td><td class="contribution-amount">Php ${(c.amount || 0).toLocaleString()}</td><td>${c.contributionDate ? new Date(c.contributionDate).toLocaleDateString() : 'N/A'}</td><td><span class="badge badge-info">${c.paymentMethod || 'N/A'}</span></td><td><small>${c.referenceNumber || 'N/A'}</small></td><td><span class="badge badge-primary">${c.monthTerm || 0} Term</span></td></tr>`);
+                });
+            }
+
+            function showSummaryView() {
+                $('#summaryTableView').show(); 
+                $('#summaryCard').show(); 
+                $('#detailedTableView').hide(); 
+                $('#memberInfoCard').hide(); 
+                $('#totalCard').hide();
+                $('#memberFilter').val('').trigger('change');
+                loadSummary();
+                showModal('info', 'Showing all members summary');
+            }
+
+            $('#applyFilterBtn').on('click', () => { 
+                const code = $('#memberFilter').val(); 
+                if (!code) showModal('warning', 'Please select a member first'); 
+                else loadMemberContributions(code); 
+            });
+            $('#resetFilterBtn').on('click', showSummaryView);
+            $('#memberFilter').on('select2:select', (e) => loadMemberContributions(e.params.data.id));
+            loadSummary();
+        });
+    </script>
 </body>
 </html>

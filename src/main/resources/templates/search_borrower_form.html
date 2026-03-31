@@ -1,422 +1,850 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Loan Savings</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" th:href="@{/assets/vendors/mdi/css/materialdesignicons.min.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/ti-icons/css/themify-icons.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/css/vendor.bundle.base.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/font-awesome/css/font-awesome.min.css}">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" th:href="@{/assets/vendors/select2/select2.min.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css}">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
-    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
-    <!-- End layout styles -->
-    <link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Loan - Group Savings</title>
     
-    <!-- Add this CSS -->
-	<style>
-	    .spinner-border-sm {
-	        width: 1rem;
-	        height: 1rem;
-	        border-width: 0.2em;
-	        margin-right: 0.5rem;
-	    }
-	</style>
-  </head>
-  <body>
-    <div class="container-scroller">
-      <div th:replace="~{fragments/header_menu :: headerMenu}"></div>
-      
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <div th:replace="~{fragments/nav_menu :: navMenu}"></div>
-        
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Search Information </h3>
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Search Form</li>
-                </ol>
-              </nav>
-            </div>
-            <div class="row">
-              <div class="col-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Search Form</h4>
-                    <form class="forms-sample">
-                      <div class="form-group">
-                        <label for="forNameSearch">Name</label>
-                        <input type="text" class="form-control" id="name_search" value="">
-                      </div>
-                      <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-                      <button class="btn btn-light">Cancel</button>
-                    </form>
-                  </div>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <!-- Select2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-                  <div class="card-body">
-                    <h4 class="card-title">Member(s) Search List</h4>
-                    </p>
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th> Full Name </th>
-                          <th> Date Registered </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                    </table>
-                  </div>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; }
+
+        /* Sidebar Navigation */
+        .nav-sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            width: 280px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        /* Logo */
+        .logo-area {
+            padding: 30px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon {
+            width: 45px; height: 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .logo-icon i { font-size: 24px; color: white; }
+        .logo-text h3 { color: white; font-weight: 700; font-size: 18px; }
+        .logo-text p { color: rgba(255,255,255,0.5); font-size: 11px; }
+
+        /* Navigation Items */
+        .nav-item {
+            padding: 12px 24px;
+            margin: 4px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: rgba(255,255,255,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-item:hover { background: rgba(102, 126, 234, 0.2); color: white; }
+        .nav-item.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 15px rgba(102,126,234,0.3); }
+        .nav-item-left { display: flex; align-items: center; gap: 12px; }
+        .nav-item-left i { width: 24px; font-size: 18px; }
+        .nav-toggle { transition: transform 0.3s ease; }
+        .nav-toggle.rotated { transform: rotate(180deg); }
+
+        .submenu {
+            margin-left: 52px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .submenu.open { max-height: 300px; }
+        .submenu-item {
+            padding: 10px 16px;
+            margin: 4px 0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .submenu-item:hover { background: rgba(255,255,255,0.1); color: white; transform: translateX(5px); }
+        .submenu-item.active { color: #a78bfa; }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 16px 24px;
+        }
+
+        /* Modern Card */
+        .modern-card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+        }
+        .modern-card:hover { transform: translateY(-3px); box-shadow: 0 25px 40px -12px rgba(0,0,0,0.15); }
+
+        .card-header-modern {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 24px 30px;
+            color: white;
+        }
+        .card-header-modern h4 { margin: 0; font-size: 1.3rem; font-weight: 600; }
+        .card-header-modern p { margin: 8px 0 0; opacity: 0.9; font-size: 0.9rem; }
+
+        .card-body { padding: 30px; }
+
+        /* Search Section */
+        .search-section {
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+        .search-wrapper {
+            position: relative;
+        }
+        .search-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+        }
+        .search-wrapper input {
+            padding-left: 45px;
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 12px 16px 12px 45px;
+        }
+
+        /* Form Styles */
+        .form-group-modern {
+            margin-bottom: 1.5rem;
+        }
+        .form-group-modern label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+        .form-group-modern label i {
+            margin-right: 6px;
+            color: #667eea;
+        }
+        .form-group-modern input, .form-group-modern select {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 12px 16px;
+            transition: all 0.2s;
+        }
+        .form-group-modern input:focus, .form-group-modern select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+            outline: none;
+        }
+        .form-group-modern input:read-only {
+            background: #f8fafc;
+        }
+
+        /* Buttons */
+        .btn-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-gradient-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        .btn-gradient-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        .btn-outline-secondary {
+            background: white;
+            border: 1px solid #cbd5e0;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-outline-secondary:hover { background: #f7fafc; transform: translateY(-2px); }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th {
+            text-align: left;
+            padding: 14px;
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .data-table td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+
+        /* Progress Bar */
+        .progress {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            border-radius: 10px;
+        }
+
+        /* Loan Summary Card */
+        .loan-summary-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e6f7f0 100%);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+            border: 1px solid #c6f6d5;
+        }
+        .loan-summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .loan-summary-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Member Row */
+        .member-row {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .member-row:hover {
+            background: #f8fafc;
+            transform: translateX(5px);
+        }
+
+        .selected-member-card {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 20px 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-clear-member {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-clear-member:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            max-width: 500px;
+            width: 90%;
+            animation: modalSlideIn 0.3s ease;
+        }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 28px 28px 0 0;
+        }
+        .modal-body { padding: 24px; text-align: center; }
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+        .icon-circle i { font-size: 35px; }
+        .icon-circle.success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        .icon-circle.error { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); color: white; }
+        .icon-circle.warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .icon-circle.info { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .empty-state { text-align: center; padding: 40px; color: #a0aec0; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+        @media (max-width: 768px) {
+            .nav-sidebar { transform: translateX(-100%); position: fixed; z-index: 1000; }
+            .nav-sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .mobile-menu-btn {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1001;
+                background: #667eea;
+                color: white;
+                border: none;
+                width: 45px;
+                height: 45px;
+                border-radius: 12px;
+                font-size: 20px;
+                cursor: pointer;
+            }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+        .mobile-menu-btn { display: none; }
+
+        .text-right { text-align: right; }
+        .mt-4 { margin-top: 1.5rem; }
+        .mb-3 { margin-bottom: 1rem; }
+        .me-2 { margin-right: 0.5rem; }
+        .badge-info { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+        .badge-warning { background: #feebc8; color: #744210; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+        .text-muted { color: #a0aec0; }
+        .mt-3 { margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <div class="nav-sidebar" id="sidebar">
+        <div class="logo-area">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-piggy-bank"></i></div>
+                <div class="logo-text">
+                    <h3>GroupSavings</h3>
+                    <p>v2.0 Ultimate</p>
                 </div>
-              </div>
             </div>
-          </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:../../partials/_footer.html -->
-          <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
-            </div>
-          </footer>
-          <!-- partial -->
         </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
+
+        <nav>
+            <div class="nav-item" th:onclick="|location.href='@{/dashboard}'|">
+                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Dashboard</span></div>
+            </div>
+
+            <div>
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-users"></i><span>Members</span></div>
+                    <i class="fas fa-chevron-down nav-toggle"></i>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/register}'|"><i class="fas fa-user-plus"></i> Member Registration</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/list}'|"><i class="fas fa-list"></i> All Members</div>
+                </div>
+            </div>
+
+            <div>
+                <div class="nav-item active" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-coins"></i><span>Contributions</span></div>
+                    <i class="fas fa-chevron-down nav-toggle rotated"></i>
+                </div>
+                <div class="submenu open">
+                    <div class="submenu-item active" th:onclick="|location.href='@{/contribution/search-member}'|"><i class="fas fa-plus-circle"></i> Add Contribution</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/contributions}'|"><i class="fas fa-chart-simple"></i> Member Contributions</div>
+                </div>
+            </div>
+
+            <div>
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-hand-holding-usd"></i><span>Loans</span></div>
+                    <i class="fas fa-chevron-down nav-toggle"></i>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item" th:onclick="|location.href='@{/loan/apply}'|"><i class="fas fa-file-invoice"></i> Apply Loan</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/loan/manage}'|"><i class="fas fa-chart-line"></i> Manage Loan</div>
+                </div>
+            </div>
+
+            <div class="nav-item" th:onclick="|location.href='@{/member/profits}'|">
+                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Profits</span></div>
+            </div>
+
+            <div class="nav-divider"></div>
+            <div class="nav-item" onclick="location.href='reports.html'">
+                <div class="nav-item-left"><i class="fas fa-chart-pie"></i><span>Reports</span></div>
+            </div>
+            <div class="nav-item" onclick="location.href='settings.html'">
+                <div class="nav-item-left"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </div>
+        </nav>
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
-    <script th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script th:src="@{/assets/js/off-canvas.js}"></script>
-    <script th:src="@{/assets/js/misc.js}"></script>
-    <script th:src="@{/assets/js/settings.js}"></script>
-    <script th:src="@{/assets/js/todolist.js}"></script>
-    <script th:src="@{/assets/js/jquery.cookie.js}"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script th:src="@{/assets/js/file-upload.js}"></script>
-    <script th:src="@{/assets/js/typeahead.js}"></script>
-    <script th:src="@{/assets/js/select2.js}"></script>
-    <!-- End custom js for this page -->
-    
-    <script type="text/javascript">
-	$(document).ready(function() {
-		
-		// Enhanced button with spinner (reusable)
-		function setLoading(button, isLoading, originalText) {
-		    if (isLoading) {
-		        button.prop('disabled', true).html(`
-		            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-		            Searching...
-		        `);
-		    } else {
-		        button.prop('disabled', false).html(originalText || '<i class="fa fa-search"></i> Submit');
-		    }
-		}
-		
-	    const MemberSearch = {
-	        init: function() {
-	            this.form = $('.forms-sample'); // Search form
-	            this.searchInput = $('#name_search');
-	            this.submitBtn = this.form.find('button[type="submit"]');
-	            this.cancelBtn = this.form.find('.btn-light');
-	            this.tableBody = $('.table tbody');
-	            
-	            // Store original button text
-	            this.originalBtnHtml = this.submitBtn.html();
-	            
-	            this.bindEvents();
-	        },
-	        
-	        bindEvents: function() {
-	            this.form.on('submit', $.proxy(this.handleSubmit, this));
-	            this.cancelBtn.on('click', $.proxy(this.handleCancel, this));
-	            
-	            // Real-time validation on blur
-	            this.searchInput.on('blur', $.proxy(this.validateField, this));
-	            
-	            // Optional: Search as you type (with debounce)
-	            let searchTimeout;
-	            this.searchInput.on('keyup', $.proxy(function() {
-	                clearTimeout(searchTimeout);
-	                searchTimeout = setTimeout($.proxy(function() {
-	                    if (this.searchInput.val().length >= 2 || this.searchInput.val().length === 0) {
-	                        this.performSearch();
-	                    }
-	                }, this), 500);
-	            }, this));
-	        },
-	        
-	        handleSubmit: function(e) {
-	            e.preventDefault();
-	            this.performSearch();
-	        },
-	        
-	        handleCancel: function(e) {
-	            e.preventDefault();
-	            this.resetSearch();
-	        },
-	        
-	        performSearch: function() {
-	            const searchTerm = this.searchInput.val().trim();
-	            
-	            if (!this.validateSearch(searchTerm)) {
-	                return;
-	            }
-	            
-	            this.setLoading(true);
-	            
-	            // Prepare data for POST request
-	            const requestData = {
-	                name: searchTerm  // or fullname, depending on your API
-	            };
-	            
-	            // POST API call
-	            $.ajax({
-	                url: 'http://localhost:8080/groupsavings/api/v1/member/info',  // POST endpoint
-	                type: 'POST',
-	                contentType: 'application/json',
-	                data: JSON.stringify(requestData),  // Send data in body
-	                dataType: 'json',
-	                success: $.proxy(this.handleSuccess, this),
-	                error: $.proxy(this.handleError, this),
-	                complete: $.proxy(function() {
-	                    this.setLoading(false);
-	                }, this)
-	            });
-	        },
-	        
-	        handleSuccess: function(response) {
-	            console.log('Members loaded:', response);
-	            
-	            // Handle different response formats
-	            const members = Array.isArray(response) ? response : (response.data || response.content || []);
-	            
-	            if (members.length === 0) {
-	                this.showAlert('info', 'No members found.');
-	                this.tableBody.html(this.getEmptyRow());
-	                return;
-	            }
-	            
-	            // Build table rows
-	            let tableRows = '';
-	            members.forEach($.proxy(function(member) {
-	                tableRows += this.buildTableRow(member);
-	            }, this));
-	            
-	            this.tableBody.html(tableRows);
-	            
-	            if (this.searchInput.val().trim()) {
-	                this.showAlert('success', 'Found ' + members.length + ' member(s).');
-	            }
-	        },
-	        
-	        handleError: function(xhr) {
-	            if (xhr.status === 400) {
-	                const errors = xhr.responseJSON;
-	                if (errors) {
-	                    this.displayFieldErrors(errors);
-	                }
-	                this.showAlert('warning', 'Invalid search parameters.');
-	            } else if (xhr.status === 404) {
-	                this.tableBody.html(this.getEmptyRow());
-	                this.showAlert('info', 'No members found.');
-	            } else {
-	                this.showAlert('danger', 'An error occurred. Please try again.');
-	                console.error('Search error:', xhr.responseText);
-	            }
-	        },
-	        
-	        displayFieldErrors: function(errors) {
-	            // Clear previous errors
-	            this.form.find('.is-invalid').removeClass('is-invalid');
-	            this.form.find('.invalid-feedback').remove();
-	            
-	            // Display new errors
-	            $.each(errors, function(field, messages) {
-	                const $input = $('#name_search');  // Adjust if multiple fields
-	                const message = Array.isArray(messages) ? messages[0] : messages;
-	                
-	                $input.addClass('is-invalid');
-	                $input.after(`<div class="invalid-feedback">${message}</div>`);
-	            });
-	        },
-	        
-	        buildTableRow: function(member) {
-	            // Handle different possible field names
-	            const fullName = member.firstname + ' ' + member.lastname;
-	            const dateRegistered = this.formatDate(member.joinedDate);
-	            const memberCode = member.memberCode || '';
-	            
-	            return `
-	                <tr>
-	                    <td>
-	                        <a href="/groupsavings/member/info/${memberCode}" class="member-link">
-	                            <i class="fa fa-user-circle me-2"></i>${this.escapeHtml(fullName)}
-	                        </a>
-	                    </td>
-	                    <td>${dateRegistered}</td>
-	                </tr>
-	            `;
-	        },
-	        
-	        getEmptyRow: function() {
-	            return `
-	                <tr>
-	                    <td colspan="2" class="text-center py-4">
-	                        <i class="fa fa-info-circle fa-2x text-muted mb-3"></i>
-	                        <p class="text-muted mb-0">No members to display</p>
-	                    </td>
-	                </tr>
-	            `;
-	        },
-	        
-	        validateSearch: function(searchTerm) {
-	            // Remove existing validation styles
-	            this.searchInput.removeClass('is-invalid');
-	            this.form.find('.invalid-feedback').remove();
-	            
-	            // Allow empty (will show all members)
-	            if (searchTerm.length === 0) {
-	                return true;
-	            }
-	            
-	            // Check minimum length
-	            if (searchTerm.length < 2) {
-	                this.searchInput.addClass('is-invalid');
-	                this.searchInput.after('<div class="invalid-feedback">Please enter at least 2 characters</div>');
-	                return false;
-	            }
-	            
-	            return true;
-	        },
-	        
-	        validateField: function(e) {
-	            const $field = $(e.target);
-	            const value = $field.val().trim();
-	            
-	            if (value.length > 0 && value.length < 2) {
-	                $field.addClass('is-invalid');
-	                $field.siblings('.invalid-feedback').remove();
-	                $field.after('<div class="invalid-feedback">Please enter at least 2 characters</div>');
-	            } else {
-	                $field.removeClass('is-invalid');
-	                $field.siblings('.invalid-feedback').remove();
-	            }
-	        },
-	        
-	        setLoading: function(isLoading) {
-	            if (isLoading) {
-	                this.submitBtn.prop('disabled', true).html(`
-	                    <span class="spinner-border spinner-border-sm" role="status"></span>
-	                    Searching...
-	                `);
-	                
-	                // Optional: Show loading in table
-	                this.tableBody.html(`
-	                    <tr>
-	                        <td colspan="2" class="text-center py-4">
-	                            <div class="spinner-border text-primary" role="status">
-	                                <span class="visually-hidden">Loading...</span>
-	                            </div>
-	                            <p class="mt-2 text-muted">Loading members...</p>
-	                        </td>
-	                    </tr>
-	                `);
-	            } else {
-	                this.submitBtn.prop('disabled', false).html(this.originalBtnHtml);
-	            }
-	        },
-	        
-	        resetSearch: function() {
-	            this.searchInput.val('').removeClass('is-invalid');
-	            this.form.find('.invalid-feedback').remove();
-	            this.showAlert('info', 'Search reset');
-	            this.tableBody.html(this.getEmptyRow()); // Clear table or load initial data
-	        },
-	        
-	        formatDate: function(dateString) {
-	            if (!dateString) return 'N/A';
-	            
-	            try {
-	                const date = new Date(dateString);
-	                if (isNaN(date.getTime())) return dateString;
-	                
-	                const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 
-	                               'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-	                
-	                const month = months[date.getMonth()];
-	                const day = String(date.getDate()).padStart(2, '0');
-	                const year = date.getFullYear();
-	                
-	                return `${month}-${day}-${year}`;
-	            } catch (e) {
-	                return dateString;
-	            }
-	        },
-	        
-	        escapeHtml: function(text) {
-	            if (!text) return text;
-	            const div = document.createElement('div');
-	            div.textContent = text;
-	            return div.innerHTML;
-	        },
-	        
-	        showAlert: function(type, message) {
-	            // Remove existing alerts
-	            $('.alert-dynamic').remove();
-	            
-	            const alertHtml = `
-	                <div class="alert alert-${type} alert-dynamic alert-dismissible fade show" style="margin-top: 12px;" role="alert">
-	                    <i class="fa fa-${this.getAlertIcon(type)} me-2"></i>
-	                    ${message}
-	                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-	                </div>
-	            `;
-	            
-	            this.form.before(alertHtml);
-	            
-	            // Auto dismiss
-	            setTimeout(() => $('.alert-dynamic').fadeOut('slow', function() {
-	                $(this).remove();
-	            }), 5000);
-	        },
-	        
-	        getAlertIcon: function(type) {
-	            const icons = {
-	                'success': 'check-circle',
-	                'danger': 'exclamation-circle',
-	                'warning': 'exclamation-triangle',
-	                'info': 'info-circle'
-	            };
-	            return icons[type] || 'info-circle';
-	        }
-	    };
-	    
-	    // Initialize
-	    MemberSearch.init();
-	});
-</script>
-  </body>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Search Card -->
+        <div class="modern-card">
+            <div class="card-header-modern">
+                <h4><i class="fas fa-search"></i> Search Member</h4>
+                <p>Search for a member to apply for a loan</p>
+            </div>
+            <div class="card-body">
+                <div class="search-section">
+                    <div style="display: flex; gap: 20px; align-items: flex-end;">
+                        <div style="flex: 1;">
+                            <div class="search-wrapper">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="name_search" placeholder="Enter member name or member code...">
+                            </div>
+                            <small class="text-muted">Type at least 2 characters to search</small>
+                        </div>
+                        <div>
+                            <button class="btn-gradient-primary" id="searchBtn"><i class="fas fa-search"></i> Search</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Results Table -->
+                <div style="margin-top: 20px;">
+                    <h5 class="mb-3"><i class="fas fa-list"></i> Search Results</h5>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead> <tr><th>Full Name</th><th>Date Registered</th><th>Member Code</th> </thead>
+                            <tbody id="searchResultsBody">
+                                <tr><td colspan="3" class="empty-state"><i class="fas fa-search"></i> Enter a name to search for members</td> </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Selected Member Card -->
+        <div class="selected-member-card" id="selectedMemberCard">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="fas fa-user-circle" style="font-size: 2rem;"></i>
+                <div>
+                    <h5 id="selectedMemberName" style="margin: 0;">-</h5>
+                    <p style="margin: 5px 0 0; opacity: 0.9;">Member Code: <span id="selectedMemberCode">-</span> | Interest: <span id="selectedInterest">-</span> | Loan Code: <span id="selectedLoanCode">-</span></p>
+                </div>
+            </div>
+            <button class="btn-clear-member" id="clearMemberBtn"><i class="fas fa-times"></i> Clear</button>
+        </div>
+
+        <!-- Loan Application Form -->
+        <div class="modern-card">
+            <div class="card-header-modern">
+                <h4><i class="fas fa-file-invoice-dollar"></i> Loan Application Form</h4>
+                <p>Fill in the loan details for the selected member</p>
+            </div>
+            <div class="card-body">
+                <div id="alertContainer"></div>
+                <form id="loanForm">
+                    <div class="grid-2">
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-user"></i> Full Name</label>
+                            <input type="text" id="fullname" readonly placeholder="Select a member first">
+                        </div>
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-barcode"></i> Member Code</label>
+                            <input type="text" id="memberCode" readonly placeholder="Select a member first">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-tag"></i> Loan Code</label>
+                            <input type="text" id="loanCode" readonly placeholder="Will be loaded from member data">
+                        </div>
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-percent"></i> Interest Rate</label>
+                            <input type="text" id="interest" readonly placeholder="Will be loaded from member data">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-money-bill-wave"></i> Loan Amount</label>
+                            <input type="number" id="loanAmount" placeholder="Enter loan amount" required>
+                        </div>
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-calendar-alt"></i> Loan Terms (months)</label>
+                            <input type="number" id="loanTerms" placeholder="Enter number of months" required>
+                        </div>
+                    </div>
+                    <div class="form-group-modern">
+                        <label><i class="fas fa-calendar-day"></i> Date Applied</label>
+                        <input type="date" id="dateApplied" required>
+                    </div>
+
+                    <!-- Loan Summary Card (shows after calculation) -->
+                    <div class="loan-summary-card" id="loanSummaryCard">
+                        <h6 style="margin-bottom: 15px;"><i class="fas fa-chart-line"></i> Loan Summary</h6>
+                        <div class="loan-summary-item"><span>Loan Amount:</span><strong id="summaryLoanAmount">₱0.00</strong></div>
+                        <div class="loan-summary-item"><span>Interest Rate:</span><strong id="summaryInterest">0%</strong></div>
+                        <div class="loan-summary-item"><span>Total Amount:</span><strong id="summaryTotalAmount">₱0.00</strong></div>
+                        <div class="loan-summary-item"><span>Monthly Amortization:</span><strong id="summaryAmortization">₱0.00</strong></div>
+                        <div class="loan-summary-item"><span>Due Date:</span><strong id="summaryDueDate">-</strong></div>
+                    </div>
+
+                    <div class="text-right mt-4">
+                        <button type="submit" class="btn-gradient-primary" id="submitBtn"><i class="fas fa-check"></i> Apply for Loan</button>
+                        <button type="button" class="btn-outline-secondary" id="cancelBtn" style="margin-left: 10px;"><i class="fas fa-times"></i> Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Contributors Table -->
+        <div class="modern-card" id="contributorsCard" style="display: none;">
+            <div class="card-header-modern">
+                <h4><i class="fas fa-users"></i> Member Loan Contribution</h4>
+                <p>Members who will contribute to this loan</p>
+            </div>
+            <div class="card-body">
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead> <tr><th>Full Name</th><th>Percentage</th><th>Amount</th> </thead>
+                        <tbody id="contributorsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="successModal"><div class="modal-content"><div class="modal-header"><h5>Success!</h5><button class="modal-close" onclick="closeModal('successModal')">&times;</button></div><div class="modal-body"><div class="icon-circle success"><i class="fas fa-check"></i></div><p id="successMessage">Loan created successfully!</p></div><div class="modal-footer"><button class="btn-gradient-primary" onclick="closeModal('successModal')">OK</button></div></div></div>
+    <div class="modal" id="errorModal"><div class="modal-content"><div class="modal-header"><h5>Error</h5><button class="modal-close" onclick="closeModal('errorModal')">&times;</button></div><div class="modal-body"><div class="icon-circle error"><i class="fas fa-times"></i></div><p id="errorMessage">Something went wrong.</p></div><div class="modal-footer"><button class="btn-gradient-primary" onclick="closeModal('errorModal')">Close</button></div></div></div>
+    <div class="modal" id="warningModal"><div class="modal-content"><div class="modal-header"><h5>Warning</h5><button class="modal-close" onclick="closeModal('warningModal')">&times;</button></div><div class="modal-body"><div class="icon-circle warning"><i class="fas fa-exclamation-triangle"></i></div><p id="warningMessage">Please check your input.</p></div><div class="modal-footer"><button class="btn-gradient-primary" onclick="closeModal('warningModal')">OK</button></div></div></div>
+    <div class="modal" id="infoModal"><div class="modal-content"><div class="modal-header"><h5>Information</h5><button class="modal-close" onclick="closeModal('infoModal')">&times;</button></div><div class="modal-body"><div class="icon-circle info"><i class="fas fa-info"></i></div><p id="infoMessage">Member information loaded.</p></div><div class="modal-footer"><button class="btn-gradient-primary" onclick="closeModal('infoModal')">OK</button></div></div></div>
+    <div class="modal" id="confirmModal"><div class="modal-content"><div class="modal-header"><h5>Confirm Loan Application</h5><button class="modal-close" onclick="closeModal('confirmModal')">&times;</button></div><div class="modal-body"><p id="confirmMessage">Are you sure you want to apply for this loan?</p></div><div class="modal-footer"><button class="btn-outline-secondary" onclick="closeModal('confirmModal')">Cancel</button><button class="btn-gradient-primary" id="confirmOkBtn">Yes, Apply</button></div></div></div>
+
+    <script>
+        let selectedMemberCode = null;
+        let selectedMemberData = null;
+        let confirmCallback = null;
+
+        // Helper Functions
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+        function toggleSubmenu(element) { const parent = element.parentElement; const submenu = parent.querySelector('.submenu'); const icon = element.querySelector('.nav-toggle'); if (submenu) { submenu.classList.toggle('open'); icon.classList.toggle('rotated'); } }
+        function closeModal(modalId) { document.getElementById(modalId).classList.remove('show'); }
+        function showModal(type, message) {
+            const modalId = type === 'success' ? 'successModal' : (type === 'error' ? 'errorModal' : (type === 'warning' ? 'warningModal' : 'infoModal'));
+            const msgId = type === 'success' ? 'successMessage' : (type === 'error' ? 'errorMessage' : (type === 'warning' ? 'warningMessage' : 'infoMessage'));
+            document.getElementById(msgId).innerText = message;
+            document.getElementById(modalId).classList.add('show');
+            setTimeout(() => { document.getElementById(modalId).classList.remove('show'); }, 3000);
+        }
+        function formatNumber(num) { return num ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '0'; }
+        function formatDate(d) { return d ? new Date(d).toLocaleDateString() : 'N/A'; }
+
+        // Auto-calculate Loan Summary
+        function calculateLoanSummary() {
+            const amount = parseFloat($('#loanAmount').val());
+            const terms = parseInt($('#loanTerms').val());
+            
+            if (amount && terms && amount > 0 && terms > 0 && selectedMemberData) {
+                // Extract numeric interest rate (remove % sign if present)
+                let interestRateStr = selectedMemberData.interest || '5%';
+                let interestRate = parseFloat(interestRateStr) / 100;
+                
+                const totalAmount = amount + (amount * interestRate);
+                const amortization = totalAmount / terms;
+                const dueDate = new Date();
+                dueDate.setMonth(dueDate.getMonth() + terms);
+                
+                $('#summaryLoanAmount').text(`₱${formatNumber(amount)}`);
+                $('#summaryInterest').text(interestRateStr);
+                $('#summaryTotalAmount').text(`₱${formatNumber(totalAmount)}`);
+                $('#summaryAmortization').text(`₱${formatNumber(amortization)}`);
+                $('#summaryDueDate').text(dueDate.toLocaleDateString());
+                $('#loanSummaryCard').show();
+            } else {
+                $('#loanSummaryCard').hide();
+            }
+        }
+
+        $('#loanAmount, #loanTerms').on('input', calculateLoanSummary);
+
+        // Search Member
+        function performSearch() {
+            const searchTerm = $('#name_search').val().trim();
+            if (searchTerm.length < 2 && searchTerm.length > 0) { showModal('warning', 'Please enter at least 2 characters'); return; }
+            if (searchTerm.length === 0) { $('#searchResultsBody').html('<tr><td colspan="3" class="empty-state"><i class="fas fa-search"></i> Enter a name to search</td></tr>'); return; }
+            
+            $('#searchResultsBody').html('<tr><td colspan="3" class="empty-state"><div class="spinner-border-sm" style="border-color: #667eea;"></div> Searching...</td></tr>');
+            $.ajax({ url: 'http://localhost:8080/groupsavings/api/v1/member/info', type: 'POST', contentType: 'application/json', data: JSON.stringify({ name: searchTerm }),
+                success: function(res) {
+                    const members = Array.isArray(res) ? res : (res.data || []);
+                    const tbody = $('#searchResultsBody');
+                    tbody.empty();
+                    if (members.length === 0) { tbody.html('<tr><td colspan="3" class="empty-state">No members found</td></tr>'); return; }
+                    members.forEach(m => {
+                        tbody.append(`<tr class="member-row" data-code="${m.memberCode}">
+                            <td><i class="fas fa-user-circle"></i> ${m.firstname} ${m.lastname}</td>
+                            <td>${formatDate(m.joinedDate)}</td>
+                            <td><span class="badge-info">${m.memberCode}</span></td>
+                        </tr>`);
+                    });
+                    $('.member-row').on('click', function() { 
+                        const code = $(this).data('code');
+                        loadMemberDetails(code);
+                    });
+                },
+                error: () => { $('#searchResultsBody').html('<tr><td colspan="3" class="empty-state">Failed to search</td></tr>'); showModal('error', 'Failed to search members'); }
+            });
+        }
+
+        // ========== GET MEMBER DETAILS FROM API ==========
+        function loadMemberDetails(memberCode) {
+            $('#searchResultsBody').html('<tr><td colspan="3" class="empty-state"><div class="spinner-border-sm" style="border-color: #667eea;"></div> Loading member details...</td></tr>');
+            
+            $.ajax({
+                url: `http://localhost:8080/groupsavings/api/v1/member/info/${memberCode}`,
+                type: 'GET',
+                contentType: 'application/json',
+                success: function(member) {
+                    console.log('Member details loaded:', member);
+                    selectedMemberData = member;
+                    selectedMemberCode = member.memberCode;
+                    
+                    // Populate form fields
+                    $('#fullname').val(`${member.firstname} ${member.lastname}`);
+                    $('#memberCode').val(member.memberCode);
+                    $('#loanCode').val(member.loanCode || 'N/A');
+                    $('#interest').val(member.interest || '5%');
+                    
+                    // Update selected member card
+                    $('#selectedMemberName').text(`${member.firstname} ${member.lastname}`);
+                    $('#selectedMemberCode').text(member.memberCode);
+                    $('#selectedInterest').text(member.interest || '5%');
+                    $('#selectedLoanCode').text(member.loanCode || 'N/A');
+                    $('#selectedMemberCard').show();
+                    
+                    // Hide summary card until user enters amount and terms
+                    $('#loanSummaryCard').hide();
+                    
+                    // Clear previous inputs
+                    $('#loanAmount, #loanTerms').val('');
+                    
+                    showModal('success', `Member ${member.firstname} ${member.lastname} selected`);
+                    
+                    // Scroll to form
+                    $('html, body').animate({ scrollTop: $('#loanForm').offset().top - 100 }, 500);
+                },
+                error: function(xhr) {
+                    console.error('Error loading member details:', xhr);
+                    if (xhr.status === 404) {
+                        showModal('warning', 'Member not found');
+                    } else {
+                        showModal('error', 'Failed to load member details');
+                    }
+                    $('#searchResultsBody').html('}<td colspan="3" class="empty-state">Failed to load member details</td>');
+                }
+            });
+        }
+
+        $('#searchBtn').on('click', performSearch);
+        $('#name_search').on('keypress', e => { if (e.which === 13) performSearch(); });
+        
+        $('#clearMemberBtn').on('click', () => { 
+            selectedMemberCode = null;
+            selectedMemberData = null;
+            $('#selectedMemberCard').hide(); 
+            $('#fullname, #memberCode, #loanCode, #interest').val(''); 
+            $('#loanSummaryCard').hide(); 
+            $('#contributorsCard').hide();
+            $('#loanAmount, #loanTerms').val('');
+            showModal('info', 'Member selection cleared');
+        });
+        
+        $('#cancelBtn').on('click', () => { 
+            $('#loanAmount, #loanTerms').val(''); 
+            $('#loanSummaryCard').hide();
+            showModal('info', 'Form cleared');
+        });
+
+        // Submit Loan
+        $('#loanForm').on('submit', function(e) {
+            e.preventDefault();
+            if (!selectedMemberCode) { showModal('warning', 'Please select a member first'); return; }
+            const amount = $('#loanAmount').val(), terms = $('#loanTerms').val();
+            if (!amount || amount <= 0) { showModal('warning', 'Please enter a valid loan amount'); return; }
+            if (!terms || terms <= 0) { showModal('warning', 'Please enter valid loan terms'); return; }
+            
+            // Get loanCode from member data
+            const loanCode = selectedMemberData?.loanCode || '';
+            
+            const interestRateStr = selectedMemberData?.interest || '5%';
+            const interestRate = parseFloat(interestRateStr) / 100;
+            const totalAmount = parseFloat(amount) + (parseFloat(amount) * interestRate);
+            const amortization = totalAmount / parseInt(terms);
+            
+            $('#confirmMessage').html(`
+                <div style="text-align: left; background: #f8fafc; padding: 15px; border-radius: 12px;">
+                    <div style="margin-bottom: 10px;"><strong>Member:</strong> ${$('#fullname').val()}</div>
+                    <div style="margin-bottom: 10px;"><strong>Loan Code:</strong> ${loanCode || 'N/A'}</div>
+                    <div style="margin-bottom: 10px;"><strong>Loan Amount:</strong> ₱${formatNumber(amount)}</div>
+                    <div style="margin-bottom: 10px;"><strong>Terms:</strong> ${terms} months</div>
+                    <div style="margin-bottom: 10px;"><strong>Interest Rate:</strong> ${interestRateStr}</div>
+                    <div style="margin-bottom: 10px;"><strong>Total Amount:</strong> ₱${formatNumber(totalAmount)}</div>
+                    <div><strong>Monthly Amortization:</strong> ₱${formatNumber(amortization)}</div>
+                </div>
+                <div class="mt-3">Do you want to proceed with this loan application?</div>
+            `);
+            $('#confirmModal').addClass('show');
+            
+            $('#confirmOkBtn').off('click').on('click', function() {
+                closeModal('confirmModal');
+                const btn = $('#submitBtn');
+                btn.prop('disabled', true).html('<span class="spinner-border-sm"></span> Processing...');
+                
+                $.ajax({ 
+                    url: 'http://localhost:8080/groupsavings/api/v1/loan/apply', 
+                    type: 'POST', 
+                    contentType: 'application/json', 
+                    data: JSON.stringify({ 
+                        memberCode: selectedMemberCode,
+                        loanCode: loanCode,
+                        loanAmount: amount, 
+                        terms: terms, 
+                        dateApplied: $('#dateApplied').val() 
+                    }),
+                    success: function(res) {
+                        $('#contributorsCard').show();
+                        $('#loanSummaryCard').show();
+                        $('#summaryLoanAmount').text(`₱${formatNumber(res.loanAmount)}`);
+                        $('#summaryTotalAmount').text(`₱${formatNumber(res.totalAmount)}`);
+                        $('#summaryAmortization').text(`₱${formatNumber(res.amortization)}`);
+                        $('#summaryDueDate').text(formatDate(res.dueDate));
+                        
+                        const tbody = $('#contributorsBody');
+                        tbody.empty();
+                        if (res.loanContributors && res.loanContributors.length) {
+                            res.loanContributors.forEach(c => {
+                                const percent = (c.percentage * 100).toFixed(2);
+                                tbody.append(`<tr>
+                                    <td><strong>${c.fullname}</strong></td>
+                                    <td><div class="progress"><div class="progress-bar" style="width: ${percent}%"></div></div><span class="badge-warning" style="margin-left: 10px;">${percent}%</span></td>
+                                    <td class="loan-amount">₱${formatNumber(c.amount)}</td>
+                                </tr>`);
+                            });
+                        }
+                        showModal('success', 'Loan application submitted successfully!');
+                    },
+                    error: function(xhr) { 
+                        let msg = 'Failed to create loan'; 
+                        try { const res = JSON.parse(xhr.responseText); msg = res.message || msg; } catch(e) {} 
+                        showModal('error', msg); 
+                    },
+                    complete: () => btn.prop('disabled', false).html('<i class="fas fa-check"></i> Apply for Loan')
+                });
+            });
+        });
+
+        // Set default date
+        $('#dateApplied').val(new Date().toISOString().split('T')[0]);
+    </script>
+</body>
 </html>

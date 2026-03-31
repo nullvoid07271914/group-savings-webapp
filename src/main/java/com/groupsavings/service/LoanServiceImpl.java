@@ -203,8 +203,17 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 		Optional<Loan> loan = loanRepository.findByLoanCode(request.getLoanCode());
 		if (loan.isPresent()) {
 			Loan currentLoan = loan.get();
-			currentLoan.setLoanStatus(LoanStatus.valueOf(request.getActionStatus()));
-			currentLoan.setDateApproved(LocalDate.now());
+
+			LoanStatus status = LoanStatus.valueOf(request.getActionStatus());
+			currentLoan.setLoanStatus(status);
+
+			switch (status) {
+				case LoanStatus.APPROVED -> currentLoan.setDateApproved(LocalDate.now());
+				case LoanStatus.RELEASE -> currentLoan.setDateReleased(LocalDate.now());
+				default -> {
+				}
+			}
+
 			Loan savedLoan = loanRepository.save(currentLoan);
 			return loanMapper.toDto(savedLoan);
 		}

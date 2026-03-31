@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Savings Dashboard - Ultimate Edition</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sidebar Navigation */
+        .nav-sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            width: 280px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        /* Logo */
+        .logo-area {
+            padding: 30px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon i {
+            font-size: 24px;
+            color: white;
+        }
+
+        .logo-text h3 {
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .logo-text p {
+            color: rgba(255,255,255,0.5);
+            font-size: 11px;
+        }
+
+        /* Navigation Items */
+        .nav-item {
+            padding: 12px 24px;
+            margin: 4px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: rgba(255,255,255,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+        }
+
+        .nav-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item-left i {
+            width: 24px;
+            font-size: 18px;
+        }
+
+        .nav-toggle {
+            transition: transform 0.3s ease;
+        }
+
+        .nav-toggle.rotated {
+            transform: rotate(180deg);
+        }
+
+        /* Submenu */
+        .submenu {
+            margin-left: 52px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .submenu.open {
+            max-height: 300px;
+        }
+
+        .submenu-item {
+            padding: 10px 16px;
+            margin: 4px 0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submenu-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 16px 24px;
+        }
+
+        /* Cards */
+        .dashboard-card {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+        }
+
+        /* Stat Cards */
+        .stat-card {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.15);
+        }
+
+        .stat-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1a202c;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #718096;
+            margin-top: 8px;
+        }
+
+        .stat-trend {
+            font-size: 13px;
+            margin-top: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 28px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-text {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .quick-action-btn {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 20px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Activity Items */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .activity-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        /* Member Items */
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+        }
+
+        .member-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-success { background: #48bb78; color: white; }
+        .badge-warning { background: #ed8936; color: white; }
+        .badge-info { background: #4299e1; color: white; }
+        .badge-secondary { background: #a0aec0; color: white; }
+
+        /* Grid */
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 16px;
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .data-table td {
+            padding: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 1000;
+            }
+            .nav-sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .mobile-menu-btn {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1001;
+                background: #667eea;
+                color: white;
+                border: none;
+                width: 45px;
+                height: 45px;
+                border-radius: 12px;
+                font-size: 20px;
+                cursor: pointer;
+            }
+            .grid-4, .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <div class="nav-sidebar" id="sidebar">
+        <div class="logo-area">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-piggy-bank"></i>
+                </div>
+                <div class="logo-text">
+                    <h3>GroupSavings</h3>
+                    <p>v2.0 Ultimate</p>
+                </div>
+            </div>
+        </div>
+
+        <nav>
+            <div class="nav-item" th:onclick="|location.href='@{/dashboard}'|">
+                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Dashboard</span></div>
+            </div>
+
+            <div>
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-users"></i><span>Members</span></div>
+                    <i class="fas fa-chevron-down nav-toggle"></i>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/register}'|"><i class="fas fa-user-plus"></i> Member Registration</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/list}'|"><i class="fas fa-list"></i> All Members</div>
+                </div>
+            </div>
+
+            <div>
+                <div class="nav-item" 
+                	th:classappend="${currentUri.contains('/contribution')} ? 'active' : ''"
+                	onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-coins"></i><span>Contributions</span></div>
+                    <i class="fas fa-chevron-down nav-toggle rotated"></i>
+                </div>
+                <div class="submenu open">
+                    <div class="submenu-item" 
+                    	th:classappend="${currentUri.endsWith('/contribution/add-contribute')} ? 'active' : ''"
+                    	th:onclick="|location.href='@{/contribution/add-contribute}'|"><i class="fas fa-plus-circle"></i> Add Contribution</div>
+                    <div class="submenu-item" 
+                    	th:classappend="${currentUri.endsWith('/contribution/summary')} ? 'active' : ''"
+                    	th:onclick="|location.href='@{/contribution/summary}'|"><i class="fas fa-chart-simple"></i> Member Contributions</div>
+                </div>
+            </div>
+
+            <div>
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-hand-holding-usd"></i><span>Loans</span></div>
+                    <i class="fas fa-chevron-down nav-toggle"></i>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item" th:onclick="|location.href='@{/loan/apply}'|"><i class="fas fa-file-invoice"></i> Apply Loan</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/loan/manage}'|"><i class="fas fa-chart-line"></i> Manage Loan</div>
+                </div>
+            </div>
+
+            <div class="nav-item" th:onclick="|location.href='@{/member/profits}'|">
+                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Profits</span></div>
+            </div>
+
+            <div class="nav-divider"></div>
+            <div class="nav-item" onclick="location.href='reports.html'">
+                <div class="nav-item-left"><i class="fas fa-chart-pie"></i><span>Reports</span></div>
+            </div>
+            <div class="nav-item" onclick="location.href='settings.html'">
+                <div class="nav-item-left"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <div class="welcome-text">
+                    Welcome back, <span style="background: linear-gradient(135deg, #ffd89b 0%, #c7e9fb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Admin!</span>
+                </div>
+                <p style="opacity: 0.9;">Here's what's happening with your group savings today.</p>
+            </div>
+            <div style="margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
+                <div class="quick-action-btn"><i class="fas fa-user-plus"></i> New Member</div>
+                <div class="quick-action-btn"><i class="fas fa-hand-holding-usd"></i> Add Contribution</div>
+                <div class="quick-action-btn"><i class="fas fa-file-invoice-dollar"></i> Apply Loan</div>
+                <div class="quick-action-btn"><i class="fas fa-chart-simple"></i> Generate Report</div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid-4" id="statsContainer">
+            <div class="stat-card"><div class="stat-icon" style="background: #667eea20; color: #667eea;"><i class="fas fa-users"></i></div><div class="stat-value"><span class="loading-spinner"></span></div><div class="stat-label">Total Members</div></div>
+            <div class="stat-card"><div class="stat-icon" style="background: #48bb7820; color: #48bb78;"><i class="fas fa-coins"></i></div><div class="stat-value"><span class="loading-spinner"></span></div><div class="stat-label">Total Contributions</div></div>
+            <div class="stat-card"><div class="stat-icon" style="background: #f6ad5520; color: #ed8936;"><i class="fas fa-chart-line"></i></div><div class="stat-value"><span class="loading-spinner"></span></div><div class="stat-label">Total Profit</div></div>
+            <div class="stat-card"><div class="stat-icon" style="background: #4299e120; color: #4299e1;"><i class="fas fa-hand-holding-usd"></i></div><div class="stat-value"><span class="loading-spinner"></span></div><div class="stat-label">Loanable Amount</div></div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid-2">
+            <div class="dashboard-card"><h3><i class="fas fa-chart-line" style="color: #667eea;"></i> Contribution Trends</h3><canvas id="contributionChart" style="height: 280px;"></canvas></div>
+            <div class="dashboard-card"><h3><i class="fas fa-chart-pie" style="color: #48bb78;"></i> Loan Distribution</h3><canvas id="loanChart" style="height: 280px;"></canvas></div>
+        </div>
+
+        <!-- Recent Activity & Top Members -->
+        <div class="grid-2">
+            <div class="dashboard-card"><h3><i class="fas fa-clock" style="color: #667eea;"></i> Recent Activity</h3><div id="activityList"><div class="loading-spinner" style="margin: 20px auto;"></div></div></div>
+            <div class="dashboard-card"><h3><i class="fas fa-trophy" style="color: #f6ad55;"></i> Top Contributors</h3><div id="topContributorsList"><div class="loading-spinner" style="margin: 20px auto;"></div></div></div>
+        </div>
+
+        <!-- Active Loans Table -->
+        <div class="dashboard-card"><h3><i class="fas fa-table" style="color: #667eea;"></i> Active Loans Summary</h3><div id="loansTable"><div class="loading-spinner" style="margin: 20px auto;"></div></div></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/groupsavings/api/v1/dashboard';
+        let contributionChart, loanChart;
+
+        // Mobile Menu
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+        function toggleSubmenu(el) { 
+            const submenu = el.parentElement.querySelector('.submenu');
+            const icon = el.querySelector('.nav-toggle');
+            submenu.classList.toggle('open');
+            icon.classList.toggle('rotated');
+        }
+        function setActive(el, page) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            alert(`Navigating to: ${page.toUpperCase()}`);
+        }
+        function setActiveSub(el, page) {
+            document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            alert(`Navigating to: ${page.replace('-', ' ').toUpperCase()}`);
+        }
+
+        // Format Currency
+        function formatCurrency(amount) { return 'Php ' + amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+
+        // Load Dashboard Data
+        async function loadDashboard() {
+            try {
+                // 1. Load Summary
+                const summaryRes = await fetch(`${API_BASE}/summary`);
+                const summaryData = await summaryRes.json();
+                if (summaryData.success) {
+                    const s = summaryData.data.summary;
+                    document.querySelectorAll('.stat-card')[0].querySelector('.stat-value').innerHTML = s.totalMembers;
+                    document.querySelectorAll('.stat-card')[1].querySelector('.stat-value').innerHTML = formatCurrency(s.totalContributions);
+                    document.querySelectorAll('.stat-card')[2].querySelector('.stat-value').innerHTML = formatCurrency(s.totalProfit);
+                    document.querySelectorAll('.stat-card')[3].querySelector('.stat-value').innerHTML = formatCurrency(s.loanableAmount);
+                    
+                    // Add trends
+                    const trends = [
+                        { growth: s.memberGrowth, up: true },
+                        { growth: s.contributionGrowth, up: true },
+                        { growth: s.profitGrowth, up: true },
+                        { growth: s.loanGrowth, up: true }
+                    ];
+                    document.querySelectorAll('.stat-card').forEach((card, i) => {
+                        const trendDiv = document.createElement('div');
+                        trendDiv.className = `stat-trend ${trends[i].up ? 'bg-green-100' : 'bg-red-100'}`;
+                        trendDiv.style.background = trends[i].up ? '#48bb7820' : '#f86a6a20';
+                        trendDiv.style.color = trends[i].up ? '#38a169' : '#e53e3e';
+                        trendDiv.innerHTML = `<i class="fas fa-arrow-${trends[i].up ? 'up' : 'down'}"></i> +${trends[i].growth}%`;
+                        if (!card.querySelector('.stat-trend')) card.appendChild(trendDiv);
+                    });
+                }
+
+                // 2. Load Contribution Trends
+                const trendsRes = await fetch(`${API_BASE}/contribution-trends`);
+                const trendsData = await trendsRes.json();
+                if (trendsData.success && contributionChart) {
+                    contributionChart.data.datasets[0].data = trendsData.data.map(d => d.amount);
+                    contributionChart.update();
+                }
+
+                // 3. Load Loan Distribution
+                const loanDistRes = await fetch(`${API_BASE}/loan-distribution`);
+                const loanDistData = await loanDistRes.json();
+                if (loanDistData.success && loanChart) {
+                    loanChart.data.datasets[0].data = loanDistData.data.map(d => d.amount);
+                    loanChart.data.labels = loanDistData.data.map(d => `${d.status} (${formatCurrency(d.amount)})`);
+                    loanChart.update();
+                }
+
+                // 4. Load Recent Activities
+                const activitiesRes = await fetch(`${API_BASE}/recent-activities?limit=5`);
+                const activitiesData = await activitiesRes.json();
+                if (activitiesData.success) {
+                    const activityHtml = activitiesData.data.map(a => `
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: ${getActivityColor(a.type)}20; color: ${getActivityColor(a.type)};">
+                                <i class="fas ${getActivityIcon(a.type)}"></i>
+                            </div>
+                            <div style="flex:1"><div><strong>${a.user?.firstName || ''} ${a.user?.lastName || ''}</strong> ${a.title}</div><div style="font-size:12px; color:#a0aec0;">${a.timeAgo}</div></div>
+                            ${a.amount ? `<div class="badge badge-success">+${formatCurrency(a.amount)}</div>` : `<span class="badge badge-${a.status === 'COMPLETED' ? 'success' : 'info'}">${a.status}</span>`}
+                        </div>
+                    `).join('');
+                    document.getElementById('activityList').innerHTML = activityHtml || '<p>No recent activities</p>';
+                }
+
+                // 5. Load Top Contributors
+                const contributorsRes = await fetch(`${API_BASE}/top-contributors?limit=5`);
+                const contributorsData = await contributorsRes.json();
+                if (contributorsData.success) {
+                    const colors = ['#f6ad55', '#48bb78', '#4299e1', '#9f7aea', '#ed64a6'];
+                    const contributorHtml = contributorsData.data.map((c, i) => `
+                        <div class="member-item">
+                            <div class="member-avatar" style="background: ${c.avatarColor || colors[i % colors.length]};">${c.rank}</div>
+                            <div style="flex:1"><div class="member-name">${c.firstName} ${c.lastName}</div><div class="member-code" style="font-size:11px;">${c.memberCode}</div></div>
+                            <div class="member-amount" style="font-weight:700; color:#48bb78;">${formatCurrency(c.totalContribution)}</div>
+                        </div>
+                    `).join('');
+                    document.getElementById('topContributorsList').innerHTML = contributorHtml || '<p>No contributors data</p>';
+                }
+
+                // 6. Load Active Loans
+                const loansRes = await fetch(`${API_BASE}/active-loans?limit=5`);
+                const loansData = await loansRes.json();
+                if (loansData.success) {
+                    const loansHtml = `
+                        <table class="data-table">
+                            <thead><tr><th>Loan Code</th><th>Borrower</th><th>Amount</th><th>Terms</th><th>Amortization</th><th>Status</th><th>Progress</th></tr></thead>
+                            <tbody>${loansData.data.map(l => `
+                                <tr>
+                                    <td><code>${l.loanCode}</code></td>
+                                    <td>${l.borrowerName}</td>
+                                    <td>${formatCurrency(l.loanAmount)}</td>
+                                    <td>${l.terms} mos</td>
+                                    <td>${formatCurrency(l.amortization)}</td>
+                                    <td><span class="badge badge-info">${l.status}</span></td>
+                                    <td><div style="width:80px; height:4px; background:#e2e8f0; border-radius:2px;"><div style="width:${l.progress}%; height:100%; background:#48bb78; border-radius:2px;"></div></div><span style="font-size:11px;">${l.paidTerms}/${l.terms}</span></td>
+                                </tr>
+                            `).join('')}</tbody>
+                        </table>
+                    `;
+                    document.getElementById('loansTable').innerHTML = loansHtml;
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                document.querySelectorAll('.stat-value').forEach(el => el.innerHTML = 'Error');
+            }
+        }
+
+        function getActivityColor(type) {
+            const colors = { CONTRIBUTION: '#48bb78', MEMBER_REGISTRATION: '#667eea', LOAN_APPROVED: '#ed8936', PAYMENT_RECEIVED: '#4299e1', PROFIT_DISTRIBUTION: '#9f7aea' };
+            return colors[type] || '#718096';
+        }
+
+        function getActivityIcon(type) {
+            const icons = { CONTRIBUTION: 'fa-coins', MEMBER_REGISTRATION: 'fa-user-plus', LOAN_APPROVED: 'fa-check-circle', PAYMENT_RECEIVED: 'fa-receipt', PROFIT_DISTRIBUTION: 'fa-chart-line' };
+            return icons[type] || 'fa-bell';
+        }
+
+        // Initialize Charts
+        function initCharts() {
+            const ctx1 = document.getElementById('contributionChart').getContext('2d');
+            contributionChart = new Chart(ctx1, {
+                type: 'line',
+                data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], datasets: [{ label: 'Contributions (Php )', data: [], borderColor: '#667eea', backgroundColor: 'rgba(102,126,234,0.1)', borderWidth: 3, fill: true, tension: 0.4 }] },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `Php ${ctx.raw.toLocaleString()}` } } }, scales: { y: { ticks: { callback: (v) => 'Php ' + v.toLocaleString() } } } }
+            });
+            const ctx2 = document.getElementById('loanChart').getContext('2d');
+            loanChart = new Chart(ctx2, { type: 'doughnut', data: { labels: [], datasets: [{ data: [], backgroundColor: ['#667eea', '#48bb78', '#f6ad55'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: true, cutout: '60%', plugins: { tooltip: { callbacks: { label: (ctx) => `Php ${ctx.raw.toLocaleString()}` } } } } });
+        }
+
+        // Initialize
+        initCharts();
+        loadDashboard();
+    </script>
+</body>
+</html>

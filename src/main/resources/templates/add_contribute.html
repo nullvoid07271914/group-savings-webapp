@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Contribution - Group Savings</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; }
+
+        /* Sidebar Navigation */
+        .nav-sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            width: 280px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        /* Logo */
+        .logo-area {
+            padding: 30px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon {
+            width: 45px; height: 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .logo-icon i { font-size: 24px; color: white; }
+        .logo-text h3 { color: white; font-weight: 700; font-size: 18px; }
+        .logo-text p { color: rgba(255,255,255,0.5); font-size: 11px; }
+
+        /* Navigation Items */
+        .nav-item {
+            padding: 12px 24px;
+            margin: 4px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: rgba(255,255,255,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-item:hover { background: rgba(102, 126, 234, 0.2); color: white; }
+        .nav-item.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 15px rgba(102,126,234,0.3); }
+        .nav-item-left { display: flex; align-items: center; gap: 12px; }
+        .nav-item-left i { width: 24px; font-size: 18px; }
+        .nav-toggle { transition: transform 0.3s ease; }
+        .nav-toggle.rotated { transform: rotate(180deg); }
+
+        /* Submenu */
+        .submenu {
+            margin-left: 52px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .submenu.open { max-height: 300px; }
+        .submenu-item {
+            padding: 10px 16px;
+            margin: 4px 0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .submenu-item:hover { background: rgba(255,255,255,0.1); color: white; transform: translateX(5px); }
+        .submenu-item.active { color: #a78bfa; }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 16px 24px;
+        }
+
+        /* Modern Card */
+        .modern-card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+        }
+        .modern-card:hover { transform: translateY(-3px); box-shadow: 0 25px 40px -12px rgba(0,0,0,0.15); }
+
+        .card-header-modern {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 24px 30px;
+            color: white;
+        }
+        .card-header-modern h4 { margin: 0; font-size: 1.3rem; font-weight: 600; }
+        .card-header-modern p { margin: 8px 0 0; opacity: 0.9; font-size: 0.9rem; }
+
+        .card-body { padding: 30px; }
+
+        /* Search Section */
+        .search-section {
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+        .search-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+        }
+        .search-wrapper input {
+            padding-left: 45px;
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 14px 16px 14px 45px;
+            font-size: 0.95rem;
+        }
+        .search-wrapper input:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+        }
+
+        /* Buttons */
+        .btn-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-gradient-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        .btn-gradient-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        .btn-outline-secondary {
+            background: white;
+            border: 1px solid #cbd5e0;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            color: #4a5568;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-outline-secondary:hover { background: #f7fafc; transform: translateY(-2px); }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th {
+            text-align: left;
+            padding: 14px;
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .data-table td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+        .data-table tr:hover { background: #f8fafc; cursor: pointer; }
+
+        /* Selected Member Card */
+        .selected-member-card {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 20px 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .selected-member-card i { font-size: 2rem; margin-right: 15px; }
+        .selected-member-info h5 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+        .selected-member-info p { margin: 5px 0 0; opacity: 0.9; font-size: 0.85rem; }
+        .btn-clear-member {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            border-radius: 50px;
+            padding: 8px 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .btn-clear-member:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
+
+        /* Form Groups */
+        .form-group-modern {
+            margin-bottom: 1.5rem;
+        }
+        .form-group-modern label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+        .form-group-modern label i { margin-right: 6px; color: #667eea; }
+        .form-group-modern input, .form-group-modern select, .form-group-modern textarea {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 12px 16px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        .form-group-modern input:focus, .form-group-modern select:focus, .form-group-modern textarea:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+        }
+        .form-group-modern input:read-only {
+            background: #f8fafc;
+        }
+
+        /* File Upload */
+        .file-upload-wrapper {
+            position: relative;
+        }
+        .file-upload-wrapper .file-upload-info {
+            border-radius: 12px 0 0 12px;
+        }
+        .file-upload-wrapper .file-upload-browse {
+            border-radius: 0 12px 12px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            cursor: pointer;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-spinner {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Alert */
+        .alert-dynamic {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.3s ease;
+        }
+        .alert-success { background: #c6f6d5; color: #22543d; border-left: 4px solid #48bb78; }
+        .alert-danger { background: #fed7d7; color: #742a2a; border-left: 4px solid #e53e3e; }
+        .alert-warning { background: #feebc8; color: #744210; border-left: 4px solid #ed8936; }
+        .alert-info { background: #bee3f8; color: #2c5282; border-left: 4px solid #4299e1; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            max-width: 500px;
+            width: 90%;
+            animation: modalSlideIn 0.3s ease;
+        }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .modal-body { padding: 24px; text-align: center; }
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .confirm-details { background: #f8fafc; border-radius: 16px; padding: 16px; text-align: left; margin-top: 16px; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-sidebar { transform: translateX(-100%); position: fixed; z-index: 1000; }
+            .nav-sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .mobile-menu-btn {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1001;
+                background: #667eea;
+                color: white;
+                border: none;
+                width: 45px;
+                height: 45px;
+                border-radius: 12px;
+                font-size: 20px;
+                cursor: pointer;
+            }
+            .grid-2 { grid-template-columns: 1fr; }
+            .selected-member-card { flex-direction: column; text-align: center; gap: 12px; }
+        }
+        .mobile-menu-btn { display: none; }
+
+        .text-right { text-align: right; }
+        .mt-4 { margin-top: 1.5rem; }
+        .mb-3 { margin-bottom: 1rem; }
+        .me-2 { margin-right: 0.5rem; }
+        .empty-state { text-align: center; padding: 40px; color: #a0aec0; }
+        .badge-info { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <div class="nav-sidebar" id="sidebar">
+        <div class="logo-area">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-piggy-bank"></i></div>
+                <div class="logo-text">
+                    <h3>GroupSavings</h3>
+                    <p>v2.0 Ultimate</p>
+                </div>
+            </div>
+        </div>
+
+        <nav>
+            <div class="nav-item" th:onclick="|location.href='@{/dashboard}'|">
+                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Dashboard</span></div>
+            </div>
+
+            <div>
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-users"></i><span>Members</span></div>
+                    <i class="fas fa-chevron-down nav-toggle"></i>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/register}'|"><i class="fas fa-user-plus"></i> Member Registration</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/list}'|"><i class="fas fa-list"></i> All Members</div>
+                </div>
+            </div>
+
+            <div>
+                <div class="nav-item active" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-coins"></i><span>Contributions</span></div>
+                    <i class="fas fa-chevron-down nav-toggle rotated"></i>
+                </div>
+                <div class="submenu open">
+                    <div class="submenu-item active" th:onclick="|location.href='@{/contribution/search-member}'|"><i class="fas fa-plus-circle"></i> Add Contribution</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/contributions}'|"><i class="fas fa-chart-simple"></i> Member Contributions</div>
+                </div>
+            </div>
+
+            <div>
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-hand-holding-usd"></i><span>Loans</span></div>
+                    <i class="fas fa-chevron-down nav-toggle"></i>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item" th:onclick="|location.href='@{/loan/apply}'|"><i class="fas fa-file-invoice"></i> Apply Loan</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/loan/manage}'|"><i class="fas fa-chart-line"></i> Manage Loan</div>
+                </div>
+            </div>
+
+            <div class="nav-item" th:onclick="|location.href='@{/member/profits}'|">
+                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Profits</span></div>
+            </div>
+
+            <div class="nav-divider"></div>
+            <div class="nav-item" onclick="location.href='reports.html'">
+                <div class="nav-item-left"><i class="fas fa-chart-pie"></i><span>Reports</span></div>
+            </div>
+            <div class="nav-item" onclick="location.href='settings.html'">
+                <div class="nav-item-left"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Search Card -->
+        <div class="modern-card">
+            <div class="card-header-modern">
+                <h4><i class="fas fa-search"></i> Search Member</h4>
+                <p>Search by member name to record their contribution</p>
+            </div>
+            <div class="card-body">
+                <div class="search-section">
+                    <div class="row" style="display: flex; gap: 20px; align-items: flex-end;">
+                        <div style="flex: 1;">
+                            <div class="search-wrapper">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="name_search" placeholder="Enter member name (e.g., Juan Dela Cruz)...">
+                            </div>
+                            <small class="text-muted">Type at least 2 characters to search</small>
+                        </div>
+                        <div>
+                            <button class="btn-gradient-primary" id="searchBtn">
+                                <i class="fas fa-search"></i> Search Member
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Results Table -->
+                <div class="member-table">
+                    <h5 class="mb-3"><i class="fas fa-list"></i> Search Results</h5>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead><tr><th>Full Name</th><th>Date Registered</th><th>Member Code</th></tr></thead>
+                            <tbody id="searchResultsBody"><tr><td colspan="3" class="empty-state"><i class="fas fa-search"></i><p>Enter a name to search for members</p></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Selected Member Card -->
+        <div class="selected-member-card" id="selectedMemberCard">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="fas fa-user-circle"></i>
+                <div class="selected-member-info">
+                    <h5 id="selectedMemberName">-</h5>
+                    <p>Member Code: <span id="selectedMemberCode">-</span></p>
+                </div>
+            </div>
+            <button class="btn-clear-member" id="clearMemberBtn"><i class="fas fa-times"></i> Clear Selection</button>
+        </div>
+
+        <!-- Contribution Form Card -->
+        <div class="modern-card">
+            <div class="card-header-modern">
+                <h4><i class="fas fa-cash-register"></i> Record Contribution</h4>
+                <p>Fill in the contribution details for the selected member</p>
+            </div>
+            <div class="card-body">
+                <div id="alertContainer"></div>
+                <form id="contributionForm">
+                    <div class="grid-2">
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-barcode"></i> Member Code</label>
+                            <input type="text" id="memberCode" readonly placeholder="Select a member first">
+                        </div>
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-calendar"></i> Contribution Date</label>
+                            <input type="date" id="contributionDate">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-money-bill"></i> Amount</label>
+                            <input type="number" id="amount" placeholder="Enter amount">
+                        </div>
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-credit-card"></i> Payment Method</label>
+                            <select id="paymentMethod">
+                                <option value="">Select Payment Method</option>
+                                <option value="GCASH">📱 GCASH</option>
+                                <option value="CASH">💵 CASH</option>
+                                <option value="MAYA">📱 MAYA</option>
+                                <option value="MARIBANK">🏦 MARIBANK</option>
+                                <option value="BANK_TRANSFER">🏦 BANK TRANSFER</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-receipt"></i> Reference Number</label>
+                            <input type="text" id="referenceNumber" placeholder="e.g., GCASH-123456789">
+                        </div>
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-chart-line"></i> Term</label>
+                            <input type="text" id="term" readonly placeholder="Auto-computed">
+                        </div>
+                    </div>
+                    <div class="form-group-modern">
+                        <label><i class="fas fa-file"></i> Payment Receipt</label>
+                        <div class="file-upload-wrapper">
+                            <div style="display: flex;">
+                                <input type="text" class="file-upload-info" id="receiptFileName" readonly placeholder="Upload payment receipt (JPG, PNG, PDF)" style="flex: 1;">
+                                <button type="button" class="file-upload-browse" id="browseFileBtn"><i class="fas fa-folder-open"></i> Browse</button>
+                            </div>
+                            <input type="file" id="paymentReceipt" accept="image/jpeg,image/png,application/pdf" style="display: none;">
+                        </div>
+                        <small class="text-muted">Max file size: 5MB. Allowed formats: JPG, PNG, PDF</small>
+                    </div>
+                    <div class="form-group-modern">
+                        <label><i class="fas fa-pencil-alt"></i> Notes</label>
+                        <textarea id="notes" rows="3" placeholder="Additional notes about this contribution..."></textarea>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn-gradient-primary" id="submitBtn"><i class="fas fa-check"></i> Record Contribution</button>
+                        <button type="button" class="btn-outline-secondary" id="cancelBtn" style="margin-left: 10px;"><i class="fas fa-times"></i> Clear Form</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"><div class="spinner-border-sm" style="border-color: #667eea;"></div><p>Processing...</p></div></div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header"><h5>Confirm Contribution</h5><button class="modal-close" onclick="closeConfirmModal()">&times;</button></div>
+            <div class="modal-body">
+                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ed8936;"></i>
+                <p class="mt-3">Please review the contribution details before submitting.</p>
+                <div class="confirm-details" id="confirmDetails"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline-secondary" onclick="closeConfirmModal()">Cancel</button>
+                <button class="btn-gradient-primary" id="confirmSubmitBtn">Confirm & Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div class="modal" id="resultModal">
+        <div class="modal-content" id="resultContent"></div>
+    </div>
+
+    <script>
+        // Mobile Menu
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+        function toggleSubmenu(element) {
+            const parent = element.parentElement;
+            const submenu = parent.querySelector('.submenu');
+            const icon = element.querySelector('.nav-toggle');
+            if (submenu) { submenu.classList.toggle('open'); icon.classList.toggle('rotated'); }
+        }
+        function closeConfirmModal() { document.getElementById('confirmModal').classList.remove('show'); }
+        function closeResultModal() { document.getElementById('resultModal').classList.remove('show'); }
+        function showAlert(type, message) {
+            $('#alertContainer').html(`<div class="alert-dynamic alert-${type}"><div><i class="fas fa-${type === 'success' ? 'check-circle' : (type === 'danger' ? 'exclamation-circle' : (type === 'warning' ? 'exclamation-triangle' : 'info-circle'))}"></i> ${message}</div><button onclick="$(this).parent().remove()" style="background:none; border:none; font-size:20px;">&times;</button></div>`);
+            setTimeout(() => $('#alertContainer').empty(), 5000);
+        }
+        function formatDate(dateString) { if (!dateString) return 'N/A'; try { return new Date(dateString).toLocaleDateString(); } catch(e) { return dateString; } }
+        function escapeHtml(text) { if (!text) return text; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+        $(document).ready(function() {
+            let currentMember = null;
+
+            // ========== FILE UPLOAD ==========
+            $('#browseFileBtn').on('click', () => $('#paymentReceipt').click());
+            $('#paymentReceipt').on('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    $('#receiptFileName').val(file.name);
+                    if (file.size > 5 * 1024 * 1024) { showAlert('warning', 'File size should not exceed 5MB'); $(this).val(''); $('#receiptFileName').val(''); }
+                    else if (!['image/jpeg','image/png','application/pdf'].includes(file.type)) { showAlert('warning', 'Only JPG, PNG, and PDF files are allowed'); $(this).val(''); $('#receiptFileName').val(''); }
+                } else { $('#receiptFileName').val(''); }
+            });
+
+            // ========== SET DEFAULT DATE ==========
+            function setDefaultDate() { $('#contributionDate').val(new Date().toISOString().split('T')[0]); computeTerm(); }
+            function computeTerm() {
+                const dateStr = $('#contributionDate').val();
+                if (!dateStr) { $('#term').val(''); return; }
+                const date = new Date(dateStr), month = date.getMonth() + 1, day = date.getDate();
+                $('#term').val(day <= 15 ? (month - 1) * 2 + 1 : (month - 1) * 2 + 2);
+            }
+            $('#contributionDate').on('change', computeTerm);
+
+            // ========== SEARCH MEMBER ==========
+            function performSearch() {
+                const searchTerm = $('#name_search').val().trim();
+                if (searchTerm.length === 0) { displaySearchResults([]); return; }
+                if (searchTerm.length < 2) { showAlert('warning', 'Please enter at least 2 characters'); return; }
+                $('#searchResultsBody').html('<tr><td colspan="3" class="empty-state"><div class="spinner-border-sm"></div> Searching...</td></tr>');
+                $.ajax({ url: 'http://localhost:8080/groupsavings/api/v1/member/info', type: 'POST', contentType: 'application/json', data: JSON.stringify({ name: searchTerm }),
+                    success: function(res) { const members = Array.isArray(res) ? res : (res.data || []); displaySearchResults(members); showAlert('success', `Found ${members.length} member(s)`); },
+                    error: function() { displaySearchResults([]); showAlert('danger', 'Failed to search members'); }
+                });
+            }
+
+            function displaySearchResults(members) {
+                const tbody = $('#searchResultsBody');
+                tbody.empty();
+                if (!members || members.length === 0) { tbody.html('<tr><td colspan="3" class="empty-state"><i class="fas fa-search"></i><p>No members found</p></td></tr>'); return; }
+                members.forEach(m => {
+                    tbody.append(`<tr class="member-row" data-code="${m.memberCode}" data-name="${m.firstname} ${m.lastname}"><td><i class="fas fa-user-circle"></i> ${escapeHtml(m.firstname)} ${escapeHtml(m.lastname)}</td><td>${formatDate(m.joinedDate)}</td><td><span class="badge-info">${m.memberCode}</span></td></tr>`);
+                });
+                $('.member-row').on('click', function() { selectMember($(this).data('code'), $(this).data('name')); });
+            }
+
+            function selectMember(code, name) {
+                $('#selectedMemberName').text(name); $('#selectedMemberCode').text(code); $('#memberCode').val(code); $('#selectedMemberCard').show();
+                $('html, body').animate({ scrollTop: $('#contributionForm').offset().top - 100 }, 500);
+                showAlert('success', `Member ${name} selected`);
+            }
+
+            $('#searchBtn').on('click', performSearch);
+            $('#name_search').on('keypress', e => { if (e.which === 13) performSearch(); });
+            $('#clearMemberBtn').on('click', () => { currentMember = null; $('#selectedMemberCard').hide(); $('#memberCode').val(''); showAlert('info', 'Member selection cleared'); });
+            $('#cancelBtn').on('click', () => { $('#amount,#paymentMethod,#referenceNumber,#notes').val(''); $('#paymentReceipt').val(''); $('#receiptFileName').val(''); setDefaultDate(); showAlert('info', 'Form cleared'); });
+
+            // ========== SUBMIT CONTRIBUTION ==========
+            function validateForm() {
+                if (!$('#memberCode').val()) { showAlert('warning', 'Please select a member first'); return false; }
+                if (!$('#amount').val() || parseFloat($('#amount').val()) <= 0) { showAlert('warning', 'Please enter a valid amount'); return false; }
+                if (!$('#paymentMethod').val()) { showAlert('warning', 'Please select a payment method'); return false; }
+                if (!$('#referenceNumber').val()) { showAlert('warning', 'Please enter a reference number'); return false; }
+                return true;
+            }
+
+            function showConfirmModal() {
+                $('#confirmDetails').html(`
+                    <div><strong>Member:</strong> ${$('#selectedMemberName').text()}</div>
+                    <div class="mt-2"><strong>Amount:</strong> ₱${parseFloat($('#amount').val()).toLocaleString()}</div>
+                    <div><strong>Payment Method:</strong> ${$('#paymentMethod option:selected').text()}</div>
+                    <div><strong>Reference #:</strong> ${$('#referenceNumber').val()}</div>
+                    <div><strong>Term:</strong> ${$('#term').val()}</div>
+                `);
+                $('#confirmModal').addClass('show');
+            }
+
+            function submitContribution() {
+                closeConfirmModal();
+                const formData = new FormData();
+                formData.append('contributionDto', new Blob([JSON.stringify({
+                    memberCode: $('#memberCode').val(), amount: $('#amount').val(), contributionDate: $('#contributionDate').val(),
+                    paymentMethod: $('#paymentMethod').val(), referenceNumber: $('#referenceNumber').val(), term: $('#term').val(), notes: $('#notes').val()
+                })], { type: 'application/json' }));
+                const file = $('#paymentReceipt')[0].files[0];
+                if (file) formData.append('paymentReceipt', file);
+                
+                $('#submitBtn').prop('disabled', true).html('<span class="spinner-border-sm"></span> Saving...');
+                $.ajax({ url: 'http://localhost:8080/groupsavings/api/v1/contribution/create', type: 'POST', data: formData, processData: false, contentType: false,
+                    success: function() {
+                        $('#resultContent').html(`<div class="modal-header"><h5>Success!</h5><button class="modal-close" onclick="closeResultModal()">&times;</button></div><div class="modal-body text-center"><i class="fas fa-check-circle" style="font-size: 4rem; color: #48bb78;"></i><h4 class="mt-3">Contribution Recorded!</h4><p>Your contribution has been recorded successfully.</p></div><div class="modal-footer"><button class="btn-gradient-primary" onclick="closeResultModal()">OK</button></div>`);
+                        $('#resultModal').addClass('show');
+                        $('#amount,#paymentMethod,#referenceNumber,#notes').val(''); $('#paymentReceipt').val(''); $('#receiptFileName').val('');
+                    },
+                    error: function(xhr) {
+                        let msg = 'Failed to record contribution';
+                        try { const res = JSON.parse(xhr.responseText); msg = res.message || msg; } catch(e) {}
+                        $('#resultContent').html(`<div class="modal-header"><h5>Error</h5><button class="modal-close" onclick="closeResultModal()">&times;</button></div><div class="modal-body text-center"><i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #e53e3e;"></i><h4 class="mt-3">Transaction Failed</h4><p>${msg}</p></div><div class="modal-footer"><button class="btn-gradient-primary" onclick="closeResultModal()">Close</button></div>`);
+                        $('#resultModal').addClass('show');
+                    },
+                    complete: () => $('#submitBtn').prop('disabled', false).html('<i class="fas fa-check"></i> Record Contribution')
+                });
+            }
+
+            $('#contributionForm').on('submit', function(e) { e.preventDefault(); if (validateForm()) showConfirmModal(); });
+            $('#confirmSubmitBtn').on('click', submitContribution);
+            setDefaultDate();
+        });
+    </script>
+</body>
+</html>

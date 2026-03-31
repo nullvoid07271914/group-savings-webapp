@@ -1,327 +1,624 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Loan Savings</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" th:href="@{/assets/vendors/mdi/css/materialdesignicons.min.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/ti-icons/css/themify-icons.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/css/vendor.bundle.base.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/font-awesome/css/font-awesome.min.css}">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" th:href="@{/assets/vendors/select2/select2.min.css}">
-    <link rel="stylesheet" th:href="@{/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css}">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
-    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
-    <!-- End layout styles -->
-    <link rel="shortcut icon" th:href="@{/assets/images/favicon.png}" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Registration - Group Savings</title>
     
-    <!-- Add this CSS -->
-	<style>
-	    .spinner-border-sm {
-	        width: 1rem;
-	        height: 1rem;
-	        border-width: 0.2em;
-	        margin-right: 0.5rem;
-	    }
-	</style>
-  </head>
-  <body>
-    <div class="container-scroller">
-      <div th:replace="~{fragments/header_menu :: headerMenu}"></div>
-      
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <div th:replace="~{fragments/nav_menu :: navMenu}"></div>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; }
+
+        /* Sidebar Navigation */
+        .nav-sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            width: 280px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        /* Logo */
+        .logo-area {
+            padding: 30px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon {
+            width: 45px; height: 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .logo-icon i { font-size: 24px; color: white; }
+        .logo-text h3 { color: white; font-weight: 700; font-size: 18px; }
+        .logo-text p { color: rgba(255,255,255,0.5); font-size: 11px; }
+
+        /* Navigation Items */
+        .nav-item {
+            padding: 12px 24px;
+            margin: 4px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: rgba(255,255,255,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-item:hover { background: rgba(102, 126, 234, 0.2); color: white; }
+        .nav-item.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 15px rgba(102,126,234,0.3); }
+        .nav-item-left { display: flex; align-items: center; gap: 12px; }
+        .nav-item-left i { width: 24px; font-size: 18px; }
+        .nav-toggle { transition: transform 0.3s ease; }
+        .nav-toggle.rotated { transform: rotate(180deg); }
+
+        /* Submenu */
+        .submenu {
+            margin-left: 52px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .submenu.open { max-height: 300px; }
+        .submenu-item {
+            padding: 10px 16px;
+            margin: 4px 0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .submenu-item:hover { background: rgba(255,255,255,0.1); color: white; transform: translateX(5px); }
+        .submenu-item.active { color: #a78bfa; }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 16px 24px;
+        }
+
+        /* Modern Card */
+        .modern-card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .modern-card:hover { transform: translateY(-3px); box-shadow: 0 25px 40px -12px rgba(0,0,0,0.15); }
+
+        .card-header-modern {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 24px 30px;
+            color: white;
+        }
+        .card-header-modern h4 { margin: 0; font-size: 1.3rem; font-weight: 600; }
+        .card-header-modern p { margin: 8px 0 0; opacity: 0.9; font-size: 0.9rem; }
+
+        .card-body { padding: 30px; }
+
+        /* Form Groups */
+        .form-group-modern {
+            margin-bottom: 1.5rem;
+        }
+        .form-group-modern label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+        .form-group-modern label i { margin-right: 6px; color: #667eea; }
+        .form-group-modern input, .form-group-modern select {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 12px 16px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        .form-group-modern input:focus, .form-group-modern select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+            outline: none;
+        }
+        .form-group-modern input.is-invalid, .form-group-modern select.is-invalid {
+            border-color: #e53e3e;
+        }
+        .invalid-feedback {
+            color: #e53e3e;
+            font-size: 0.75rem;
+            margin-top: 5px;
+            display: block;
+        }
+        .text-muted { font-size: 0.7rem; color: #718096; margin-top: 5px; display: block; }
+
+        /* Buttons */
+        .btn-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .btn-gradient-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        .btn-gradient-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
         
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Member Information Details </h3>
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Registration Form</li>
-                </ol>
-              </nav>
-            </div>
-            <div class="row">
-              <div class="col-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Registration Form</h4>
-                    <p class="card-description">Registration for new member(s) or borrower(s)</p>
-                    <form class="member_registration_form" novalidate>
-                      <div class="form-group">
-                        <label for="inputForFirstname">Firstname</label>
-                        <input type="text" class="form-control" id="firstname" name="firstname">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForLastname">Lastname</label>
-                        <input type="text" class="form-control" id="lastname" name="lastname">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForMobileNumber">Mobile Number</label>
-                        <input type="text" class="form-control" id="mobileNumber" name="mobileNumber">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForEmail">Email</label>
-                        <input type="email" class="form-control" id="email" name="email">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForMemberType">Member Type</label>
-                        <select class="form-select" id="memberType" name="memberType">
-                          <option></option>
-                          <option >CONTRIBUTOR</option>
-                          <option>BORROWER</option>
-                          <option>UNKNOWN</option>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForStreet">Street</label>
-                        <input type="text" class="form-control" id="street" name="street">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForBarangay">Barangay</label>
-                        <input type="text" class="form-control" id="barangay" name="barangay">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForCity">City</label>
-                        <input type="text" class="form-control" id="city" name="city">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForProvince">Province</label>
-                        <input type="text" class="form-control" id="province" name="province">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputForZipcode">Zipcode</label>
-                        <input type="text" class="form-control" id="zipcode" name="zipcode">
-                      </div>
-                      <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-                      <button class="btn btn-light">Cancel</button>
-                    </form>
-                  </div>
+        .btn-outline-secondary {
+            background: white;
+            border: 1px solid #cbd5e0;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            color: #4a5568;
+        }
+        .btn-outline-secondary:hover { background: #f7fafc; transform: translateY(-2px); }
+
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+            border-width: 0.2em;
+            margin-right: 0.5rem;
+            display: inline-block;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Alert */
+        .alert-dynamic {
+            padding: 15px 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .alert-success { background: #c6f6d5; color: #22543d; border-left: 4px solid #48bb78; }
+        .alert-danger { background: #fed7d7; color: #742a2a; border-left: 4px solid #e53e3e; }
+        .alert-warning { background: #feebc8; color: #744210; border-left: 4px solid #ed8936; }
+        .alert-info { background: #bee3f8; color: #2c5282; border-left: 4px solid #4299e1; }
+
+        hr { margin: 20px 0; border-color: #e2e8f0; }
+        h6 i { color: #667eea; margin-right: 8px; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-sidebar { transform: translateX(-100%); position: fixed; z-index: 1000; }
+            .nav-sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .mobile-menu-btn {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1001;
+                background: #667eea;
+                color: white;
+                border: none;
+                width: 45px;
+                height: 45px;
+                border-radius: 12px;
+                font-size: 20px;
+                cursor: pointer;
+            }
+            .card-body { padding: 20px; }
+        }
+        .mobile-menu-btn { display: none; }
+
+        .text-right { text-align: right; }
+        .me-2 { margin-right: 8px; }
+        .mt-4 { margin-top: 20px; }
+        .mb-3 { margin-bottom: 15px; }
+        .my-4 { margin-top: 20px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <div class="nav-sidebar" id="sidebar">
+        <div class="logo-area">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-piggy-bank"></i></div>
+                <div class="logo-text">
+                    <h3>GroupSavings</h3>
+                    <p>v2.0 Ultimate</p>
                 </div>
-              </div>
             </div>
-          </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:../../partials/_footer.html -->
-          <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
-            </div>
-          </footer>
-          <!-- partial -->
         </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
+
+        <nav>
+            <div class="nav-item" th:onclick="|location.href='@{/dashboard}'|">
+                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Dashboard</span></div>
+            </div>
+
+            <div>
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-users"></i><span>Members</span></div>
+                    <i class="fas fa-chevron-down nav-toggle"></i>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/register}'|"><i class="fas fa-user-plus"></i> Member Registration</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/list}'|"><i class="fas fa-list"></i> All Members</div>
+                </div>
+            </div>
+
+            <div>
+                <div class="nav-item active" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-coins"></i><span>Contributions</span></div>
+                    <i class="fas fa-chevron-down nav-toggle rotated"></i>
+                </div>
+                <div class="submenu open">
+                    <div class="submenu-item active" th:onclick="|location.href='@{/contribution/search-member}'|"><i class="fas fa-plus-circle"></i> Add Contribution</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/member/contributions}'|"><i class="fas fa-chart-simple"></i> Member Contributions</div>
+                </div>
+            </div>
+
+            <div>
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <div class="nav-item-left"><i class="fas fa-hand-holding-usd"></i><span>Loans</span></div>
+                    <i class="fas fa-chevron-down nav-toggle"></i>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item" th:onclick="|location.href='@{/loan/apply}'|"><i class="fas fa-file-invoice"></i> Apply Loan</div>
+                    <div class="submenu-item" th:onclick="|location.href='@{/loan/manage}'|"><i class="fas fa-chart-line"></i> Manage Loan</div>
+                </div>
+            </div>
+
+            <div class="nav-item" th:onclick="|location.href='@{/member/profits}'|">
+                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Profits</span></div>
+            </div>
+
+            <div class="nav-divider"></div>
+            <div class="nav-item" onclick="location.href='reports.html'">
+                <div class="nav-item-left"><i class="fas fa-chart-pie"></i><span>Reports</span></div>
+            </div>
+            <div class="nav-item" onclick="location.href='settings.html'">
+                <div class="nav-item-left"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </div>
+        </nav>
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script th:src="@{/assets/vendors/js/vendor.bundle.base.js}"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script th:src="@{/assets/vendors/select2/select2.min.js}"></script>
-    <script th:src="@{/assets/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script th:src="@{/assets/js/off-canvas.js}"></script>
-    <script th:src="@{/assets/js/misc.js}"></script>
-    <script th:src="@{/assets/js/settings.js}"></script>
-    <script th:src="@{/assets/js/todolist.js}"></script>
-    <script th:src="@{/assets/js/jquery.cookie.js}"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script th:src="@{/assets/js/file-upload.js}"></script>
-    <script th:src="@{/assets/js/typeahead.js}"></script>
-    <script th:src="@{/assets/js/select2.js}"></script>
-    <!-- End custom js for this page -->
-    
-    <script type="text/javascript">
-	$(document).ready(function() {
-		
-		// Enhanced button with spinner
-		function setLoading(button, isLoading) {
-		    if (isLoading) {
-		        button.prop('disabled', true).html(`
-		            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-		            Submitting...
-		        `);
-		    } else {
-		        button.prop('disabled', false).text('Submit');
-		    }
-		}
-		
-	    const MemberForm = {
-	        init: function() {
-	            this.form = $('.member_registration_form');
-	            this.submitBtn = this.form.find('button[type="submit"]');
-	            this.bindEvents();
-	        },
-	        
-	        bindEvents: function() {
-	            this.form.on('submit', $.proxy(this.handleSubmit, this));
-	            
-	            // Real-time validation (optional)
-	            this.form.find('input, select').on('blur', $.proxy(this.validateField, this));
-	        },
-	        
-	        handleSubmit: function(e) {
-	            e.preventDefault();
-	            
-	            if (!this.validateForm()) {
-	                return;
-	            }
-	            
-	            this.setLoading(true);
-	            
-	            const data = this.getFormData();
-	            
-	            $.ajax({
-	                url: 'http://localhost:8080/groupsavings/api/v1/member/register',
-	                type: 'POST',
-	                contentType: 'application/json',
-	                data: JSON.stringify(data),
-	                dataType: 'json',
-	                success: $.proxy(this.handleSuccess, this),
-	                error: $.proxy(this.handleError, this),
-	                complete: $.proxy(function() {
-	                    this.setLoading(false);
-	                }, this)
-	            });
-	        },
-	        
-	        getFormData: function() {
-	            const formArray = this.form.serializeArray();
-	            const data = {};
-	            
-	            $.each(formArray, function(_, field) {
-	                data[field.name] = field.value.trim();
-	            });
-	            
-	            return data;
-	        },
-	        
-	        validateForm: function() {
-	            let isValid = true;
-	            this.form.find('[name]').each(function() {
-	                if (!$(this).val().trim()) {
-	                    $(this).addClass('is-invalid');
-	                    isValid = false;
-	                } else {
-	                    $(this).removeClass('is-invalid');
-	                }
-	            });
-	            
-	            if (!isValid) {
-	                this.showAlert('warning', 'Please fill in all required fields.');
-	            }
-	            
-	            return isValid;
-	        },
-	        
-	        validateField: function(e) {
-	            const $field = $(e.target);
-	            if ($field.val().trim()) {
-	                $field.removeClass('is-invalid');
-	            }
-	        },
-	        
-	        setLoading: function(isLoading) {
-	            if (isLoading) {
-	                this.submitBtn.prop('disabled', true).html(`
-	                    <span class="spinner-border spinner-border-sm" role="status"></span>
-	                    Submitting...
-	                `);
-	            } else {
-	                this.submitBtn.prop('disabled', false).text('Submit');
-	            }
-	        },
-	        
-	        handleSuccess: function(response) {
-	            console.log('Member created:', response);
-	            
-	            this.showAlert('success', 'Member registered successfully!');
-	            this.form[0].reset();
-	            
-	            // Optional: Redirect to member list
-	            // setTimeout(() => {
-	            //     window.location.href = '/groupsavings/members';
-	            // }, 2000);
-	        },
-	        
-	        handleError: function(xhr) {
-	            if (xhr.status === 400 && xhr.responseJSON) {
-	                // Display validation errors from backend
-	                this.displayFieldErrors(xhr.responseJSON);
-	                this.showAlert('danger', 'Please fix the errors below.');
-	            } else if (xhr.status === 409) {
-	                this.showAlert('warning', xhr.responseJSON.message || 'Duplicate entry found.');
-	            } else {
-	                this.showAlert('danger', 'An error occurred. Please try again.');
-	            }
-	        },
-	        
-	        displayFieldErrors: function(errors) {
-	            // Clear previous errors
-	            this.form.find('.is-invalid').removeClass('is-invalid');
-	            this.form.find('.invalid-feedback').remove();
-	            
-	            // Display new errors
-	            $.each(errors, function(field, messages) {
-	                const $input = $('#' + field);
-	                const message = Array.isArray(messages) ? messages[0] : messages;
-	                
-	                $input.addClass('is-invalid');
-	                $input.after(`<div class="invalid-feedback">${message}</div>`);
-	            });
-	        },
-	        
-	        showAlert: function(type, message) {
-	            // Remove existing alerts
-	            $('.alert-dynamic').remove();
-	            
-	            const alertHtml = `
-	                <div class="alert alert-${type} alert-dynamic alert-dismissible fade show" style="margin-top: 12px;" role="alert">
-	                    <i class="fa fa-${this.getAlertIcon(type)} me-2"></i>
-	                    ${message}
-	                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-	                </div>
-	            `;
-	            
-	            this.form.before(alertHtml);
-	            this.form.after(alertHtml);
-	            
-	            // Auto dismiss
-	            setTimeout(() => $('.alert-dynamic').fadeOut('slow', function() {
-	                $(this).remove();
-	            }), 5000);
-	        },
-	        
-	        getAlertIcon: function(type) {
-	            const icons = {
-	                'success': 'check-circle',
-	                'danger': 'exclamation-circle',
-	                'warning': 'exclamation-triangle',
-	                'info': 'info-circle'
-	            };
-	            return icons[type] || 'info-circle';
-	        }
-	    };
-	    
-	    // Initialize
-	    MemberForm.init();
-	});
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="modern-card">
+            <div class="card-header-modern">
+                <h4><i class="fas fa-user-plus"></i> Member Registration Form</h4>
+                <p>Register a new member to the group savings program</p>
+            </div>
+            <div class="card-body">
+                <!-- Alert Container -->
+                <div id="alertContainer"></div>
+
+                <form id="memberForm" novalidate>
+                    <div class="row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-user"></i> Firstname</label>
+                            <input type="text" id="firstname" name="firstname" placeholder="Enter firstname">
+                            <div class="invalid-feedback" id="firstnameError"></div>
+                        </div>
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-user"></i> Lastname</label>
+                            <input type="text" id="lastname" name="lastname" placeholder="Enter lastname">
+                            <div class="invalid-feedback" id="lastnameError"></div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-mobile-alt"></i> Mobile Number</label>
+                            <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="09171234567">
+                            <div class="invalid-feedback" id="mobileNumberError"></div>
+                            <small class="text-muted">11-digit mobile number</small>
+                        </div>
+                        <div class="form-group-modern">
+                            <label><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="email" name="email" placeholder="example@email.com">
+                            <div class="invalid-feedback" id="emailError"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group-modern">
+                        <label><i class="fas fa-tag"></i> Member Type</label>
+                        <select id="memberType" name="memberType">
+                            <option value="CONTRIBUTOR">CONTRIBUTOR</option>
+                            <option value="BORROWER">BORROWER</option>
+                            <option value="UNKNOWN">UNKNOWN</option>
+                        </select>
+                    </div>
+
+                    <hr>
+                    <h6><i class="fas fa-map-marker-alt"></i> Address Information</h6>
+
+                    <div class="form-group-modern">
+                        <label>Street</label>
+                        <input type="text" id="street" name="street" placeholder="Enter street address">
+                    </div>
+
+                    <div class="row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group-modern">
+                            <label>Barangay</label>
+                            <input type="text" id="barangay" name="barangay" placeholder="Enter barangay">
+                        </div>
+                        <div class="form-group-modern">
+                            <label>City</label>
+                            <input type="text" id="city" name="city" placeholder="Enter city">
+                        </div>
+                    </div>
+
+                    <div class="row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group-modern">
+                            <label>Province</label>
+                            <input type="text" id="province" name="province" placeholder="Enter province">
+                        </div>
+                        <div class="form-group-modern">
+                            <label>Zipcode</label>
+                            <input type="text" id="zipcode" name="zipcode" placeholder="1234">
+                            <div class="invalid-feedback" id="zipcodeError"></div>
+                            <small class="text-muted">4-digit zipcode</small>
+                        </div>
+                    </div>
+
+                    <div class="text-right mt-4">
+                        <button type="submit" class="btn-gradient-primary" id="submitBtn">
+                            <i class="fas fa-check"></i> Submit
+                        </button>
+                        <button type="button" class="btn-outline-secondary" id="cancelBtn" style="margin-left: 10px;">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function toggleSubmenu(element) {
+            const parent = element.parentElement;
+            const submenu = parent.querySelector('.submenu');
+            const icon = element.querySelector('.nav-toggle');
+            if (submenu) {
+                submenu.classList.toggle('open');
+                icon.classList.toggle('rotated');
+            }
+        }
+
+        $(document).ready(function() {
+            const MemberForm = {
+                init: function() {
+                    this.form = $('#memberForm');
+                    this.submitBtn = $('#submitBtn');
+                    this.bindEvents();
+                },
+
+                bindEvents: function() {
+                    this.form.on('submit', $.proxy(this.handleSubmit, this));
+                    $('#cancelBtn').on('click', $.proxy(this.resetForm, this));
+                    this.form.find('input, select').on('blur', $.proxy(this.validateField, this));
+                },
+
+                validateField: function(e) {
+                    const $field = $(e.target);
+                    const value = $field.val().trim();
+                    const fieldName = $field.attr('id');
+                    
+                    if (value) {
+                        $field.removeClass('is-invalid');
+                        $(`#${fieldName}Error`).text('');
+                    }
+                    
+                    if (fieldName === 'zipcode' && value && !/^\d{4}$/.test(value)) {
+                        $field.addClass('is-invalid');
+                        $(`#${fieldName}Error`).text('Zipcode must be 4 digits');
+                    }
+                    if (fieldName === 'mobileNumber' && value && !/^\d{11}$/.test(value)) {
+                        $field.addClass('is-invalid');
+                        $(`#${fieldName}Error`).text('Mobile number must be 11 digits');
+                    }
+                    if (fieldName === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                        $field.addClass('is-invalid');
+                        $(`#${fieldName}Error`).text('Invalid email format');
+                    }
+                },
+
+                validateForm: function() {
+                    let isValid = true;
+                    const fields = ['firstname', 'lastname', 'mobileNumber', 'email'];
+                    
+                    fields.forEach(field => {
+                        const value = $(`#${field}`).val().trim();
+                        if (!value) {
+                            $(`#${field}`).addClass('is-invalid');
+                            $(`#${field}Error`).text('This field is required');
+                            isValid = false;
+                        } else {
+                            $(`#${field}`).removeClass('is-invalid');
+                            $(`#${field}Error`).text('');
+                        }
+                    });
+                    
+                    const mobile = $('#mobileNumber').val().trim();
+                    if (mobile && !/^\d{11}$/.test(mobile)) {
+                        $('#mobileNumber').addClass('is-invalid');
+                        $('#mobileNumberError').text('Mobile number must be 11 digits');
+                        isValid = false;
+                    }
+                    
+                    const email = $('#email').val().trim();
+                    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                        $('#email').addClass('is-invalid');
+                        $('#emailError').text('Invalid email format');
+                        isValid = false;
+                    }
+                    
+                    const zipcode = $('#zipcode').val().trim();
+                    if (zipcode && !/^\d{4}$/.test(zipcode)) {
+                        $('#zipcode').addClass('is-invalid');
+                        $('#zipcodeError').text('Zipcode must be 4 digits');
+                        isValid = false;
+                    }
+                    
+                    return isValid;
+                },
+
+                getFormData: function() {
+                    return {
+                        firstname: $('#firstname').val().trim(),
+                        lastname: $('#lastname').val().trim(),
+                        mobileNumber: $('#mobileNumber').val().trim(),
+                        email: $('#email').val().trim(),
+                        memberType: $('#memberType').val(),
+                        street: $('#street').val().trim(),
+                        barangay: $('#barangay').val().trim(),
+                        city: $('#city').val().trim(),
+                        province: $('#province').val().trim(),
+                        zipcode: $('#zipcode').val().trim()
+                    };
+                },
+
+                setLoading: function(isLoading) {
+                    if (isLoading) {
+                        this.submitBtn.prop('disabled', true).html('<span class="spinner-border-sm"></span> Submitting...');
+                    } else {
+                        this.submitBtn.prop('disabled', false).html('<i class="fas fa-check"></i> Submit');
+                    }
+                },
+
+                handleSubmit: function(e) {
+                    e.preventDefault();
+                    
+                    if (!this.validateForm()) {
+                        this.showAlert('warning', 'Please fill in all required fields correctly.');
+                        return;
+                    }
+                    
+                    this.setLoading(true);
+                    
+                    $.ajax({
+                        url: 'http://localhost:8080/groupsavings/api/v1/member/register',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(this.getFormData()),
+                        dataType: 'json',
+                        success: $.proxy(this.handleSuccess, this),
+                        error: $.proxy(this.handleError, this),
+                        complete: $.proxy(() => this.setLoading(false), this)
+                    });
+                },
+
+                handleSuccess: function(response) {
+                    this.showAlert('success', `Member ${response.firstname} ${response.lastname} registered successfully! Member Code: ${response.memberCode}`);
+                    this.form[0].reset();
+                    this.form.find('.is-invalid').removeClass('is-invalid');
+                },
+
+                handleError: function(xhr) {
+                    if (xhr.status === 400 && xhr.responseJSON) {
+                        this.displayFieldErrors(xhr.responseJSON);
+                        this.showAlert('danger', 'Please fix the errors below.');
+                    } else if (xhr.status === 409) {
+                        this.showAlert('warning', xhr.responseJSON.message || 'Duplicate entry found. Email or mobile number already exists.');
+                    } else {
+                        this.showAlert('danger', 'An error occurred. Please try again.');
+                    }
+                },
+
+                displayFieldErrors: function(errors) {
+                    this.form.find('.is-invalid').removeClass('is-invalid');
+                    $.each(errors, (field, messages) => {
+                        const $input = $(`#${field}`);
+                        const message = Array.isArray(messages) ? messages[0] : messages;
+                        $input.addClass('is-invalid');
+                        $(`#${field}Error`).text(message);
+                    });
+                },
+
+                resetForm: function() {
+                    this.form[0].reset();
+                    this.form.find('.is-invalid').removeClass('is-invalid');
+                    this.showAlert('info', 'Form has been cleared.');
+                },
+
+                showAlert: function(type, message) {
+                    $('#alertContainer').empty();
+                    const icons = { success: 'fa-check-circle', danger: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+                    const alertHtml = `
+                        <div class="alert-dynamic alert-${type}">
+                            <div><i class="fas ${icons[type]}"></i> ${message}</div>
+                            <button onclick="$(this).parent().remove()" style="background:none; border:none; font-size:20px; cursor:pointer;">&times;</button>
+                        </div>
+                    `;
+                    $('#alertContainer').html(alertHtml);
+                    setTimeout(() => $('#alertContainer').empty(), 5000);
+                }
+            };
+            
+            MemberForm.init();
+        });
     </script>
-  </body>
+</body>
 </html>
