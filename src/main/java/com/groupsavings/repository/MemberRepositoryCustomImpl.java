@@ -35,4 +35,12 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
 		return query.getResultList();
 	}
 
+	@Override
+	public List<Object[]> fetchMemberLoanProfits(String memberCode) {
+		String sql = sqlLoader.getQuery("member_earnings.sql");
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter(1, memberCode);
+		return query.getResultList();
+	}
+
 }

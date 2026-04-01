@@ -17,6 +17,8 @@
 
 	<properties>
 		<java.version>21</java.version>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release>21</maven.compiler.release>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 		<lombok.version>1.18.30</lombok.version>
@@ -65,17 +67,16 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- MapStruct -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version>
 		</dependency>
 
-		<!-- MapStruct Processor (provided scope para hindi kasama sa final JAR) -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-processor</artifactId>
@@ -127,9 +128,8 @@
 				<configuration>
 					<source>21</source>
 					<target>21</target>
+					<release>21</release> <!-- Explicitly set release to 21 -->
 					<annotationProcessorPaths>
-						<!-- IMPORTANT: ORDER MATTERS! Lombok muna then
-						MapStruct -->
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
@@ -146,6 +146,9 @@
 							<version>${lombok-mapstruct-binding.version}</version>
 						</path>
 					</annotationProcessorPaths>
+					<compilerArgs>
+						<arg>-parameters</arg> <!-- This helps with parameter names in reflection -->
+					</compilerArgs>
 				</configuration>
 			</plugin>
 		</plugins>

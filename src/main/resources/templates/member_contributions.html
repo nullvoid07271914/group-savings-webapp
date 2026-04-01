@@ -421,56 +421,7 @@
             </div>
         </div>
 
-        <nav>
-            <div class="nav-item" th:onclick="|location.href='@{/dashboard}'|">
-                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Dashboard</span></div>
-            </div>
-
-            <div>
-                <div class="nav-item" onclick="toggleSubmenu(this)">
-                    <div class="nav-item-left"><i class="fas fa-users"></i><span>Members</span></div>
-                    <i class="fas fa-chevron-down nav-toggle"></i>
-                </div>
-                <div class="submenu">
-                    <div class="submenu-item" th:onclick="|location.href='@{/member/register}'|"><i class="fas fa-user-plus"></i> Member Registration</div>
-                    <div class="submenu-item" th:onclick="|location.href='@{/member/list}'|"><i class="fas fa-list"></i> All Members</div>
-                </div>
-            </div>
-
-            <div>
-                <div class="nav-item active" onclick="toggleSubmenu(this)">
-                    <div class="nav-item-left"><i class="fas fa-coins"></i><span>Contributions</span></div>
-                    <i class="fas fa-chevron-down nav-toggle rotated"></i>
-                </div>
-                <div class="submenu open">
-                    <div class="submenu-item active" th:onclick="|location.href='@{/contribution/search-member}'|"><i class="fas fa-plus-circle"></i> Add Contribution</div>
-                    <div class="submenu-item" th:onclick="|location.href='@{/member/contributions}'|"><i class="fas fa-chart-simple"></i> Member Contributions</div>
-                </div>
-            </div>
-
-            <div>
-                <div class="nav-item" onclick="toggleSubmenu(this)">
-                    <div class="nav-item-left"><i class="fas fa-hand-holding-usd"></i><span>Loans</span></div>
-                    <i class="fas fa-chevron-down nav-toggle"></i>
-                </div>
-                <div class="submenu">
-                    <div class="submenu-item" th:onclick="|location.href='@{/loan/apply}'|"><i class="fas fa-file-invoice"></i> Apply Loan</div>
-                    <div class="submenu-item" th:onclick="|location.href='@{/loan/manage}'|"><i class="fas fa-chart-line"></i> Manage Loan</div>
-                </div>
-            </div>
-
-            <div class="nav-item" th:onclick="|location.href='@{/member/profits}'|">
-                <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Profits</span></div>
-            </div>
-
-            <div class="nav-divider"></div>
-            <div class="nav-item" onclick="location.href='reports.html'">
-                <div class="nav-item-left"><i class="fas fa-chart-pie"></i><span>Reports</span></div>
-            </div>
-            <div class="nav-item" onclick="location.href='settings.html'">
-                <div class="nav-item-left"><i class="fas fa-cog"></i><span>Settings</span></div>
-            </div>
-        </nav>
+        <div th:replace="fragments/nav_menu :: navMenu"></div>
     </div>
 
     <!-- Main Content -->

@@ -203,7 +203,46 @@ public class MemberLoansMapper {
 	}
 
 	private BigDecimal getBigDecimal(Object[] row, RowColumn col) {
-		return row[col.getIndex()] != null ? (BigDecimal) row[col.getIndex()] : null;
+		Object value = row[col.getIndex()];
+		if (value == null)
+			return null;
+
+		// Handle BigDecimal directly
+		if (value instanceof BigDecimal) {
+			return (BigDecimal) value;
+		}
+
+		// Handle Double (from MySQL SUM, addition, etc.)
+		if (value instanceof Double) {
+			return BigDecimal.valueOf((Double) value);
+		}
+
+		// Handle Integer
+		if (value instanceof Integer) {
+			return BigDecimal.valueOf((Integer) value);
+		}
+
+		// Handle Long
+		if (value instanceof Long) {
+			return BigDecimal.valueOf((Long) value);
+		}
+
+		// Handle Float
+		if (value instanceof Float) {
+			return BigDecimal.valueOf((Float) value);
+		}
+
+		// Handle String (just in case)
+		if (value instanceof String) {
+			try {
+				return new BigDecimal((String) value);
+			} catch (NumberFormatException e) {
+				return BigDecimal.ZERO;
+			}
+		}
+
+		// Default return
+		return BigDecimal.ZERO;
 	}
 
 	private Float getFloat(Object[] row, RowColumn col) {

@@ -2,6 +2,7 @@ package com.groupsavings.api;
 
 import java.util.List;
 
+import com.groupsavings.model.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,12 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.groupsavings.model.dto.MemberContributions;
-import com.groupsavings.model.dto.MemberNameRequestDto;
-import com.groupsavings.model.dto.MemberRequestDto;
-import com.groupsavings.model.dto.MemberResponseDto;
-import com.groupsavings.model.dto.MemberSummaryProfit;
-import com.groupsavings.model.dto.MemberTotalContributionDto;
 import com.groupsavings.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -69,6 +64,12 @@ public class MemberApiRestController {
 	@GetMapping("/profits")
 	public ResponseEntity<List<MemberSummaryProfit>> profits() {
 		List<MemberSummaryProfit> summaryProfits = memberService.membersSummaryProfits();
+		return new ResponseEntity<>(summaryProfits, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/profits/{memberCode}")
+	public ResponseEntity<MemberLoanProfitsDto> memberProfits(@PathVariable String memberCode) {
+		MemberLoanProfitsDto summaryProfits = memberService.memberLoanProfits(memberCode);
 		return new ResponseEntity<>(summaryProfits, HttpStatus.CREATED);
 	}
 }

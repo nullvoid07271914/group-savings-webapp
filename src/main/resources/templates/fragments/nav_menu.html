@@ -2,95 +2,78 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<!-- partial:../../partials/_sidebar.html -->
-<nav th:fragment="navMenu" class="sidebar sidebar-offcanvas" id="sidebar">
-  <ul class="nav">
-    <li class="nav-item nav-profile">
-      <a href="#" class="nav-link">
-        <div class="nav-profile-image">
-          <img th:src="@{/assets/images/faces/face1.jpg}" alt="profile" />
-          <span class="login-status online"></span>
-          <!--change to offline or busy as needed-->
-        </div>
-        <div class="nav-profile-text d-flex flex-column">
-          <span class="font-weight-bold mb-2">David Grey. H</span>
-          <span class="text-secondary text-small">Project Manager</span>
-        </div>
-        <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" th:href="@{/index.html}">
-        <span class="menu-title">Dashboard</span>
-        <i class="mdi mdi-home menu-icon"></i>
-      </a>
-    </li>
-    <li class="nav-item" th:classappend="${currentUri.contains('/contribution/')} ? 'active' : ''">
-      <a class="nav-link" data-bs-toggle="collapse" href="#contri" aria-expanded="false" aria-controls="icons">
-        <span class="menu-title">Contribution</span>
-        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-      </a>
-      <div class="collapse" id="contri">
-        <ul class="nav flex-column sub-menu">
-          <li class="nav-item">
-            <a class="nav-link"
-            	th:classappend="${currentUri.endsWith('/contribution/search-member')} ? 'active' : ''"
-            	th:href="@{/contribution/search-member}">Contribute</a>
-          </li>
-        </ul>
-      </div>
-    </li>
-    <li class="nav-item" th:classappend="${currentUri.contains('/member/')} ? 'active' : ''">
-      <a class="nav-link" data-bs-toggle="collapse" href="#mem" aria-expanded="false" aria-controls="icons">
-        <span class="menu-title">Accounts</span>
-        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-      </a>
-      <div class="collapse" id="mem">
-        <ul class="nav flex-column sub-menu">
-          <li class="nav-item">
-            <a class="nav-link"
-            	th:classappend="${currentUri.endsWith('/member/register')} ? 'active' : ''"
-            	th:href="@{/member/register}">Member Registration</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link"
-            	th:classappend="${currentUri.endsWith('/member/list')} ? 'active' : ''"
-            	th:href="@{/member/list}">View Members</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link"
-            	th:classappend="${currentUri.endsWith('/member/profits')} ? 'active' : ''"
-            	th:href="@{/member/profits}">View Members Profits</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link"
-            	th:classappend="${currentUri.endsWith('/member/contributions')} ? 'active' : ''"
-            	th:href="@{/member/contributions}">View Member Contributions</a>
-          </li>
-        </ul>
-      </div>
-    </li>
-    <li class="nav-item" th:classappend="${currentUri.contains('/loan/')} ? 'active' : ''">
-      <a class="nav-link" data-bs-toggle="collapse" href="#loan" aria-expanded="false" aria-controls="forms">
-        <span class="menu-title">Loans</span>
-        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-      </a>
-      <div class="collapse" id="loan">
-        <ul class="nav flex-column sub-menu">
-          <li class="nav-item">
-            <a class="nav-link"
-            	th:classappend="${currentUri.endsWith('/loan/manage')} ? 'active' : ''"
-            	th:href="@{/loan/manage}">Manage Loans</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link"
-            	th:classappend="${currentUri.endsWith('/loan/apply')} ? 'active' : ''"
-            	th:href="@{/loan/apply}">Apply Loan</a>
-          </li>
-        </ul>
-      </div>
-    </li>
-  </ul>
+<nav th:fragment="navMenu">
+  <div class="nav-item"
+       th:classappend="${currentUri.contains('/dashboard')} ? 'active' : ''"
+       th:onclick="|location.href='@{/dashboard}'|">
+    <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Dashboard</span></div>
+  </div>
+
+  <div>
+    <div class="nav-item"
+         th:classappend="${currentUri.contains('/member')} ? 'active' : ''"
+         onclick="toggleSubmenu(this)">
+      <div class="nav-item-left"><i class="fas fa-users"></i><span>Members</span></div>
+      <i class="fas fa-chevron-down nav-toggle"></i>
+    </div>
+    <div class="submenu" th:classappend="${currentUri.contains('/member')} ? 'open' : ''">
+      <div class="submenu-item"
+           th:classappend="${currentUri.endsWith('/member/register')} ? 'active' : ''"
+           th:onclick="|location.href='@{/member/register}'|"><i class="fas fa-user-plus"></i> Member Registration</div>
+      <div class="submenu-item"
+           th:classappend="${currentUri.endsWith('/member/list')} ? 'active' : ''"
+           th:onclick="|location.href='@{/member/list}'|"><i class="fas fa-list"></i> All Members</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="nav-item"
+         th:classappend="${currentUri.contains('/contribution')} ? 'active' : ''"
+         onclick="toggleSubmenu(this)">
+      <div class="nav-item-left"><i class="fas fa-coins"></i><span>Contributions</span></div>
+      <i class="fas fa-chevron-down nav-toggle rotated"></i>
+    </div>
+    <div class="submenu" th:classappend="${currentUri.contains('/contribution')} ? ' open' : ''">
+      <div class="submenu-item"
+           th:classappend="${currentUri.endsWith('/contribution/add-contribute')} ? 'active' : ''"
+           th:onclick="|location.href='@{/contribution/add-contribute}'|"><i class="fas fa-plus-circle"></i> Add Contribution</div>
+      <div class="submenu-item"
+           th:classappend="${currentUri.endsWith('/contribution/summary')} ? 'active' : ''"
+           th:onclick="|location.href='@{/contribution/summary}'|"><i class="fas fa-chart-simple"></i> Member Contributions</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="nav-item"
+         th:classappend="${currentUri.contains('/loan')} ? 'active' : ''"
+         onclick="toggleSubmenu(this)">
+      <div class="nav-item-left"><i class="fas fa-hand-holding-usd"></i><span>Loans</span></div>
+      <i class="fas fa-chevron-down nav-toggle"></i>
+    </div>
+    <div class="submenu" th:classappend="${currentUri.contains('/loan')} ? ' open' : ''">
+      <div class="submenu-item"
+           th:classappend="${currentUri.endsWith('/loan/apply')} ? 'active' : ''"
+           th:onclick="|location.href='@{/loan/apply}'|"><i class="fas fa-file-invoice"></i> Apply Loan</div>
+      <div class="submenu-item"
+           th:classappend="${currentUri.endsWith('/loan/manage')} ? 'active' : ''"
+           th:onclick="|location.href='@{/loan/manage}'|"><i class="fas fa-chart-line"></i> Manage Loan</div>
+    </div>
+  </div>
+
+  <div class="nav-item"
+       th:classappend="${currentUri.contains('/profits')} ? 'active' : ''"
+       th:onclick="|location.href='@{/profits}'|">
+    <div class="nav-item-left"><i class="fas fa-chart-line"></i><span>Profits</span></div>
+  </div>
+
+  <div class="nav-divider"></div>
+  <div class="nav-item" onclick="location.href='reports.html'">
+    <div class="nav-item-left"><i class="fas fa-chart-pie"></i><span>Reports</span></div>
+  </div>
+  <div class="nav-item" onclick="location.href='settings.html'">
+    <div class="nav-item-left"><i class="fas fa-cog"></i><span>Settings</span></div>
+  </div>
 </nav>
+
 </body>
 </html>

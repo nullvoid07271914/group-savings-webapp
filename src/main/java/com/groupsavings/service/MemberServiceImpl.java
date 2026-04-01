@@ -3,6 +3,8 @@ package com.groupsavings.service;
 import java.util.List;
 import java.util.Objects;
 
+import com.groupsavings.component.MemberLoanProfitsMapper;
+import com.groupsavings.model.dto.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +18,6 @@ import com.groupsavings.constants.LoanConstants;
 import com.groupsavings.exception.DuplicateResourceException;
 import com.groupsavings.exception.RequestInsufficientException;
 import com.groupsavings.mapper.MemberMapper;
-import com.groupsavings.model.dto.MemberContributions;
-import com.groupsavings.model.dto.MemberNameRequestDto;
-import com.groupsavings.model.dto.MemberRequestDto;
-import com.groupsavings.model.dto.MemberResponseDto;
-import com.groupsavings.model.dto.MemberSummaryProfit;
-import com.groupsavings.model.dto.MemberTotalContributionDto;
 import com.groupsavings.model.entity.Member;
 import com.groupsavings.model.entity.SavingsPool;
 import com.groupsavings.model.enums.MemberStatus;
@@ -53,6 +49,8 @@ public class MemberServiceImpl implements MemberService, LoanConstants {
 	private final MemberContributionMapper memberContributionMapper;
 
 	private final MemberSummaryProfitMapper memberSummaryProfitMapper;
+
+	private final MemberLoanProfitsMapper memberLoanProfitsMapper;
 
 	@Override
 	public MemberResponseDto createMember(MemberRequestDto member) {
@@ -86,7 +84,7 @@ public class MemberServiceImpl implements MemberService, LoanConstants {
 		}
 
 		List<Member> memberList = memberRepository.searchByName(member.getName());
-		List<MemberResponseDto> resultMemberList = memberList.stream().map(mem -> memberMapper.toResponseDto(mem))
+		List<MemberResponseDto> resultMemberList = memberList.stream().map(memberMapper::toResponseDto)
 				.toList();
 
 		log.info("resultMemberList: {}", resultMemberList);
@@ -156,8 +154,13 @@ public class MemberServiceImpl implements MemberService, LoanConstants {
 	public List<MemberSummaryProfit> membersSummaryProfits() {
 		SavingsPool savingsPool = configRepositoty.findConfigByIdOne().getSavingsPool();
 		List<Object[]> membersProfits = loanRepository.fetchMembersSummaryProfit(savingsPool.getPoolId());
-		List<MemberSummaryProfit> profits = memberSummaryProfitMapper.toMemberSummaryProfitList(membersProfits);
-		return profits;
+        return memberSummaryProfitMapper.toMemberSummaryProfitList(membersProfits);
+	}
+
+	@Override
+	public MemberLoanProfitsDto memberLoanProfits(String memberCode) {
+		List<Object[]> profits = memberRepository.fetchMemberLoanProfits(memberCode);
+        return memberLoanProfitsMapper.toMemberProfitsDto(profits);
 	}
 
 }

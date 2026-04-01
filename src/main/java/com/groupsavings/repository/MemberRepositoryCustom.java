@@ -7,4 +7,6 @@ public interface MemberRepositoryCustom {
 	List<Object[]> fetchMemberTotalContributions();
 
 	List<Object[]> fetchMemberContributions(String memberCode);
+
+	List<Object[]> fetchMemberLoanProfits(String memberCode);
 }
