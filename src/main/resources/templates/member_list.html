@@ -386,12 +386,297 @@
         .mt-4 { margin-top: 1.5rem; }
         .text-center { text-align: center; }
         .me-2 { margin-right: 0.5rem; }
+
+        /* ========== MISSING HEADER STYLES ========== */
+
+        /* Header Styles */
+        .top-header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 280px;
+            z-index: 99;
+            padding: 12px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-title h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .header-title p {
+            font-size: 0.75rem;
+            color: #718096;
+            margin-top: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Notification Dropdown */
+        .notification-btn {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #4a5568;
+            transition: color 0.2s;
+            padding: 8px;
+            border-radius: 50%;
+        }
+
+        .notification-btn:hover {
+            color: #667eea;
+            background: #f7fafc;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #e53e3e;
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 5px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .notification-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 350px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+            overflow: hidden;
+            animation: dropdownSlide 0.2s ease;
+        }
+
+        .notification-dropdown.show { display: block; }
+
+        .notification-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-header h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .mark-all-read {
+            font-size: 0.7rem;
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .notification-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .notification-item:hover { background: #f7fafc; }
+        .notification-item.unread { background: #fef5e7; }
+
+        .notification-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .notification-icon.success { background: #c6f6d5; color: #38a169; }
+        .notification-icon.warning { background: #feebc8; color: #ed8936; }
+        .notification-icon.info { background: #bee3f8; color: #3182ce; }
+        .notification-icon.primary { background: #c7d2fe; color: #5a67d8; }
+
+        .notification-content { flex: 1; }
+        .notification-title { font-size: 0.85rem; font-weight: 600; color: #2d3748; margin-bottom: 4px; }
+        .notification-message { font-size: 0.75rem; color: #718096; margin-bottom: 4px; }
+        .notification-time { font-size: 0.65rem; color: #a0aec0; }
+
+        .notification-footer {
+            padding: 12px 20px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .notification-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* User Profile Dropdown */
+        .user-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 30px;
+            transition: background 0.2s;
+        }
+
+        .user-profile:hover { background: #f7fafc; }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-info h4 { font-size: 0.9rem; font-weight: 600; color: #2d3748; }
+        .user-info p { font-size: 0.7rem; color: #718096; }
+
+        .user-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 220px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+            animation: dropdownSlide 0.2s ease;
+        }
+
+        .user-dropdown.show { display: block; }
+
+        .user-dropdown-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #4a5568;
+            text-decoration: none;
+        }
+
+        .user-dropdown-item:hover { background: #f7fafc; }
+        .user-dropdown-item i { width: 20px; color: #667eea; }
+        .user-dropdown-divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 5px 0;
+        }
+        .logout-item { color: #e53e3e; }
+        .logout-item i { color: #e53e3e; }
+
+        /* Footer */
+        .footer {
+            margin-left: 280px;
+            padding: 20px 30px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 30px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #718096;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: #667eea; }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: #a0aec0;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+
+        .social-links a:hover { color: #667eea; transform: translateY(-2px); }
+
+        /* Adjust main content margin for fixed header */
+        .main-content {
+            margin-left: 280px;
+            margin-top: 70px;
+            padding: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                margin-top: 70px;
+            }
+            .top-header {
+                left: 0;
+            }
+            .footer {
+                margin-left: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <button class="mobile-menu-btn" onclick="toggleMenu()">
         <i class="fas fa-bars"></i>
     </button>
+
+    <!-- Top Header -->
+    <div th:replace="fragments/header_menu :: headerMenu"></div>
 
     <!-- Sidebar Navigation -->
     <div class="nav-sidebar" id="sidebar">
@@ -583,7 +868,7 @@
                     
                     $.each(members, function(i, m) {
                         const statusClass = m.status === 'ACTIVE' ? 'success' : (m.status === 'INACTIVE' ? 'warning' : 'danger');
-                        const typeClass = m.memberType === 'CONTRIBUTOR' ? 'info' : (m.memberType === 'BORROWER' ? 'primary' : 'secondary');
+                        const typeClass = m.type === 'CONTRIBUTOR' ? 'info' : (m.type === 'BORROWER' ? 'primary' : 'secondary');
                         const joinDate = m.joinedDate ? new Date(m.joinedDate).toLocaleDateString() : 'N/A';
                         
                         const row = `<tr>
@@ -592,7 +877,7 @@
                             <td>${joinDate}</td>
                             <td>${m.mobileNumber || '-'}</td>
                             <td><span class="badge badge-${statusClass}">${m.status || 'UNKNOWN'}</span></td>
-                            <td><span class="badge badge-${typeClass}">${m.memberType || 'UNKNOWN'}</span></td>
+                            <td><span class="badge badge-${typeClass}">${m.type || 'UNKNOWN'}</span></td>
                             <td><div class="action-buttons"><button class="btn-edit" data-code="${m.memberCode}"><i class="fas fa-edit"></i> Edit</button><button class="btn-delete" data-code="${m.memberCode}" data-name="${m.firstname} ${m.lastname}"><i class="fas fa-trash"></i> Delete</button></div></td>
                         </tr>`;
                         tbody.append(row);
@@ -626,7 +911,7 @@
                             $('#email').val(res.email);
                             if (res.joinedDate) $('#joinDate').val(new Date(res.joinedDate).toISOString().split('T')[0]);
                             $('#status').val(res.status || 'ACTIVE');
-                            $('#memberType').val(res.memberType || 'CONTRIBUTOR');
+                            $('#memberType').val(res.type || 'CONTRIBUTOR');
                             $('#street').val(res.street || '');
                             $('#barangay').val(res.barangay || '');
                             $('#city').val(res.city || '');
@@ -691,5 +976,67 @@
                 loadMembers();
             });
         </script>
+
+    <script>
+        // ========== NOTIFICATION & USER DROPDOWN ==========
+        // Make sure this code runs after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Notification dropdown
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+
+            // User profile dropdown
+            const userProfileBtn = document.getElementById('userProfileBtn');
+            const userDropdown = document.getElementById('userDropdown');
+
+            // Notification button click
+            if (notificationBtn && notificationDropdown) {
+                notificationBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('show');
+                    if (userDropdown) userDropdown.classList.remove('show');
+                });
+            }
+
+            // User profile button click
+            if (userProfileBtn && userDropdown) {
+                userProfileBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('show');
+                    if (notificationDropdown) notificationDropdown.classList.remove('show');
+                });
+            }
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                if (notificationDropdown) notificationDropdown.classList.remove('show');
+                if (userDropdown) userDropdown.classList.remove('show');
+            });
+        });
+
+        // ========== NOTIFICATION FUNCTIONS ==========
+        function markAllRead() {
+            const items = document.querySelectorAll('.notification-item');
+            items.forEach(item => {
+                item.classList.remove('unread');
+            });
+            const badge = document.getElementById('notificationBadge');
+            if (badge) {
+                badge.textContent = '0';
+                badge.style.display = 'none';
+            }
+        }
+
+        function viewAllNotifications() {
+            alert('Redirecting to all notifications page...');
+            // window.location.href = '/notifications';
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
     </body>
     </html>

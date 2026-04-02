@@ -882,94 +882,7 @@
 </button>
 
 <!-- Top Header -->
-<div class="top-header">
-    <div class="header-title">
-        <h2><i class="fas fa-hand-holding-usd"></i> Loan Management</h2>
-        <p>Manage and monitor all loan applications</p>
-    </div>
-    <div class="header-actions">
-        <!-- Notification Dropdown -->
-        <div class="notification-btn" id="notificationBtn">
-            <i class="fas fa-bell"></i>
-            <span class="notification-badge" id="notificationBadge">5</span>
-            <div class="notification-dropdown" id="notificationDropdown">
-                <div class="notification-header">
-                    <h4>Notifications</h4>
-                    <span class="mark-all-read" onclick="markAllRead()">Mark all as read</span>
-                </div>
-                <div class="notification-list" id="notificationList">
-                    <div class="notification-item unread" data-id="1">
-                        <div class="notification-icon success"><i class="fas fa-check-circle"></i></div>
-                        <div class="notification-content">
-                            <div class="notification-title">Loan Approved</div>
-                            <div class="notification-message">Loan #LOAN-2024-001 has been approved.</div>
-                            <div class="notification-time">2 minutes ago</div>
-                        </div>
-                    </div>
-                    <div class="notification-item unread" data-id="2">
-                        <div class="notification-icon warning"><i class="fas fa-clock"></i></div>
-                        <div class="notification-content">
-                            <div class="notification-title">Payment Due</div>
-                            <div class="notification-message">Payment for Loan #LOAN-2024-003 is due tomorrow.</div>
-                            <div class="notification-time">1 hour ago</div>
-                        </div>
-                    </div>
-                    <div class="notification-item" data-id="3">
-                        <div class="notification-icon info"><i class="fas fa-user-plus"></i></div>
-                        <div class="notification-content">
-                            <div class="notification-title">New Member Registered</div>
-                            <div class="notification-message">Maria Santos has joined the group.</div>
-                            <div class="notification-time">3 hours ago</div>
-                        </div>
-                    </div>
-                    <div class="notification-item" data-id="4">
-                        <div class="notification-icon success"><i class="fas fa-cash-register"></i></div>
-                        <div class="notification-content">
-                            <div class="notification-title">Payment Received</div>
-                            <div class="notification-message">Payment of ₱5,000 received from Joel Idul.</div>
-                            <div class="notification-time">5 hours ago</div>
-                        </div>
-                    </div>
-                    <div class="notification-item" data-id="5">
-                        <div class="notification-icon primary"><i class="fas fa-file-invoice"></i></div>
-                        <div class="notification-content">
-                            <div class="notification-title">New Loan Application</div>
-                            <div class="notification-message">Roselyn Bernales applied for a loan of ₱2,700.</div>
-                            <div class="notification-time">Yesterday</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="notification-footer">
-                    <a href="#" onclick="viewAllNotifications(); return false;">See all notifications</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- User Profile Dropdown -->
-        <div class="user-profile" id="userProfileBtn">
-            <div class="user-avatar">
-                <i class="fas fa-user"></i>
-            </div>
-            <div class="user-info">
-                <h4>Admin User</h4>
-                <p>Administrator</p>
-            </div>
-            <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
-            <div class="user-dropdown" id="userDropdown">
-                <div class="user-dropdown-item" onclick="window.location.href='profile.html'">
-                    <i class="fas fa-user-circle"></i> My Profile
-                </div>
-                <div class="user-dropdown-item" onclick="window.location.href='account-settings.html'">
-                    <i class="fas fa-cog"></i> Account Settings
-                </div>
-                <div class="user-dropdown-divider"></div>
-                <div class="user-dropdown-item logout-item" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="fragments/header_menu :: headerMenu"></div>
 
 <!-- Sidebar Navigation -->
 <div class="nav-sidebar" id="sidebar">
@@ -1115,7 +1028,13 @@
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                         <div class="form-group"><label><i class="fas fa-calendar-check"></i> Payment Date</label><input type="date" id="paymentDate" class="form-control" required></div>
-                        <div class="form-group"><label><i class="fas fa-credit-card"></i> Payment Method</label><select id="paymentMethod" class="form-control" required><option value="">Select Payment Method</option><option value="GCASH">📱 GCASH</option><option value="CASH">💵 CASH</option><option value="MAYA">📱 MAYA</option><option value="MARIBANK">🏦 MARIBANK</option><option value="BANK_TRANSFER">🏦 BANK TRANSFER</option></select></div>
+                        <div class="form-group"><label><i class="fas fa-credit-card"></i> Payment Method</label><select id="paymentMethod" class="form-control" required>
+                            <option value="">Select Payment Method</option>
+                            <option value="GCASH">GCASH</option>
+                            <option value="CASH">CASH</option>
+                            <option value="MAYA">MAYA</option>
+                            <option value="MARIBANK">MARIBANK</option>
+                            <option value="BANK_TRANSFER">BANK TRANSFER</option></select></div>
                     </div>
                     <div class="form-group"><label><i class="fas fa-receipt"></i> Reference Number</label><input type="text" id="referenceNumber" class="form-control" placeholder="e.g., GCASH-123456789" required></div>
                     <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
@@ -1267,24 +1186,37 @@
         function showPaymentModal(loan, borrower) {
             const schedule = generateSchedule(loan);
             currentLoanData = { loan, schedule };
+
+            // Update loan info
             $('#modalLoanCode').text(loan.loanCode);
             $('#modalBorrowerName').text(borrower);
             $('#modalLoanAmount').text(`Php ${formatNumber(loan.loanAmount)}`);
             $('#modalTotalAmount').text(`Php ${formatNumber(loan.totalAmount || loan.loanAmount)}`);
             $('#modalAmortization').text(`Php ${formatNumber(loan.amortization)}`);
 
+            // Get paid terms from API payments
             const paidTermsData = getPaidTerms(loan.payments);
             const sorted = [...schedule].sort((a, b) => a.term - b.term);
             const totalTerms = sorted.length;
             const paidTermsCount = paidTermsData.length;
 
+            // ========== CALCULATE TOTAL PAID FROM ACTUAL PAYMENTS ==========
             let totalPaid = 0;
             if (loan.payments && loan.payments.length > 0) {
-                loan.payments.forEach(payment => { totalPaid += (payment.amountPaid || 0); });
+                loan.payments.forEach(payment => {
+                    // Add the actual amount paid from each payment record
+                    totalPaid += (payment.amountPaid || 0);
+                });
             }
+
+            // Calculate remaining balance
             const totalAmount = loan.totalAmount || loan.loanAmount;
             const remainingBalance = totalAmount - totalPaid;
 
+            // Calculate payment progress percentage
+            const progressPercent = totalAmount > 0 ? (totalPaid / totalAmount * 100) : 0;
+
+            // Update schedule summary badge
             if (paidTermsCount === totalTerms) {
                 $('#scheduleSummary').removeClass('badge-info badge-warning').addClass('badge-success').text('✓ Fully Paid');
             } else if (paidTermsCount > 0) {
@@ -1293,30 +1225,126 @@
                 $('#scheduleSummary').removeClass('badge-warning badge-success').addClass('badge-info').text(`${totalTerms} terms remaining`);
             }
 
-            let html = `<div class="schedule-header"><div><i class="fas fa-calendar-day"></i> Due Date</div><div><i class="fas fa-hashtag"></i> Term</div><div><i class="fas fa-money-bill-wave"></i> Amount</div><div><i class="fas fa-circle-info"></i> Status</div><div><i class="fas fa-qrcode"></i> Payment Code</div><div><i class="fas fa-calendar-check"></i> Payment Date</div></div>`;
+            // Build schedule HTML
+            let html = `
+        <div class="schedule-header">
+            <div><i class="fas fa-calendar-day"></i> Due Date</div>
+            <div><i class="fas fa-hashtag"></i> Term</div>
+            <div><i class="fas fa-money-bill-wave"></i> Amount</div>
+            <div><i class="fas fa-circle-info"></i> Status</div>
+            <div><i class="fas fa-qrcode"></i> Payment Code</div>
+            <div><i class="fas fa-calendar-check"></i> Payment Date</div>
+        </div>
+    `;
+
             sorted.forEach(item => {
                 const paidInfo = paidTermsData.find(p => p.term === item.term);
                 const isPaid = !!paidInfo;
-                html += `<div class="schedule-item ${isPaid ? 'paid' : ''}"><div class="schedule-date"><i class="far fa-calendar-alt"></i> ${item.dueDate}</div><div><span class="term-badge">Term ${item.term}</span></div><div class="schedule-amount">Php ${formatNumber(item.amount)}</div><div><span class="status-badge ${isPaid ? 'status-paid' : 'status-pending'}"><i class="fas ${isPaid ? 'fa-check-circle' : 'fa-clock'}"></i> ${isPaid ? 'PAID' : 'PENDING'}</span></div><div>${isPaid ? `<span class="payment-code">${paidInfo.paymentCode || 'N/A'}</span>` : '<span class="text-muted">—</span>'}</div><div>${isPaid ? `<span class="payment-date"><i class="far fa-calendar-alt"></i> ${formatDate(paidInfo.paymentDate)}</span>` : '<span class="text-muted">—</span>'}</div></div>`;
+
+                html += `
+            <div class="schedule-item ${isPaid ? 'paid' : ''}">
+                <div class="schedule-date"><i class="far fa-calendar-alt"></i> ${item.dueDate}</div>
+                <div><span class="term-badge">Term ${item.term}</span></div>
+                <div class="schedule-amount">Php ${formatNumber(item.amount)}</div>
+                <div>
+                    <span class="status-badge ${isPaid ? 'status-paid' : 'status-pending'}">
+                        <i class="fas ${isPaid ? 'fa-check-circle' : 'fa-clock'}"></i>
+                        ${isPaid ? 'PAID' : 'PENDING'}
+                    </span>
+                </div>
+                <div>
+                    ${isPaid ? `<span class="payment-code">${paidInfo.paymentCode || 'N/A'}</span>` : '<span class="text-muted">—</span>'}
+                </div>
+                <div>
+                    ${isPaid ? `<span class="payment-date"><i class="far fa-calendar-alt"></i> ${formatDate(paidInfo.paymentDate)}</span>` : '<span class="text-muted">—</span>'}
+                </div>
+            </div>
+        `;
             });
+
             $('#amortizationScheduleList').html(html);
 
+            // Build payment term dropdown
             const termSelect = $('#payInTerm');
             termSelect.html('<option value="">-- Select term to pay --</option>');
+
             sorted.forEach(item => {
                 const isPaid = paidTermsData.some(p => p.term === item.term);
-                termSelect.append(`<option value="${item.term}" ${isPaid ? 'disabled' : ''}>Term ${item.term} - Due: ${item.dueDate} (Php ${formatNumber(item.amount)})${isPaid ? ' ✓ PAID' : ''}</option>`);
-            });
-            $('#paymentDate').val(new Date().toISOString().split('T')[0]);
-            $('#paymentAmount,#paymentMethod,#referenceNumber').val('');
+                const disabledAttr = isPaid ? 'disabled' : '';
+                const paidText = isPaid ? ' ✓ PAID' : '';
 
+                termSelect.append(`
+            <option value="${item.term}" ${disabledAttr}>
+                Term ${item.term} - Due: ${item.dueDate} (Php ${formatNumber(item.amount)})${paidText}
+            </option>
+        `);
+            });
+
+            // Set default payment date to today
+            const today = new Date().toISOString().split('T')[0];
+            $('#paymentDate').val(today);
+
+            // Clear form fields
+            $('#paymentAmount').val('');
+            $('#paymentMethod').val('');
+            $('#referenceNumber').val('');
+
+            // ========== UPDATE PAYMENT SUMMARY WITH CORRECT VALUES ==========
+            // Create or update payment summary section
             if ($('#paymentSummary').length === 0) {
-                $('.payment-form').prepend(`<div id="paymentSummary" class="payment-summary"><div class="payment-summary-item"><span><i class="fas fa-receipt"></i> Total Paid:</span><strong>Php ${formatNumber(totalPaid)}</strong></div><div class="payment-summary-item"><span><i class="fas fa-chart-line"></i> Remaining Balance:</span><strong style="color: ${remainingBalance > 0 ? '#ed8936' : '#48bb78'};">Php ${formatNumber(remainingBalance)}</strong></div><div class="payment-summary-item"><span><i class="fas fa-percent"></i> Payment Progress:</span><div class="progress-bar-container"><div class="progress-bar-fill" style="width: ${totalAmount > 0 ? (totalPaid / totalAmount * 100) : 0}%"></div><span>${totalAmount > 0 ? Math.round(totalPaid / totalAmount * 100) : 0}%</span></div></div></div>`);
+                $('.payment-form').prepend(`
+            <div id="paymentSummary" class="payment-summary">
+                <div class="payment-summary-item">
+                    <span><i class="fas fa-receipt"></i> Total Paid:</span>
+                    <strong class="total-paid-amount" style="color: #48bb78;">Php ${formatNumber(totalPaid)}</strong>
+                </div>
+                <div class="payment-summary-item">
+                    <span><i class="fas fa-chart-line"></i> Remaining Balance:</span>
+                    <strong class="remaining-balance-amount" style="color: ${remainingBalance > 0 ? '#ed8936' : '#48bb78'};">Php ${formatNumber(remainingBalance)}</strong>
+                </div>
+                <div class="payment-summary-item">
+                    <span><i class="fas fa-percent"></i> Payment Progress:</span>
+                    <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+                        <div class="progress-bar-container" style="flex: 1; background: #e2e8f0; border-radius: 20px; height: 8px; overflow: hidden;">
+                            <div class="progress-bar-fill" style="width: ${progressPercent}%; height: 100%; background: linear-gradient(90deg, #48bb78, #38a169); border-radius: 20px;"></div>
+                        </div>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: #48bb78;">${Math.round(progressPercent)}%</span>
+                    </div>
+                </div>
+            </div>
+        `);
+            } else {
+                $('#paymentSummary').html(`
+            <div class="payment-summary-item">
+                <span><i class="fas fa-receipt"></i> Total Paid:</span>
+                <strong class="total-paid-amount" style="color: #48bb78;">Php ${formatNumber(totalPaid)}</strong>
+            </div>
+            <div class="payment-summary-item">
+                <span><i class="fas fa-chart-line"></i> Remaining Balance:</span>
+                <strong class="remaining-balance-amount" style="color: ${remainingBalance > 0 ? '#ed8936' : '#48bb78'};">Php ${formatNumber(remainingBalance)}</strong>
+            </div>
+            <div class="payment-summary-item">
+                <span><i class="fas fa-percent"></i> Payment Progress:</span>
+                <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+                    <div class="progress-bar-container" style="flex: 1; background: #e2e8f0; border-radius: 20px; height: 8px; overflow: hidden;">
+                        <div class="progress-bar-fill" style="width: ${progressPercent}%; height: 100%; background: linear-gradient(90deg, #48bb78, #38a169); border-radius: 20px;"></div>
+                    </div>
+                    <span style="font-size: 0.75rem; font-weight: 600; color: #48bb78;">${Math.round(progressPercent)}%</span>
+                </div>
+            </div>
+        `);
             }
 
+            // Check if all terms are paid
             const allPaid = sorted.every(item => paidTermsData.some(p => p.term === item.term));
-            if (allPaid) { $('#paymentForm button[type="submit"]').prop('disabled', true); showModal('info', 'This loan is already fully paid!'); }
-            else { $('#paymentForm button[type="submit"]').prop('disabled', false); }
+            if (allPaid) {
+                $('#paymentForm button[type="submit"]').prop('disabled', true);
+                showModal('info', 'This loan is already fully paid!');
+            } else {
+                $('#paymentForm button[type="submit"]').prop('disabled', false);
+            }
+
+            // Show modal
             $('#paymentModal').addClass('show');
         }
 

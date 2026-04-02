@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="top-header" th:fragment="headerMenu">
+    <div class="header-title">
+        <h2><i class="fas fa-hand-holding-usd"></i> Loan Management</h2>
+        <p>Manage and monitor all loan applications</p>
+    </div>
+    <div class="header-actions">
+        <!-- Notification Dropdown -->
+        <div class="notification-btn" id="notificationBtn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge" id="notificationBadge">5</span>
+            <div class="notification-dropdown" id="notificationDropdown">
+                <div class="notification-header">
+                    <h4>Notifications</h4>
+                    <span class="mark-all-read" onclick="markAllRead()">Mark all as read</span>
+                </div>
+                <div class="notification-list" id="notificationList">
+                    <div class="notification-item unread" data-id="1">
+                        <div class="notification-icon success"><i class="fas fa-check-circle"></i></div>
+                        <div class="notification-content">
+                            <div class="notification-title">Loan Approved</div>
+                            <div class="notification-message">Loan #LOAN-2024-001 has been approved.</div>
+                            <div class="notification-time">2 minutes ago</div>
+                        </div>
+                    </div>
+                    <div class="notification-item unread" data-id="2">
+                        <div class="notification-icon warning"><i class="fas fa-clock"></i></div>
+                        <div class="notification-content">
+                            <div class="notification-title">Payment Due</div>
+                            <div class="notification-message">Payment for Loan #LOAN-2024-003 is due tomorrow.</div>
+                            <div class="notification-time">1 hour ago</div>
+                        </div>
+                    </div>
+                    <div class="notification-item" data-id="3">
+                        <div class="notification-icon info"><i class="fas fa-user-plus"></i></div>
+                        <div class="notification-content">
+                            <div class="notification-title">New Member Registered</div>
+                            <div class="notification-message">Maria Santos has joined the group.</div>
+                            <div class="notification-time">3 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="notification-item" data-id="4">
+                        <div class="notification-icon success"><i class="fas fa-cash-register"></i></div>
+                        <div class="notification-content">
+                            <div class="notification-title">Payment Received</div>
+                            <div class="notification-message">Payment of ₱5,000 received from Joel Idul.</div>
+                            <div class="notification-time">5 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="notification-item" data-id="5">
+                        <div class="notification-icon primary"><i class="fas fa-file-invoice"></i></div>
+                        <div class="notification-content">
+                            <div class="notification-title">New Loan Application</div>
+                            <div class="notification-message">Roselyn Bernales applied for a loan of ₱2,700.</div>
+                            <div class="notification-time">Yesterday</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="notification-footer">
+                    <a href="#" onclick="viewAllNotifications(); return false;">See all notifications</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Profile Dropdown -->
+        <div class="user-profile" id="userProfileBtn">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <h4>Admin User</h4>
+                <p>Administrator</p>
+            </div>
+            <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+            <div class="user-dropdown" id="userDropdown">
+                <div class="user-dropdown-item" onclick="window.location.href='profile.html'">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </div>
+                <div class="user-dropdown-item" onclick="window.location.href='account-settings.html'">
+                    <i class="fas fa-cog"></i> Account Settings
+                </div>
+                <div class="user-dropdown-divider"></div>
+                <div class="user-dropdown-item logout-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
