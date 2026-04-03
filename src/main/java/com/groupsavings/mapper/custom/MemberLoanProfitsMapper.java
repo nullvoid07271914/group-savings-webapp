@@ -1,23 +1,21 @@
-package com.groupsavings.component;
+package com.groupsavings.mapper.custom;
 
 import com.groupsavings.model.dto.BorrowerLoanPaymentsDto;
-import com.groupsavings.model.dto.MemberContributions;
 import com.groupsavings.model.dto.MemberErningsFromLoansDto;
 import com.groupsavings.model.dto.MemberLoanProfitsDto;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @Component
-public class MemberLoanProfitsMapper {
+public class MemberLoanProfitsMapper extends BaseMapper {
 
-    private enum RowColumn {
+    private enum RowColumn implements BaseColumnIndex {
         MEMBER_CODE(0), FIRSTNAME(1), LASTNAME(2), JOIN_DATE(3), LOAN_CODE(4), BORROWER_CODE(5), BORROWER_FIRSTNAME(6), BORROWER_LASTNAME(7), LOAN_AMOUNT(8), TOTAL_AMOUNT(9), DATE_RELEASED(10), CONTRIBUTION_AMOUNT(11), CONTRIBUTION_PERCENTAGE(12), PAY_IN_TERM(13), AMOUNT_PAID(14), PAYMENT_DATE(15), LOAN_PROFIT(16);
 
         private final int index;
@@ -26,6 +24,7 @@ public class MemberLoanProfitsMapper {
             this.index = index;
         }
 
+        @Override
         public int getIndex() {
             return index;
         }
@@ -104,75 +103,6 @@ public class MemberLoanProfitsMapper {
         earnings.setContributionAmount(getBigDecimal(row, RowColumn.CONTRIBUTION_AMOUNT));
         earnings.setContributionPercentage(toPercentageString(getBigDecimal(row, RowColumn.CONTRIBUTION_PERCENTAGE)));
         return earnings;
-    }
-
-    private String getString(Object[] row, RowColumn col) {
-        return row[col.getIndex()] != null ? (String) row[col.getIndex()] : null;
-    }
-
-    private BigDecimal getBigDecimal(Object[] row, RowColumn col) {
-        Object value = row[col.getIndex()];
-        if (value == null)
-            return null;
-
-        // Handle BigDecimal directly
-        if (value instanceof BigDecimal) {
-            return (BigDecimal) value;
-        }
-
-        // Handle Double (from MySQL SUM, addition, etc.)
-        if (value instanceof Double) {
-            return BigDecimal.valueOf((Double) value);
-        }
-
-        // Handle Integer
-        if (value instanceof Integer) {
-            return BigDecimal.valueOf((Integer) value);
-        }
-
-        // Handle Long
-        if (value instanceof Long) {
-            return BigDecimal.valueOf((Long) value);
-        }
-
-        // Handle Float
-        if (value instanceof Float) {
-            return BigDecimal.valueOf((Float) value);
-        }
-
-        // Handle String (just in case)
-        if (value instanceof String) {
-            try {
-                return new BigDecimal((String) value);
-            } catch (NumberFormatException e) {
-                return BigDecimal.ZERO;
-            }
-        }
-
-        // Default return
-        return BigDecimal.ZERO;
-    }
-
-    private Integer getInt(Object[] row, RowColumn col) {
-        return row[col.getIndex()] != null ? ((Number) row[col.getIndex()]).intValue() : null;
-    }
-
-    private LocalDate getLocalDate(Object[] row, RowColumn col) {
-        Object date = row[col.getIndex()];
-        if (date == null)
-            return null;
-
-        if (date instanceof java.sql.Date) {
-            return ((java.sql.Date) date).toLocalDate();
-        }
-        if (date instanceof java.sql.Timestamp) {
-            return ((java.sql.Timestamp) date).toLocalDateTime().toLocalDate();
-        }
-        if (date instanceof LocalDate) {
-            return (LocalDate) date;
-        }
-
-        return null;
     }
 
     private String toPercentageString(BigDecimal value) {

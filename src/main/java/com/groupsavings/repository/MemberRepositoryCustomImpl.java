@@ -35,6 +35,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> fetchMemberLoanProfits(String memberCode) {
 		String sql = sqlLoader.getQuery("member_earnings.sql");

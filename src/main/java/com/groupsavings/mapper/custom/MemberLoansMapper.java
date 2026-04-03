@@ -1,7 +1,5 @@
-package com.groupsavings.component;
+package com.groupsavings.mapper.custom;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,9 +14,9 @@ import com.groupsavings.model.dto.PaymentDto;
 import com.groupsavings.model.enums.LoanStatus;
 
 @Component
-public class MemberLoansMapper {
+public class MemberLoansMapper extends BaseMapper {
 
-	private enum RowColumn {
+	private enum RowColumn implements BaseColumnIndex {
 		MEMBER_CODE(0), FIRSTNAME(1), LASTNAME(2), LOAN_CODE(3), LOAN_AMOUNT(4), INTEREST_RATE(5), TERMS(6),
 		LOAN_STATUS(7), DATE_APPLIED(8), DATE_APPROVED(9), DATE_RELEASED(10), DUE_DATE(11), TOTAL_AMOUNT(12),
 		AMORTIZATION(13), PAYMENT_CODE(14), PAY_IN_TERM(15), AMOUNT_PAID(16), PAYMENT_DATE(17), PAYMENT_STATUS(18);
@@ -29,6 +27,7 @@ public class MemberLoansMapper {
 			this.index = index;
 		}
 
+		@Override
 		public int getIndex() {
 			return index;
 		}
@@ -171,7 +170,7 @@ public class MemberLoansMapper {
 			paymentDto.setAmountPaid(getBigDecimal(row, RowColumn.AMOUNT_PAID));
 			paymentDto.setPaymentDate(getLocalDate(row, RowColumn.PAYMENT_DATE));
 			paymentDto.setStatus(getString(row, RowColumn.PAYMENT_STATUS));
-			paymentDto.setTerm(getInteger(row, RowColumn.PAY_IN_TERM));
+			paymentDto.setTerm(getInt(row, RowColumn.PAY_IN_TERM));
 		}
 		return paymentDto;
 	}
@@ -194,85 +193,9 @@ public class MemberLoansMapper {
 		return loanDto;
 	}
 
-	private String getString(Object[] row, RowColumn col) {
-		return row[col.getIndex()] != null ? (String) row[col.getIndex()] : null;
-	}
-
-	private Integer getInteger(Object[] row, RowColumn col) {
-		return row[col.getIndex()] != null ? Integer.valueOf((Integer) row[col.getIndex()]) : null;
-	}
-
-	private BigDecimal getBigDecimal(Object[] row, RowColumn col) {
-		Object value = row[col.getIndex()];
-		if (value == null)
-			return null;
-
-		// Handle BigDecimal directly
-		if (value instanceof BigDecimal) {
-			return (BigDecimal) value;
-		}
-
-		// Handle Double (from MySQL SUM, addition, etc.)
-		if (value instanceof Double) {
-			return BigDecimal.valueOf((Double) value);
-		}
-
-		// Handle Integer
-		if (value instanceof Integer) {
-			return BigDecimal.valueOf((Integer) value);
-		}
-
-		// Handle Long
-		if (value instanceof Long) {
-			return BigDecimal.valueOf((Long) value);
-		}
-
-		// Handle Float
-		if (value instanceof Float) {
-			return BigDecimal.valueOf((Float) value);
-		}
-
-		// Handle String (just in case)
-		if (value instanceof String) {
-			try {
-				return new BigDecimal((String) value);
-			} catch (NumberFormatException e) {
-				return BigDecimal.ZERO;
-			}
-		}
-
-		// Default return
-		return BigDecimal.ZERO;
-	}
-
-	private Float getFloat(Object[] row, RowColumn col) {
-		return row[col.getIndex()] != null ? ((Number) row[col.getIndex()]).floatValue() : null;
-	}
-
-	private Integer getInt(Object[] row, RowColumn col) {
-		return row[col.getIndex()] != null ? ((Number) row[col.getIndex()]).intValue() : null;
-	}
-
 	private LoanStatus getLoanStatus(Object[] row, RowColumn col) {
 		String status = getString(row, col);
 		return status != null ? LoanStatus.valueOf(status) : null;
 	}
 
-	private LocalDate getLocalDate(Object[] row, RowColumn col) {
-		Object date = row[col.getIndex()];
-		if (date == null)
-			return null;
-
-		if (date instanceof java.sql.Date) {
-			return ((java.sql.Date) date).toLocalDate();
-		}
-		if (date instanceof java.sql.Timestamp) {
-			return ((java.sql.Timestamp) date).toLocalDateTime().toLocalDate();
-		}
-		if (date instanceof LocalDate) {
-			return (LocalDate) date;
-		}
-
-		return null;
-	}
 }

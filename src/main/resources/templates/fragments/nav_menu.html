@@ -14,7 +14,8 @@
          th:classappend="${currentUri.contains('/member')} ? 'active' : ''"
          onclick="toggleSubmenu(this)">
       <div class="nav-item-left"><i class="fas fa-users"></i><span>Members</span></div>
-      <i class="fas fa-chevron-down nav-toggle"></i>
+      <i class="fas fa-chevron-down nav-toggle"
+         th:classappend="${currentUri.contains('/member')} ? 'rotated' : ''"></i>
     </div>
     <div class="submenu" th:classappend="${currentUri.contains('/member')} ? 'open' : ''">
       <div class="submenu-item"
@@ -31,7 +32,8 @@
          th:classappend="${currentUri.contains('/contribution')} ? 'active' : ''"
          onclick="toggleSubmenu(this)">
       <div class="nav-item-left"><i class="fas fa-coins"></i><span>Contributions</span></div>
-      <i class="fas fa-chevron-down nav-toggle rotated"></i>
+      <i class="fas fa-chevron-down nav-toggle"
+         th:classappend="${currentUri.contains('/contribution')} ? 'rotated' : ''"></i>
     </div>
     <div class="submenu" th:classappend="${currentUri.contains('/contribution')} ? ' open' : ''">
       <div class="submenu-item"
@@ -48,7 +50,8 @@
          th:classappend="${currentUri.contains('/loan')} ? 'active' : ''"
          onclick="toggleSubmenu(this)">
       <div class="nav-item-left"><i class="fas fa-hand-holding-usd"></i><span>Loans</span></div>
-      <i class="fas fa-chevron-down nav-toggle"></i>
+      <i class="fas fa-chevron-down nav-toggle"
+            th:classappend="${currentUri.contains('/loan')} ? 'rotated' : ''"></i>
     </div>
     <div class="submenu" th:classappend="${currentUri.contains('/loan')} ? ' open' : ''">
       <div class="submenu-item"

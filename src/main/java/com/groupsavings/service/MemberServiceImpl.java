@@ -3,7 +3,7 @@ package com.groupsavings.service;
 import java.util.List;
 import java.util.Objects;
 
-import com.groupsavings.component.MemberLoanProfitsMapper;
+import com.groupsavings.mapper.custom.MemberLoanProfitsMapper;
 import com.groupsavings.model.dto.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.groupsavings.component.MemberContributionMapper;
-import com.groupsavings.component.MemberSummaryProfitMapper;
-import com.groupsavings.component.MemberTotalContributionMapper;
+import com.groupsavings.mapper.custom.MemberContributionMapper;
+import com.groupsavings.mapper.custom.MemberSummaryProfitMapper;
+import com.groupsavings.mapper.custom.MemberTotalContributionMapper;
 import com.groupsavings.constants.LoanConstants;
 import com.groupsavings.exception.DuplicateResourceException;
 import com.groupsavings.exception.RequestInsufficientException;

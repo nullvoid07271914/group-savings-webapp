@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.groupsavings.component.AmountInPoolPerMemberMapper;
-import com.groupsavings.component.MemberLoansMapper;
+import com.groupsavings.mapper.custom.AmountInPoolPerMemberMapper;
+import com.groupsavings.mapper.custom.MemberLoansMapper;
 import com.groupsavings.constants.LoanConstants;
 import com.groupsavings.exception.BorrowerLoanExistException;
 import com.groupsavings.exception.BorrowerNotFoundException;
@@ -76,8 +76,8 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 			Loan loan = new Loan();
 
 			List<Loan> activeLoans = loanRepository.findByBorrowerIdAndLoanStatus(borrower, LoanStatus.ACTIVE);
-			if (Objects.nonNull(activeLoans) && activeLoans.size() > 0) {
-				Member fetchMember = activeLoans.get(0).getMember();
+			if (Objects.nonNull(activeLoans) && !activeLoans.isEmpty()) {
+				Member fetchMember = activeLoans.getFirst().getMember();
 				Optional<Member> member = memberRepository.findById(fetchMember.getMemberId());
 				if (member.isPresent() && MemberType.BORROWER.equals(member.get().getMemberType())) {
 					throw new BorrowerLoanExistException(
@@ -187,6 +187,7 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 	public List<LoanResponseDto> loanByStatus(LoanStatus status) {
 		List<Loan> pendingsLoans = loanRepository.findByLoanStatus(status);
 		List<LoanResponseDto> loansDto = pendingsLoans.stream().map(loanMapper::toDto).toList();
+		log.info("loansDto: {}", loansDto);
 		return loansDto;
 	}
 
@@ -194,6 +195,7 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 		List<Object[]> poolAmountPerMember = loanRepository.fetchMembersPoolAmountForLoan(poolId, dateApplied);
 		log.info("poolAmountPerMember: {}", poolAmountPerMember);
 		List<AmountPerMemberDto> perMemberList = amountInPoolPerMemberMapper.toDtoList(poolAmountPerMember);
+		log.info("perMemberList: {}", perMemberList);
 		return perMemberList;
 	}
 
@@ -210,6 +212,7 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 			switch (status) {
 				case LoanStatus.APPROVED -> currentLoan.setDateApproved(LocalDate.now());
 				case LoanStatus.RELEASE -> currentLoan.setDateReleased(LocalDate.now());
+				case LoanStatus.FULLY_PAID -> currentLoan.setDateFullyPaid(LocalDate.now());
 				default -> {
 				}
 			}
@@ -226,6 +229,7 @@ public class LoanServiceImpl implements LoanService, LoanConstants {
 		List<Object[]> fetchedMemberLoans = loanRepository.fetchMemberLoans(request.getName(), request.getStatus());
 		log.info("fetchedMemberLoans: {}", fetchedMemberLoans);
 		List<MemberLoansDto> memberLoans = memberLoansMapper.toDtoList(fetchedMemberLoans);
+		log.info("memberLoans: {}", memberLoans);
 		return memberLoans;
 	}
 

@@ -1,7 +1,5 @@
-package com.groupsavings.component;
+package com.groupsavings.mapper.custom;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,9 +12,9 @@ import com.groupsavings.model.dto.ContributionDto;
 import com.groupsavings.model.dto.MemberContributions;
 
 @Component
-public class MemberContributionMapper {
+public class MemberContributionMapper extends BaseMapper {
 
-	private enum RowColumn {
+	private enum RowColumn implements BaseColumnIndex {
 		MEMBER_CODE(0), FIRSTNAME(1), LASTNAME(2), JOIN_DATE(3), CONTRIBUTION_CODE(4), AMOUNT(5), CONTRIBUTION_DATE(6),
 		PAYMENT_METHOD(7), REFERENCE_NUMBER(8), MONTH_TERM(9);
 
@@ -26,6 +24,7 @@ public class MemberContributionMapper {
 			this.index = index;
 		}
 
+		@Override
 		public int getIndex() {
 			return index;
 		}
@@ -107,33 +106,4 @@ public class MemberContributionMapper {
 		return contribution;
 	}
 
-	private String getString(Object[] row, RowColumn col) {
-		return row[col.getIndex()] != null ? (String) row[col.getIndex()] : null;
-	}
-
-	private BigDecimal getBigDecimal(Object[] row, RowColumn col) {
-		return row[col.getIndex()] != null ? (BigDecimal) row[col.getIndex()] : null;
-	}
-
-	private Integer getInt(Object[] row, RowColumn col) {
-		return row[col.getIndex()] != null ? ((Number) row[col.getIndex()]).intValue() : null;
-	}
-
-	private LocalDate getLocalDate(Object[] row, RowColumn col) {
-		Object date = row[col.getIndex()];
-		if (date == null)
-			return null;
-
-		if (date instanceof java.sql.Date) {
-			return ((java.sql.Date) date).toLocalDate();
-		}
-		if (date instanceof java.sql.Timestamp) {
-			return ((java.sql.Timestamp) date).toLocalDateTime().toLocalDate();
-		}
-		if (date instanceof LocalDate) {
-			return (LocalDate) date;
-		}
-
-		return null;
-	}
 }
