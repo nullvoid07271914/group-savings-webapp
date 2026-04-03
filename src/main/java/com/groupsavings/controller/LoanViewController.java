@@ -13,7 +13,7 @@ public class LoanViewController {
 	@GetMapping("/loan/apply")
 	public String viewBorrowerForLoan(Model model, HttpServletRequest request) {
 		model.addAttribute("currentUri", request.getRequestURI());
-		return "search_borrower_form";
+		return "apply_loan";
 	}
 
 	@GetMapping("/loan/manage")

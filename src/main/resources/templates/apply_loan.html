@@ -817,10 +817,10 @@
                     <!-- Loan Summary Card (shows after calculation) -->
                     <div class="loan-summary-card" id="loanSummaryCard">
                         <h6 style="margin-bottom: 15px;"><i class="fas fa-chart-line"></i> Loan Summary</h6>
-                        <div class="loan-summary-item"><span>Loan Amount:</span><strong id="summaryLoanAmount">₱0.00</strong></div>
+                        <div class="loan-summary-item"><span>Loan Amount:</span><strong id="summaryLoanAmount">Php 0.00</strong></div>
                         <div class="loan-summary-item"><span>Interest Rate:</span><strong id="summaryInterest">0%</strong></div>
-                        <div class="loan-summary-item"><span>Total Amount:</span><strong id="summaryTotalAmount">₱0.00</strong></div>
-                        <div class="loan-summary-item"><span>Monthly Amortization:</span><strong id="summaryAmortization">₱0.00</strong></div>
+                        <div class="loan-summary-item"><span>Total Amount:</span><strong id="summaryTotalAmount">Php 0.00</strong></div>
+                        <div class="loan-summary-item"><span>Monthly Amortization:</span><strong id="summaryAmortization">Php 0.00</strong></div>
                         <div class="loan-summary-item"><span>Due Date:</span><strong id="summaryDueDate">-</strong></div>
                     </div>
 
@@ -872,28 +872,80 @@
             document.getElementById(modalId).classList.add('show');
             setTimeout(() => { document.getElementById(modalId).classList.remove('show'); }, 3000);
         }
-        function formatNumber(num) { return num ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '0'; }
+
+        function formatNumber(num) {
+            if (!num || isNaN(num)) return '0.00';
+            // Round to 2 decimal places
+            const rounded = Math.round(num * 100) / 100;
+            // Format with commas and 2 decimal places
+            return rounded.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
         function formatDate(d) { return d ? new Date(d).toLocaleDateString() : 'N/A'; }
+
+        // ========== CORRECTED DUE DATE CALCULATION ==========
+        function calculateDueDate(currentDate, terms) {
+            let dueDate = new Date(currentDate);
+
+            for (let i = 0; i < terms; i++) {
+                dueDate = addOneTerm(dueDate);
+            }
+
+            return dueDate;
+        }
+
+        function addOneTerm(date) {
+            const day = date.getDate();
+            const newDate = new Date(date);
+
+            // If 1st term (days 1-15) - move to end of same month
+            if (day <= 15) {
+                // Get last day of current month
+                const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+                newDate.setDate(lastDay);
+            }
+            // If 2nd term (days 16-31) - move to next month, day 15
+            else {
+                // Go to next month
+                newDate.setMonth(date.getMonth() + 1);
+                newDate.setDate(15);
+            }
+
+            return newDate;
+        }
+
+        function formatDateYMD(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
 
         // Auto-calculate Loan Summary
         function calculateLoanSummary() {
             const amount = parseFloat($('#loanAmount').val());
             const terms = parseInt($('#loanTerms').val());
-            
-            if (amount && terms && amount > 0 && terms > 0 && selectedMemberData) {
+            const dateAppliedStr = $('#dateApplied').val();
+
+            if (amount && terms && amount > 0 && terms > 0 && selectedMemberData && dateAppliedStr) {
                 // Extract numeric interest rate (remove % sign if present)
                 let interestRateStr = selectedMemberData.interest || '5%';
                 let interestRate = parseFloat(interestRateStr) / 100;
-                
+
                 const totalAmount = amount + (amount * interestRate);
                 const amortization = totalAmount / terms;
-                const dueDate = new Date();
-                dueDate.setMonth(dueDate.getMonth() + terms);
-                
-                $('#summaryLoanAmount').text(`₱${formatNumber(amount)}`);
+
+                // ========== CALCULATE DUE DATE BASED ON DATE APPLIED ==========
+                const dateApplied = new Date(dateAppliedStr);
+                const dueDate = calculateDueDate(dateApplied, terms);
+
+                $('#summaryLoanAmount').text(`Php ${formatNumber(amount)}`);
                 $('#summaryInterest').text(interestRateStr);
-                $('#summaryTotalAmount').text(`₱${formatNumber(totalAmount)}`);
-                $('#summaryAmortization').text(`₱${formatNumber(amortization)}`);
+                $('#summaryTotalAmount').text(`Php ${formatNumber(totalAmount)}`);
+                $('#summaryAmortization').text(`Php ${formatNumber(amortization)}`);
                 $('#summaryDueDate').text(dueDate.toLocaleDateString());
                 $('#loanSummaryCard').show();
             } else {
@@ -902,6 +954,7 @@
         }
 
         $('#loanAmount, #loanTerms').on('input', calculateLoanSummary);
+        $('#dateApplied').on('change', calculateLoanSummary);
 
         // Search Member
         function performSearch() {
@@ -1021,11 +1074,11 @@
                 <div style="text-align: left; background: #f8fafc; padding: 15px; border-radius: 12px;">
                     <div style="margin-bottom: 10px;"><strong>Member:</strong> ${$('#fullname').val()}</div>
                     <div style="margin-bottom: 10px;"><strong>Loan Code:</strong> ${loanCode || 'N/A'}</div>
-                    <div style="margin-bottom: 10px;"><strong>Loan Amount:</strong> ₱${formatNumber(amount)}</div>
-                    <div style="margin-bottom: 10px;"><strong>Terms:</strong> ${terms} months</div>
+                    <div style="margin-bottom: 10px;"><strong>Loan Amount:</strong> Php ${formatNumber(amount)}</div>
+                    <div style="margin-bottom: 10px;"><strong>Terms:</strong> ${terms}</div>
                     <div style="margin-bottom: 10px;"><strong>Interest Rate:</strong> ${interestRateStr}</div>
-                    <div style="margin-bottom: 10px;"><strong>Total Amount:</strong> ₱${formatNumber(totalAmount)}</div>
-                    <div><strong>Monthly Amortization:</strong> ₱${formatNumber(amortization)}</div>
+                    <div style="margin-bottom: 10px;"><strong>Total Amount:</strong> Php ${formatNumber(totalAmount)}</div>
+                    <div><strong>Monthly Amortization:</strong> Php ${formatNumber(amortization.toFixed(2))}</div>
                 </div>
                 <div class="mt-3">Do you want to proceed with this loan application?</div>
             `);
@@ -1050,9 +1103,9 @@
                     success: function(res) {
                         $('#contributorsCard').show();
                         $('#loanSummaryCard').show();
-                        $('#summaryLoanAmount').text(`₱${formatNumber(res.loanAmount)}`);
-                        $('#summaryTotalAmount').text(`₱${formatNumber(res.totalAmount)}`);
-                        $('#summaryAmortization').text(`₱${formatNumber(res.amortization)}`);
+                        $('#summaryLoanAmount').text(`Php ${formatNumber(res.loanAmount)}`);
+                        $('#summaryTotalAmount').text(`Php ${formatNumber(res.totalAmount)}`);
+                        $('#summaryAmortization').text(`Php ${formatNumber(res.amortization)}`);
                         $('#summaryDueDate').text(formatDate(res.dueDate));
                         
                         const tbody = $('#contributorsBody');
@@ -1063,7 +1116,7 @@
                                 tbody.append(`<tr>
                                     <td><strong>${c.fullname}</strong></td>
                                     <td><div class="progress"><div class="progress-bar" style="width: ${percent}%"></div></div><span class="badge-warning" style="margin-left: 10px;">${percent}%</span></td>
-                                    <td class="loan-amount">₱${formatNumber(c.amount)}</td>
+                                    <td class="loan-amount">Php ${formatNumber(c.amount)}</td>
                                 </tr>`);
                             });
                         }

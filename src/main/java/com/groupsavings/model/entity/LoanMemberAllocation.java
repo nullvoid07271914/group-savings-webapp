@@ -111,4 +111,5 @@ public class LoanMemberAllocation {
     public int hashCode() {
         return Objects.hash(id, member, loan);
     }
+
 }

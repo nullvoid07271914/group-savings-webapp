@@ -2,6 +2,7 @@ package com.groupsavings.mapper;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -37,6 +38,10 @@ public interface LoanMapper {
 
 	@Named("toLoanContributors")
 	default List<LoanContributorDto> toLoanContributors(List<LoanMemberAllocation> contributors) {
+		if (Objects.isNull(contributors) || contributors.isEmpty()) {
+			return List.of();
+		}
+
 		return contributors.stream().map(item -> {
 			LoanContributorDto dto = new LoanContributorDto();
 			dto.setFullname(item.getMember().getFirstname() + " " + item.getMember().getLastname());
