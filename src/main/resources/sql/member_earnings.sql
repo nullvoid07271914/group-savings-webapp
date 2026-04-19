@@ -15,7 +15,7 @@ SELECT
     p.pay_in_term,
     p.amount_paid,
     p.payment_date,
-    TRUNCATE(COALESCE(p.amount_paid - (l.loan_amount / l.terms)) * lma.contribution_percentage, 0), 2) AS loan_profit
+    TRUNCATE(COALESCE((p.amount_paid - (l.loan_amount / l.terms)) * lma.contribution_percentage, 0), 2) AS loan_profit
 FROM loan_tbl l
          LEFT JOIN payment_tbl p
               ON p.loan_id = l.loan_id
