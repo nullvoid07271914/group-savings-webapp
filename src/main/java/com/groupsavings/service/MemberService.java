@@ -12,7 +12,7 @@ public interface MemberService {
 
 	List<MemberResponseDto> searchBorrower(MemberNameRequestDto member);
 
-	List<MemberResponseDto> fetchMembers(String status, String type);
+	PageResponse<MemberResponseDto> fetchMembers(String status, String type, int page, int size, String sortBy, String sortDir);
 
 	List<MemberTotalContributionDto> fetchMemberTotalContributions();
 

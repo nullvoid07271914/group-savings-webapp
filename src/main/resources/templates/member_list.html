@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Members - Group Savings</title>
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    
+
     <style>
         * {
             margin: 0;
@@ -176,7 +176,7 @@
             gap: 8px;
         }
         .btn-gradient-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
-        
+
         .btn-gradient-success {
             background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
             border: none;
@@ -191,7 +191,7 @@
             gap: 8px;
         }
         .btn-gradient-success:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(72,187,120,0.4); }
-        
+
         .btn-outline-secondary {
             background: white;
             border: 1px solid #cbd5e0;
@@ -206,6 +206,57 @@
             gap: 8px;
         }
         .btn-outline-secondary:hover { background: #f7fafc; transform: translateY(-2px); }
+
+        /* Pagination Styles */
+        .pagination-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .pagination-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #4a5568;
+            font-weight: 500;
+            min-width: 40px;
+            text-align: center;
+        }
+        .pagination-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+        .pagination-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .pagination-info {
+            text-align: center;
+            margin-top: 15px;
+            color: #718096;
+            font-size: 0.85rem;
+        }
+        .page-size-selector {
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            margin-left: 15px;
+            cursor: pointer;
+        }
 
         /* Table */
         .data-table {
@@ -386,8 +437,6 @@
         .mt-4 { margin-top: 1.5rem; }
         .text-center { text-align: center; }
         .me-2 { margin-right: 0.5rem; }
-
-        /* ========== MISSING HEADER STYLES ========== */
 
         /* Header Styles */
         .top-header {
@@ -671,372 +720,515 @@
     </style>
 </head>
 <body>
-    <button class="mobile-menu-btn" onclick="toggleMenu()">
-        <i class="fas fa-bars"></i>
-    </button>
+<button class="mobile-menu-btn" onclick="toggleMenu()">
+    <i class="fas fa-bars"></i>
+</button>
 
-    <!-- Top Header -->
-    <div th:replace="fragments/header_menu :: headerMenu"></div>
+<!-- Top Header -->
+<div th:replace="fragments/header_menu :: headerMenu"></div>
 
-    <!-- Sidebar Navigation -->
-    <div class="nav-sidebar" id="sidebar">
-        <div class="logo-area">
-            <div class="logo">
-                <div class="logo-icon"><i class="fas fa-piggy-bank"></i></div>
-                <div class="logo-text">
-                    <h3>GroupSavings</h3>
-                    <p>v2.0 Ultimate</p>
-                </div>
+<!-- Sidebar Navigation -->
+<div class="nav-sidebar" id="sidebar">
+    <div class="logo-area">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-piggy-bank"></i></div>
+            <div class="logo-text">
+                <h3>GroupSavings</h3>
+                <p>v2.0 Ultimate</p>
             </div>
         </div>
-
-        <div th:replace="fragments/nav_menu :: navMenu"></div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="modern-card">
-            <div class="card-header-modern">
-                <h4><i class="fas fa-users"></i> All Members</h4>
-                <p>View and manage all registered members</p>
-            </div>
-            <div class="card-body">
-                <!-- Alert Container -->
-                <div id="alertContainer"></div>
+    <div th:replace="fragments/nav_menu :: navMenu"></div>
+</div>
 
-                <!-- Filter Section -->
-                <div class="filter-section">
-                    <div class="grid-2">
-                        <div>
-                            <label class="filter-label"><i class="fas fa-filter"></i> Status</label>
-                            <select class="filter-select" id="statusFilter">
-                                <option value="ALL">ALL</option>
-                                <option value="ACTIVE">ACTIVE</option>
-                                <option value="INACTIVE">INACTIVE</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="filter-label"><i class="fas fa-tag"></i> Member Type</label>
-                            <select class="filter-select" id="typeFilter">
-                                <option value="ALL">ALL</option>
-                                <option value="CONTRIBUTOR">CONTRIBUTOR</option>
-                                <option value="BORROWER">BORROWER</option>
-                                <option value="UNKNOWN">UNKNOWN</option>
-                            </select>
-                        </div>
+<!-- Main Content -->
+<div class="main-content">
+    <div class="modern-card">
+        <div class="card-header-modern">
+            <h4><i class="fas fa-users"></i> All Members</h4>
+            <p>View and manage all registered members</p>
+        </div>
+        <div class="card-body">
+            <!-- Alert Container -->
+            <div id="alertContainer"></div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="grid-2">
+                    <div>
+                        <label class="filter-label"><i class="fas fa-filter"></i> Status</label>
+                        <select class="filter-select" id="statusFilter">
+                            <option value="ALL">ALL</option>
+                            <option value="ACTIVE">ACTIVE</option>
+                            <option value="INACTIVE">INACTIVE</option>
+                        </select>
                     </div>
-                    <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: flex-end;">
-                        <button class="btn-gradient-primary" id="applyFilterBtn">
-                            <i class="fas fa-search"></i> Apply Filter
-                        </button>
-                        <button class="btn-outline-secondary" id="resetFilterBtn">
-                            <i class="fas fa-refresh"></i> Reset
-                        </button>
+                    <div>
+                        <label class="filter-label"><i class="fas fa-tag"></i> Member Type</label>
+                        <select class="filter-select" id="typeFilter">
+                            <option value="ALL">ALL</option>
+                            <option value="CONTRIBUTOR">CONTRIBUTOR</option>
+                            <option value="BORROWER">BORROWER</option>
+                            <option value="UNKNOWN">UNKNOWN</option>
+                        </select>
                     </div>
                 </div>
-
-                <!-- Add Member Button -->
-                <div style="margin-bottom: 24px;">
-                    <button class="btn-gradient-success" id="addMemberBtn">
-                        <i class="fas fa-user-plus"></i> Add New Member
+                <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="btn-gradient-primary" id="applyFilterBtn">
+                        <i class="fas fa-search"></i> Apply Filter
+                    </button>
+                    <button class="btn-outline-secondary" id="resetFilterBtn">
+                        <i class="fas fa-refresh"></i> Reset
                     </button>
                 </div>
-
-                <!-- Members Table -->
-                <div style="overflow-x: auto;">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Member Code</th>
-                                <th>Full Name</th>
-                                <th>Join Date</th>
-                                <th>Mobile Number</th>
-                                <th>Status</th>
-                                <th>Type</th>
-                                <th>Actions</th>
-                            </thead>
-                            <tbody id="membersTableBody">
-                                <tr><td colspan="7" class="loading-container"><div class="spinner-border-sm" style="border-color: #667eea;"></div> Loading members...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
-        </div>
 
-        <!-- Member Modal -->
-        <div class="modal" id="memberModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 id="modalTitle">Add New Member</h5>
-                    <button class="modal-close" onclick="closeModal()">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form id="memberForm">
-                        <input type="hidden" id="memberCode">
-                        <div class="grid-2">
-                            <div class="form-group"><label>First Name <span style="color:#e53e3e;">*</span></label><input type="text" id="firstName"></div>
-                            <div class="form-group"><label>Last Name <span style="color:#e53e3e;">*</span></label><input type="text" id="lastName"></div>
-                        </div>
-                        <div class="grid-2">
-                            <div class="form-group"><label>Mobile Number <span style="color:#e53e3e;">*</span></label><input type="tel" id="mobileNumber" placeholder="09171234567"></div>
-                            <div class="form-group"><label>Email</label><input type="email" id="email"></div>
-                        </div>
-                        <div class="grid-2">
-                            <div class="form-group"><label>Join Date</label><input type="date" id="joinDate"></div>
-                            <div class="form-group"><label>Status</label><select id="status"><option value="ACTIVE">ACTIVE</option><option value="INACTIVE">INACTIVE</option></select></div>
-                        </div>
-                        <div class="grid-2">
-                            <div class="form-group"><label>Member Type</label><select id="memberType"><option value="CONTRIBUTOR">CONTRIBUTOR</option><option value="BORROWER">BORROWER</option><option value="UNKNOWN">UNKNOWN</option></select></div>
-                        </div>
-                        <hr>
-                        <h6 style="margin-bottom:12px;"><i class="fas fa-map-marker-alt"></i> Address (Optional)</h6>
-                        <div class="grid-2">
-                            <div class="form-group"><label>Street</label><input type="text" id="street"></div>
-                            <div class="form-group"><label>Barangay</label><input type="text" id="barangay"></div>
-                        </div>
-                        <div class="grid-2">
-                            <div class="form-group"><label>City</label><input type="text" id="city"></div>
-                            <div class="form-group"><label>Province</label><input type="text" id="province"></div>
-                        </div>
-                        <div class="form-group"><label>Zipcode</label><input type="text" id="zipcode" placeholder="1234"></div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn-outline-secondary" onclick="closeModal()">Cancel</button>
-                    <button class="btn-gradient-primary" id="saveMemberBtn">Save Member</button>
-                </div>
+            <!-- Add Member Button -->
+            <div style="margin-bottom: 24px;">
+                <button class="btn-gradient-success" id="addMemberBtn">
+                    <i class="fas fa-user-plus"></i> Add New Member
+                </button>
             </div>
+
+            <!-- Members Table -->
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Member Code</th>
+                        <th>Full Name</th>
+                        <th>Join Date</th>
+                        <th>Mobile Number</th>
+                        <th>Status</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody id="membersTableBody">
+                    <tr><td colspan="7" class="loading-container"><div class="spinner-border-sm" style="border-color: #667eea;"></div> Loading members...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Section -->
+            <div class="pagination-container" id="paginationContainer"></div>
+            <div class="pagination-info" id="paginationInfo"></div>
         </div>
+    </div>
+</div>
 
-        <script>
-            // Mobile Menu
-            function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
-            function toggleSubmenu(element) {
-                const parent = element.parentElement;
-                const submenu = parent.querySelector('.submenu');
-                const icon = element.querySelector('.nav-toggle');
-                if (submenu) { submenu.classList.toggle('open'); icon.classList.toggle('rotated'); }
+<!-- Member Modal -->
+<div class="modal" id="memberModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 id="modalTitle">Add New Member</h5>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="memberForm">
+                <input type="hidden" id="memberCode">
+                <div class="grid-2">
+                    <div class="form-group"><label>First Name <span style="color:#e53e3e;">*</span></label><input type="text" id="firstName"></div>
+                    <div class="form-group"><label>Last Name <span style="color:#e53e3e;">*</span></label><input type="text" id="lastName"></div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label>Mobile Number <span style="color:#e53e3e;">*</span></label><input type="tel" id="mobileNumber" placeholder="09171234567"></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="email"></div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label>Join Date</label><input type="date" id="joinDate"></div>
+                    <div class="form-group"><label>Status</label><select id="status"><option value="ACTIVE">ACTIVE</option><option value="INACTIVE">INACTIVE</option></select></div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label>Member Type</label><select id="memberType"><option value="CONTRIBUTOR">CONTRIBUTOR</option><option value="BORROWER">BORROWER</option><option value="UNKNOWN">UNKNOWN</option></select></div>
+                </div>
+                <hr>
+                <h6 style="margin-bottom:12px;"><i class="fas fa-map-marker-alt"></i> Address (Optional)</h6>
+                <div class="grid-2">
+                    <div class="form-group"><label>Street</label><input type="text" id="street"></div>
+                    <div class="form-group"><label>Barangay</label><input type="text" id="barangay"></div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label>City</label><input type="text" id="city"></div>
+                    <div class="form-group"><label>Province</label><input type="text" id="province"></div>
+                </div>
+                <div class="form-group"><label>Zipcode</label><input type="text" id="zipcode" placeholder="1234"></div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-outline-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn-gradient-primary" id="saveMemberBtn">Save Member</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="footer">
+    <div class="footer-content">
+        <div>© 2024 GroupSavings. All rights reserved.</div>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Global pagination state
+    let currentPage = 0;
+    let pageSize = 10;
+    let totalPages = 0;
+    let totalElements = 0;
+    let currentStatus = 'ALL';
+    let currentType = 'ALL';
+
+    // Mobile Menu
+    function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+
+    function toggleSubmenu(element) {
+        const parent = element.parentElement;
+        const submenu = parent.querySelector('.submenu');
+        const icon = element.querySelector('.nav-toggle');
+        if (submenu) { submenu.classList.toggle('open'); icon.classList.toggle('rotated'); }
+    }
+
+    function closeModal() { document.getElementById('memberModal').classList.remove('show'); }
+
+    function showAlert(type, message) {
+        $('#alertContainer').empty();
+        const icons = { success: 'fa-check-circle', danger: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+        const alertHtml = `<div class="alert-dynamic alert-${type}"><div><i class="fas ${icons[type]}"></i> ${message}</div><button onclick="$(this).parent().remove()" style="background:none; border:none; font-size:20px; cursor:pointer;">&times;</button></div>`;
+        $('#alertContainer').html(alertHtml);
+        setTimeout(() => $('#alertContainer').empty(), 5000);
+    }
+
+    // ========== PAGINATION RENDER FUNCTION ==========
+    function renderPagination() {
+        const container = $('#paginationContainer');
+        const infoContainer = $('#paginationInfo');
+
+        if (totalPages <= 0) {
+            container.empty();
+            infoContainer.empty();
+            return;
+        }
+
+        // Build pagination info text
+        const startItem = currentPage * pageSize + 1;
+        const endItem = Math.min((currentPage + 1) * pageSize, totalElements);
+        infoContainer.html(`Showing ${startItem} to ${endItem} of ${totalElements} members`);
+
+        // Build pagination buttons
+        let paginationHtml = '';
+
+        // Previous button
+        paginationHtml += `<button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 0 ? 'disabled' : ''}>
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>`;
+
+        // Page number buttons
+        const maxVisiblePages = 5;
+        let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
+
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(0, endPage - maxVisiblePages + 1);
+        }
+
+        if (startPage > 0) {
+            paginationHtml += `<button class="pagination-btn" onclick="changePage(0)">1</button>`;
+            if (startPage > 1) {
+                paginationHtml += `<button class="pagination-btn" disabled>...</button>`;
             }
-            function closeModal() { document.getElementById('memberModal').classList.remove('show'); }
-            function showAlert(type, message) {
-                $('#alertContainer').empty();
-                const icons = { success: 'fa-check-circle', danger: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
-                const alertHtml = `<div class="alert-dynamic alert-${type}"><div><i class="fas ${icons[type]}"></i> ${message}</div><button onclick="$(this).parent().remove()" style="background:none; border:none; font-size:20px; cursor:pointer;">&times;</button></div>`;
-                $('#alertContainer').html(alertHtml);
-                setTimeout(() => $('#alertContainer').empty(), 5000);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            paginationHtml += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i + 1}</button>`;
+        }
+
+        if (endPage < totalPages - 1) {
+            if (endPage < totalPages - 2) {
+                paginationHtml += `<button class="pagination-btn" disabled>...</button>`;
             }
+            paginationHtml += `<button class="pagination-btn" onclick="changePage(${totalPages - 1})">${totalPages}</button>`;
+        }
 
-            $(document).ready(function() {
-                // ========== LOAD MEMBERS ==========
-                function loadMembers() {
-				    const status = $('#statusFilter').val();
-				    const type = $('#typeFilter').val();
-				    
-				    // Always include both parameters (required by backend)
-				    const url = 'http://localhost:8080/groupsavings/api/v1/member/list?status=' + encodeURIComponent(status) + '&type=' + encodeURIComponent(type);
-				    
-				    $('#membersTableBody').html('<tr><td colspan="7" class="loading-container"><div class="spinner-border-sm" style="border-color: #667eea;"></div> Loading members...</td></tr>');
-				    
-				    $.ajax({
-				        url: url,
-				        type: 'GET',
-				        contentType: 'application/json',
-				        success: function(res) {
-				            console.log('Response:', res);
-				            const members = Array.isArray(res) ? res : (res.data || []);
-				            displayMembers(members);
-				            showAlert('success', 'Members loaded successfully!');
-				        },
-				        error: function(xhr) {
-				            console.error('Error:', xhr);
-				            let errorMsg = 'Failed to load members.';
-				            if (xhr.responseJSON?.message) {
-				                errorMsg = xhr.responseJSON.message;
-				            }
-				            showAlert('danger', errorMsg);
-				            $('#membersTableBody').html('<tr><td colspan="7" class="loading-container">Error loading members</td></tr>');
-				        }
-				    });
-				}
-                
-                // ========== DISPLAY MEMBERS ==========
-                function displayMembers(members) {
-                    const tbody = $('#membersTableBody');
-                    tbody.empty();
-                    if (!members || members.length === 0) { tbody.html('<tr><td colspan="7" class="loading-container">No members found</td></tr>'); return; }
-                    
-                    $.each(members, function(i, m) {
-                        const statusClass = m.status === 'ACTIVE' ? 'success' : (m.status === 'INACTIVE' ? 'warning' : 'danger');
-                        const typeClass = m.type === 'CONTRIBUTOR' ? 'info' : (m.type === 'BORROWER' ? 'primary' : 'secondary');
-                        const joinDate = m.joinedDate ? new Date(m.joinedDate).toLocaleDateString() : 'N/A';
-                        
-                        const row = `<tr>
-                            <td><code>${m.memberCode || '-'}</code></td>
-                            <td><strong>${m.firstname || ''} ${m.lastname || ''}</strong></td>
-                            <td>${joinDate}</td>
-                            <td>${m.mobileNumber || '-'}</td>
-                            <td><span class="badge badge-${statusClass}">${m.status || 'UNKNOWN'}</span></td>
-                            <td><span class="badge badge-${typeClass}">${m.type || 'UNKNOWN'}</span></td>
-                            <td><div class="action-buttons"><button class="btn-edit" data-code="${m.memberCode}"><i class="fas fa-edit"></i> Edit</button><button class="btn-delete" data-code="${m.memberCode}" data-name="${m.firstname} ${m.lastname}"><i class="fas fa-trash"></i> Delete</button></div></td>
-                        </tr>`;
-                        tbody.append(row);
-                    });
-                    
-                    $('.btn-edit').on('click', function() { editMember($(this).data('code')); });
-                    $('.btn-delete').on('click', function() { 
-                        const btn = $(this);
-                        if (confirm(`Delete member "${btn.data('name')}"? This cannot be undone.`)) {
-                            deleteMember(btn.data('code'));
-                        }
-                    });
-                }
-                
-                // ========== ADD/EDIT MEMBER ==========
-                function resetForm() {
-                    $('#memberForm')[0].reset();
-                    $('#memberCode').val('');
-                    $('#joinDate').val(new Date().toISOString().split('T')[0]);
-                    $('#status').val('ACTIVE');
-                    $('#memberType').val('CONTRIBUTOR');
-                }
-                
-                function editMember(code) {
-                    $.ajax({ url: `http://localhost:8080/groupsavings/api/v1/member/info/${code}`, type: 'GET',
-                        success: function(res) {
-                            $('#memberCode').val(res.memberCode);
-                            $('#firstName').val(res.firstname);
-                            $('#lastName').val(res.lastname);
-                            $('#mobileNumber').val(res.mobileNumber);
-                            $('#email').val(res.email);
-                            if (res.joinedDate) $('#joinDate').val(new Date(res.joinedDate).toISOString().split('T')[0]);
-                            $('#status').val(res.status || 'ACTIVE');
-                            $('#memberType').val(res.type || 'CONTRIBUTOR');
-                            $('#street').val(res.street || '');
-                            $('#barangay').val(res.barangay || '');
-                            $('#city').val(res.city || '');
-                            $('#province').val(res.province || '');
-                            $('#zipcode').val(res.zipcode || '');
-                            $('#modalTitle').text('Edit Member');
-                            $('#memberModal').addClass('show');
-                        },
-                        error: () => showAlert('danger', 'Failed to load member details')
-                    });
-                }
-                
-                function saveMember() {
-                    const data = {
-                        memberCode: $('#memberCode').val() || null,
-                        firstname: $('#firstName').val(),
-                        lastname: $('#lastName').val(),
-                        mobileNumber: $('#mobileNumber').val(),
-                        email: $('#email').val(),
-                        joinDate: $('#joinDate').val(),
-                        status: $('#status').val(),
-                        memberType: $('#memberType').val(),
-                        street: $('#street').val(),
-                        barangay: $('#barangay').val(),
-                        city: $('#city').val(),
-                        province: $('#province').val(),
-                        zipcode: $('#zipcode').val()
-                    };
-                    if (!data.firstname || !data.lastname || !data.mobileNumber) { showAlert('warning', 'Please fill required fields'); return; }
-                    
-                    const isEdit = !!data.memberCode;
-                    const url = isEdit ? 'http://localhost:8080/groupsavings/api/v1/member/update' : 'http://localhost:8080/groupsavings/api/v1/member/register';
-                    const btn = $('#saveMemberBtn');
-                    const original = btn.html();
-                    btn.html('<span class="spinner-border-sm"></span> Saving...').prop('disabled', true);
-                    
-                    $.ajax({ url: url, type: 'POST', contentType: 'application/json', data: JSON.stringify(data),
-                        success: function() {
-                            closeModal();
-                            loadMembers();
-                            showAlert('success', `Member ${isEdit ? 'updated' : 'added'} successfully!`);
-                        },
-                        error: (xhr) => { showAlert('danger', xhr.responseJSON?.message || 'Failed to save member'); },
-                        complete: () => btn.html(original).prop('disabled', false)
-                    });
-                }
-                
-                function deleteMember(code) {
-                    $.ajax({ url: `http://localhost:8080/groupsavings/api/v1/member/delete/${code}`, type: 'DELETE',
-                        success: function() { loadMembers(); showAlert('success', 'Member deleted successfully!'); },
-                        error: () => showAlert('danger', 'Failed to delete member')
-                    });
-                }
-                
-                // ========== EVENT BINDINGS ==========
-                $('#applyFilterBtn').on('click', loadMembers);
-                $('#resetFilterBtn').on('click', function() { $('#statusFilter').val('ALL'); $('#typeFilter').val('ALL'); loadMembers(); });
-                $('#addMemberBtn').on('click', function() { resetForm(); $('#modalTitle').text('Add New Member'); $('#memberModal').addClass('show'); });
-                $('#saveMemberBtn').on('click', saveMember);
-                
-                // Initial load
-                loadMembers();
-            });
-        </script>
+        // Next button
+        paginationHtml += `<button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage >= totalPages - 1 ? 'disabled' : ''}>
+                Next <i class="fas fa-chevron-right"></i>
+            </button>`;
 
-    <script>
-        // ========== NOTIFICATION & USER DROPDOWN ==========
-        // Make sure this code runs after the DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Notification dropdown
-            const notificationBtn = document.getElementById('notificationBtn');
-            const notificationDropdown = document.getElementById('notificationDropdown');
+        // Page size selector
+        paginationHtml += `<select class="page-size-selector" id="pageSizeSelector" onchange="changePageSize()">
+                <option value="5" ${pageSize === 5 ? 'selected' : ''}>5 per page</option>
+                <option value="10" ${pageSize === 10 ? 'selected' : ''}>10 per page</option>
+                <option value="20" ${pageSize === 20 ? 'selected' : ''}>20 per page</option>
+                <option value="50" ${pageSize === 50 ? 'selected' : ''}>50 per page</option>
+            </select>`;
 
-            // User profile dropdown
-            const userProfileBtn = document.getElementById('userProfileBtn');
-            const userDropdown = document.getElementById('userDropdown');
+        container.html(paginationHtml);
+    }
 
-            // Notification button click
-            if (notificationBtn && notificationDropdown) {
-                notificationBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    notificationDropdown.classList.toggle('show');
-                    if (userDropdown) userDropdown.classList.remove('show');
-                });
+    // ========== CHANGE PAGE FUNCTION ==========
+    function changePage(page) {
+        if (page < 0 || page >= totalPages) return;
+        currentPage = page;
+        loadMembers();
+    }
+
+    // ========== CHANGE PAGE SIZE FUNCTION ==========
+    function changePageSize() {
+        pageSize = parseInt($('#pageSizeSelector').val());
+        currentPage = 0; // Reset to first page
+        loadMembers();
+    }
+
+    // ========== LOAD MEMBERS WITH PAGINATION ==========
+    function loadMembers() {
+        const status = $('#statusFilter').val();
+        const type = $('#typeFilter').val();
+
+        currentStatus = status;
+        currentType = type;
+
+        // Build URL with pagination parameters
+        const url = `http://localhost:8080/groupsavings/api/v1/member/list?status=${encodeURIComponent(status)}&type=${encodeURIComponent(type)}&page=${currentPage}&size=${pageSize}&sortBy=memberId&sortDir=ASC`;
+
+        $('#membersTableBody').html('<tr><td colspan="7" class="loading-container"><div class="spinner-border-sm" style="border-color: #667eea;"></div> Loading members...</td></tr>');
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            contentType: 'application/json',
+            success: function(response) {
+                console.log('Paginated Response:', response);
+
+                // Check if response is paginated object or array
+                let members = [];
+                if (response.content && Array.isArray(response.content)) {
+                    // New paginated response format
+                    members = response.content;
+                    totalPages = response.totalPages || 0;
+                    totalElements = response.totalElements || 0;
+                    currentPage = response.pageNumber || 0;
+                    pageSize = response.pageSize || 10;
+                } else if (Array.isArray(response)) {
+                    // Old response format (no pagination) - handle gracefully
+                    members = response;
+                    totalPages = 1;
+                    totalElements = members.length;
+                    currentPage = 0;
+                } else {
+                    members = [];
+                    totalPages = 0;
+                    totalElements = 0;
+                }
+
+                displayMembers(members);
+                renderPagination();
+
+                if (members.length > 0) {
+                    showAlert('success', `Loaded ${members.length} members (Page ${currentPage + 1} of ${totalPages})`);
+                }
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr);
+                let errorMsg = 'Failed to load members.';
+                if (xhr.responseJSON?.message) {
+                    errorMsg = xhr.responseJSON.message;
+                }
+                showAlert('danger', errorMsg);
+                $('#membersTableBody').html('<tr><td colspan="7" class="loading-container">Error loading members</td></tr>');
+                $('#paginationContainer').empty();
+                $('#paginationInfo').empty();
             }
+        });
+    }
 
-            // User profile button click
-            if (userProfileBtn && userDropdown) {
-                userProfileBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    userDropdown.classList.toggle('show');
-                    if (notificationDropdown) notificationDropdown.classList.remove('show');
-                });
-            }
+    // ========== DISPLAY MEMBERS ==========
+    function displayMembers(members) {
+        const tbody = $('#membersTableBody');
+        tbody.empty();
+        if (!members || members.length === 0) {
+            tbody.html('<tr><td colspan="7" class="loading-container">No members found</td></tr>');
+            return;
+        }
 
-            // Close dropdowns when clicking outside
-            document.addEventListener('click', function() {
-                if (notificationDropdown) notificationDropdown.classList.remove('show');
-                if (userDropdown) userDropdown.classList.remove('show');
-            });
+        $.each(members, function(i, m) {
+            const statusClass = m.status === 'ACTIVE' ? 'success' : (m.status === 'INACTIVE' ? 'warning' : 'danger');
+            const typeClass = m.type === 'CONTRIBUTOR' ? 'info' : (m.type === 'BORROWER' ? 'primary' : 'secondary');
+            const joinDate = m.joinedDate ? new Date(m.joinedDate).toLocaleDateString() : 'N/A';
+
+            const row = `<tr>
+                    <td><code>${m.memberCode || '-'}</code></td>
+                    <td><strong>${m.firstname || ''} ${m.lastname || ''}</strong></td>
+                    <td>${joinDate}</td>
+                    <td>${m.mobileNumber || '-'}</td>
+                    <td><span class="badge badge-${statusClass}">${m.status || 'UNKNOWN'}</span></td>
+                    <td><span class="badge badge-${typeClass}">${m.type || 'UNKNOWN'}</span></td>
+                    <td><div class="action-buttons"><button class="btn-edit" data-code="${m.memberCode}"><i class="fas fa-edit"></i> Edit</button><button class="btn-delete" data-code="${m.memberCode}" data-name="${m.firstname} ${m.lastname}"><i class="fas fa-trash"></i> Delete</button></div></td>
+                </tr>`;
+            tbody.append(row);
         });
 
-        // ========== NOTIFICATION FUNCTIONS ==========
-        function markAllRead() {
-            const items = document.querySelectorAll('.notification-item');
-            items.forEach(item => {
-                item.classList.remove('unread');
+        $('.btn-edit').on('click', function() { editMember($(this).data('code')); });
+        $('.btn-delete').on('click', function() {
+            const btn = $(this);
+            if (confirm(`Delete member "${btn.data('name')}"? This cannot be undone.`)) {
+                deleteMember(btn.data('code'));
+            }
+        });
+    }
+
+    // ========== ADD/EDIT MEMBER ==========
+    function resetForm() {
+        $('#memberForm')[0].reset();
+        $('#memberCode').val('');
+        $('#joinDate').val(new Date().toISOString().split('T')[0]);
+        $('#status').val('ACTIVE');
+        $('#memberType').val('CONTRIBUTOR');
+    }
+
+    function editMember(code) {
+        $.ajax({ url: `http://localhost:8080/groupsavings/api/v1/member/info/${code}`, type: 'GET',
+            success: function(res) {
+                $('#memberCode').val(res.memberCode);
+                $('#firstName').val(res.firstname);
+                $('#lastName').val(res.lastname);
+                $('#mobileNumber').val(res.mobileNumber);
+                $('#email').val(res.email);
+                if (res.joinedDate) $('#joinDate').val(new Date(res.joinedDate).toISOString().split('T')[0]);
+                $('#status').val(res.status || 'ACTIVE');
+                $('#memberType').val(res.type || 'CONTRIBUTOR');
+                $('#street').val(res.street || '');
+                $('#barangay').val(res.barangay || '');
+                $('#city').val(res.city || '');
+                $('#province').val(res.province || '');
+                $('#zipcode').val(res.zipcode || '');
+                $('#modalTitle').text('Edit Member');
+                $('#memberModal').addClass('show');
+            },
+            error: () => showAlert('danger', 'Failed to load member details')
+        });
+    }
+
+    function saveMember() {
+        const data = {
+            memberCode: $('#memberCode').val() || null,
+            firstname: $('#firstName').val(),
+            lastname: $('#lastName').val(),
+            mobileNumber: $('#mobileNumber').val(),
+            email: $('#email').val(),
+            joinDate: $('#joinDate').val(),
+            status: $('#status').val(),
+            memberType: $('#memberType').val(),
+            street: $('#street').val(),
+            barangay: $('#barangay').val(),
+            city: $('#city').val(),
+            province: $('#province').val(),
+            zipcode: $('#zipcode').val()
+        };
+        if (!data.firstname || !data.lastname || !data.mobileNumber) { showAlert('warning', 'Please fill required fields'); return; }
+
+        const isEdit = !!data.memberCode;
+        const url = isEdit ? 'http://localhost:8080/groupsavings/api/v1/member/update' : 'http://localhost:8080/groupsavings/api/v1/member/register';
+        const btn = $('#saveMemberBtn');
+        const original = btn.html();
+        btn.html('<span class="spinner-border-sm"></span> Saving...').prop('disabled', true);
+
+        $.ajax({ url: url, type: 'POST', contentType: 'application/json', data: JSON.stringify(data),
+            success: function() {
+                closeModal();
+                loadMembers();
+                showAlert('success', `Member ${isEdit ? 'updated' : 'added'} successfully!`);
+            },
+            error: (xhr) => { showAlert('danger', xhr.responseJSON?.message || 'Failed to save member'); },
+            complete: () => btn.html(original).prop('disabled', false)
+        });
+    }
+
+    function deleteMember(code) {
+        $.ajax({ url: `http://localhost:8080/groupsavings/api/v1/member/delete/${code}`, type: 'DELETE',
+            success: function() { loadMembers(); showAlert('success', 'Member deleted successfully!'); },
+            error: () => showAlert('danger', 'Failed to delete member')
+        });
+    }
+
+    // ========== EVENT BINDINGS ==========
+    $(document).ready(function() {
+        $('#applyFilterBtn').on('click', function() {
+            currentPage = 0; // Reset to first page when applying filter
+            loadMembers();
+        });
+
+        $('#resetFilterBtn').on('click', function() {
+            $('#statusFilter').val('ALL');
+            $('#typeFilter').val('ALL');
+            currentPage = 0;
+            loadMembers();
+        });
+
+        $('#addMemberBtn').on('click', function() {
+            resetForm();
+            $('#modalTitle').text('Add New Member');
+            $('#memberModal').addClass('show');
+        });
+
+        $('#saveMemberBtn').on('click', saveMember);
+
+        // Initial load
+        loadMembers();
+    });
+
+    // ========== NOTIFICATION & USER DROPDOWN ==========
+    document.addEventListener('DOMContentLoaded', function() {
+        const notificationBtn = document.getElementById('notificationBtn');
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const userProfileBtn = document.getElementById('userProfileBtn');
+        const userDropdown = document.getElementById('userDropdown');
+
+        if (notificationBtn && notificationDropdown) {
+            notificationBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                notificationDropdown.classList.toggle('show');
+                if (userDropdown) userDropdown.classList.remove('show');
             });
-            const badge = document.getElementById('notificationBadge');
-            if (badge) {
-                badge.textContent = '0';
-                badge.style.display = 'none';
-            }
         }
 
-        function viewAllNotifications() {
-            alert('Redirecting to all notifications page...');
-            // window.location.href = '/notifications';
+        if (userProfileBtn && userDropdown) {
+            userProfileBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('show');
+                if (notificationDropdown) notificationDropdown.classList.remove('show');
+            });
         }
 
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                window.location.href = 'login.html';
-            }
+        document.addEventListener('click', function() {
+            if (notificationDropdown) notificationDropdown.classList.remove('show');
+            if (userDropdown) userDropdown.classList.remove('show');
+        });
+    });
+
+    function markAllRead() {
+        $('.notification-item').removeClass('unread');
+        $('#notificationBadge').text('0').hide();
+    }
+
+    function viewAllNotifications() {
+        alert('Redirecting to all notifications page...');
+    }
+
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            window.location.href = 'login.html';
         }
-    </script>
-    </body>
-    </html>
+    }
+</script>
+</body>
+</html>

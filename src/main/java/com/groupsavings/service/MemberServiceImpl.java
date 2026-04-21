@@ -8,6 +8,10 @@ import com.groupsavings.model.dto.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -112,25 +116,42 @@ public class MemberServiceImpl implements MemberService, LoanConstants {
 	}
 
 	@Override
-	public List<MemberResponseDto> fetchMembers(String status, String type) {
-		List<Member> members = List.of();
+	public PageResponse<MemberResponseDto> fetchMembers(String status, String type, int page, int size, String sortBy, String sortDir) {
+		log.info("Fetching members with pagination - status: {}, type: {}, page: {}, size: {}", status, type, page, size);
+
+		// Create Pageable object
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDir), sortBy));
+
+		Page<Member> memberPage;
 
 		if (Objects.equals("ALL", status) && Objects.equals("ALL", type)) {
-			members = memberRepository.findAll();
+			memberPage = memberRepository.findAll(pageable);
 		} else if (Objects.equals("ALL", status)) {
-			members = memberRepository.findByMemberType(MemberType.valueOf(type));
+			memberPage = memberRepository.findByMemberType(MemberType.valueOf(type), pageable);
 		} else if (Objects.equals("ALL", type)) {
-			members = memberRepository.findByMemberStatus(MemberStatus.valueOf(status));
+			memberPage = memberRepository.findByMemberStatus(MemberStatus.valueOf(status), pageable);
 		} else {
 			MemberStatus memberStatus = MemberStatus.valueOf(status);
 			MemberType memberType = MemberType.valueOf(type.toUpperCase());
-			members = memberRepository.findByMemberStatusAndType(memberStatus, memberType);
+			memberPage = memberRepository.findByMemberStatusAndType(memberStatus, memberType, pageable);
 		}
 
-		List<MemberResponseDto> memberDtos = memberMapper.toResponseDto(members);
-		log.info("memberDtos: {}", memberDtos);
+		// Convert to Response DTOs
+		List<MemberResponseDto> memberDtos = memberMapper.toResponseDto(memberPage.getContent());
 
-		return memberDtos;
+		// Create PageResponse
+		PageResponse<MemberResponseDto> pageResponse = new PageResponse<>();
+		pageResponse.setContent(memberDtos);
+		pageResponse.setPageNumber(memberPage.getNumber());
+		pageResponse.setPageSize(memberPage.getSize());
+		pageResponse.setTotalElements(memberPage.getTotalElements());
+		pageResponse.setTotalPages(memberPage.getTotalPages());
+		pageResponse.setLast(memberPage.isLast());
+		pageResponse.setFirst(memberPage.isFirst());
+
+		log.info("Returning page {} of {} with {} elements", page, memberPage.getTotalPages(), memberDtos.size());
+
+		return pageResponse;
 	}
 
 	@Override

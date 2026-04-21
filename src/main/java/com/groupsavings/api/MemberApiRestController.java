@@ -38,9 +38,15 @@ public class MemberApiRestController {
 	}
 
 	@GetMapping("/list")
-	public ResponseEntity<List<MemberResponseDto>> members(@RequestParam String status, @RequestParam String type) {
-		List<MemberResponseDto> memberList = memberService.fetchMembers(status, type);
-		return new ResponseEntity<>(memberList, HttpStatus.CREATED);
+	public ResponseEntity<PageResponse<MemberResponseDto>> members(
+			@RequestParam String status,
+			@RequestParam String type,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "memberId") String sortBy,
+			@RequestParam(defaultValue = "ASC") String sortDir) {
+		PageResponse<MemberResponseDto> memberPage = memberService.fetchMembers(status, type, page, size, sortBy, sortDir);
+		return new ResponseEntity<>(memberPage, HttpStatus.OK);
 	}
 
 	@GetMapping("/info/{code}")
