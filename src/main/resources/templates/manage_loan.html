@@ -1172,13 +1172,59 @@
         }
 
         function generateSchedule(loan) {
-            const schedule=[]; const terms=loan.terms; const amort=loan.amortization; const dueDate=new Date(loan.dueDate); const isEndMonth=dueDate.getDate()>15;
-            for(let i=0;i<terms;i++){ let d=new Date(dueDate); let termNum=terms-i; let months=Math.floor(i/2); let half=i%2===1; d.setMonth(d.getMonth()-months);
-                if(isEndMonth){ if(half) d.setDate(15); else d=new Date(d.getFullYear(),d.getMonth()+1,0); }
-                else{ if(half) d=new Date(d.getFullYear(),d.getMonth()+1,0); else d.setDate(15); }
-                schedule.push({ term:termNum, dueDate:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`, amount:amort, status:'PENDING' });
+            const schedule = [];
+            const terms = loan.terms;
+            const amort = loan.amortization;
+            const originalDate = new Date(loan.dueDate);
+            const isFifteenth = originalDate.getDate() === 15;
+
+            for (let i = 0; i < terms; i++) {
+                let dueDate = new Date(originalDate);
+                const halfStep = Math.floor(i / 2);
+
+                if (isFifteenth) {
+                    // Pattern for 15th start: 15th, end of month, 15th, end of month (going backward)
+                    if (i === 0) {
+                        // Term 1: original date (15th)
+                        dueDate = new Date(originalDate);
+                    } else if (i % 2 === 1) {
+                        // Terms 2,4,6...: end of month
+                        dueDate = new Date(originalDate.getFullYear(), originalDate.getMonth() - halfStep, 0);
+                    } else {
+                        // Terms 3,5,7...: 15th
+                        dueDate = new Date(originalDate.getFullYear(), originalDate.getMonth() - halfStep, 15);
+                    }
+                } else {
+                    // Pattern for end-of-month start: end of month, 15th, end of month, 15th (going backward)
+                    if (i === 0) {
+                        // Term 1: original date (end of month)
+                        dueDate = new Date(originalDate);
+                    } else if (i % 2 === 1) {
+                        // Terms 2,4,6...: 15th
+                        dueDate = new Date(originalDate.getFullYear(), originalDate.getMonth() - halfStep, 15);
+                    } else {
+                        // Terms 3,5,7...: end of month
+                        dueDate = new Date(originalDate.getFullYear(), originalDate.getMonth() - halfStep + 1, 0);
+                    }
+                }
+
+                schedule.push({
+                    term: i + 1,
+                    dueDate: `${dueDate.getFullYear()}-${String(dueDate.getMonth() + 1).padStart(2, '0')}-${String(dueDate.getDate()).padStart(2, '0')}`,
+                    amount: amort,
+                    status: 'PENDING'
+                });
             }
-            return schedule.sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate));
+
+            // Sort ascending para chronological order
+            schedule.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+            // Renumber terms after sorting
+            schedule.forEach((item, index) => {
+                item.term = index + 1;
+            });
+
+            return schedule;
         }
 
         function getPaidTerms(payments){ return payments?payments.map(p=>({term:p.term,paymentCode:p.paymentCode,paymentDate:p.paymentDate})):[]; }
