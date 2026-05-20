@@ -1106,7 +1106,33 @@
     }
     document.getElementById('confirmOkBtn').onclick = function() { if (confirmCallback) { confirmCallback(); } closeModal('confirmModal'); };
 
-    function formatNumber(n) { return n ? n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '0'; }
+    // FIXED: Proper number formatting function that handles decimal precision
+    function formatNumber(n) {
+        if (n === null || n === undefined || n === '') return '0.00';
+        // Parse as float
+        let num = parseFloat(n);
+        if (isNaN(num)) return '0.00';
+        // Fix floating point precision by rounding to 2 decimal places
+        let rounded = Math.round(num * 100) / 100;
+        // Format with 2 decimal places and commas for thousands
+        return rounded.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    // Helper function for raw number formatting (without currency symbol)
+    function formatRawNumber(n) {
+        if (n === null || n === undefined || n === '') return '0.00';
+        let num = parseFloat(n);
+        if (isNaN(num)) return '0.00';
+        let rounded = Math.round(num * 100) / 100;
+        return rounded.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
     function formatDate(d) { return d ? new Date(d).toLocaleDateString() : 'N/A'; }
 
     $(document).ready(function() {
@@ -1183,27 +1209,19 @@
                 const halfStep = Math.floor(i / 2);
 
                 if (isFifteenth) {
-                    // Pattern for 15th start: 15th, end of month, 15th, end of month (going backward)
                     if (i === 0) {
-                        // Term 1: original date (15th)
                         dueDate = new Date(originalDate);
                     } else if (i % 2 === 1) {
-                        // Terms 2,4,6...: end of month
                         dueDate = new Date(originalDate.getFullYear(), originalDate.getMonth() - halfStep, 0);
                     } else {
-                        // Terms 3,5,7...: 15th
                         dueDate = new Date(originalDate.getFullYear(), originalDate.getMonth() - halfStep, 15);
                     }
                 } else {
-                    // Pattern for end-of-month start: end of month, 15th, end of month, 15th (going backward)
                     if (i === 0) {
-                        // Term 1: original date (end of month)
                         dueDate = new Date(originalDate);
                     } else if (i % 2 === 1) {
-                        // Terms 2,4,6...: 15th
                         dueDate = new Date(originalDate.getFullYear(), originalDate.getMonth() - halfStep, 15);
                     } else {
-                        // Terms 3,5,7...: end of month
                         dueDate = new Date(originalDate.getFullYear(), originalDate.getMonth() - halfStep + 1, 0);
                     }
                 }
@@ -1211,23 +1229,18 @@
                 schedule.push({
                     term: i + 1,
                     dueDate: `${dueDate.getFullYear()}-${String(dueDate.getMonth() + 1).padStart(2, '0')}-${String(dueDate.getDate()).padStart(2, '0')}`,
-                    amount: amort,
+                    amount: parseFloat(amort),
                     status: 'PENDING'
                 });
             }
 
-            // Sort ascending para chronological order
             schedule.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
-            // Renumber terms after sorting
-            schedule.forEach((item, index) => {
-                item.term = index + 1;
-            });
+            schedule.forEach((item, index) => { item.term = index + 1; });
 
             return schedule;
         }
 
-        function getPaidTerms(payments){ return payments?payments.map(p=>({term:p.term,paymentCode:p.paymentCode,paymentDate:p.paymentDate})):[]; }
+        function getPaidTerms(payments){ return payments?payments.map(p=>({term:p.term,paymentCode:p.paymentCode,paymentDate:p.paymentDate,amountPaid:parseFloat(p.amountPaid || 0)})):[]; }
 
         function showPaymentModal(loan, borrower) {
             const schedule = generateSchedule(loan);
@@ -1246,21 +1259,22 @@
             const totalTerms = sorted.length;
             const paidTermsCount = paidTermsData.length;
 
-            // ========== CALCULATE TOTAL PAID FROM ACTUAL PAYMENTS ==========
+            // FIXED: Calculate total paid with proper decimal precision
             let totalPaid = 0;
             if (loan.payments && loan.payments.length > 0) {
                 loan.payments.forEach(payment => {
-                    // Add the actual amount paid from each payment record
-                    totalPaid += (payment.amountPaid || 0);
+                    let amount = parseFloat(payment.amountPaid || 0);
+                    // Accumulate with precision
+                    totalPaid = Math.round((totalPaid + amount) * 100) / 100;
                 });
             }
 
-            // Calculate remaining balance
-            const totalAmount = loan.totalAmount || loan.loanAmount;
-            const remainingBalance = totalAmount - totalPaid;
+            // Calculate remaining balance with precision
+            const totalAmount = parseFloat(loan.totalAmount || loan.loanAmount || 0);
+            const remainingBalance = Math.round((totalAmount - totalPaid) * 100) / 100;
 
             // Calculate payment progress percentage
-            const progressPercent = totalAmount > 0 ? (totalPaid / totalAmount * 100) : 0;
+            const progressPercent = totalAmount > 0 ? Math.round((totalPaid / totalAmount * 100) * 100) / 100 : 0;
 
             // Update schedule summary badge
             if (paidTermsCount === totalTerms) {
@@ -1335,7 +1349,7 @@
             $('#paymentMethod').val('');
             $('#referenceNumber').val('');
 
-            // ========== UPDATE PAYMENT SUMMARY WITH CORRECT VALUES ==========
+            // FIXED: Update payment summary with properly formatted numbers
             // Create or update payment summary section
             if ($('#paymentSummary').length === 0) {
                 $('.payment-form').prepend(`
@@ -1346,13 +1360,13 @@
                 </div>
                 <div class="payment-summary-item">
                     <span><i class="fas fa-chart-line"></i> Remaining Balance:</span>
-                    <strong class="remaining-balance-amount" style="color: ${remainingBalance > 0 ? '#ed8936' : '#48bb78'};">Php ${formatNumber(remainingBalance)}</strong>
+                    <strong class="remaining-balance-amount" style="color: ${remainingBalance > 0.01 ? '#ed8936' : '#48bb78'};">Php ${formatNumber(remainingBalance)}</strong>
                 </div>
                 <div class="payment-summary-item">
                     <span><i class="fas fa-percent"></i> Payment Progress:</span>
                     <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
                         <div class="progress-bar-container" style="flex: 1; background: #e2e8f0; border-radius: 20px; height: 8px; overflow: hidden;">
-                            <div class="progress-bar-fill" style="width: ${progressPercent}%; height: 100%; background: linear-gradient(90deg, #48bb78, #38a169); border-radius: 20px;"></div>
+                            <div class="progress-bar-fill" style="width: ${Math.min(progressPercent, 100)}%; height: 100%; background: linear-gradient(90deg, #48bb78, #38a169); border-radius: 20px;"></div>
                         </div>
                         <span style="font-size: 0.75rem; font-weight: 600; color: #48bb78;">${Math.round(progressPercent)}%</span>
                     </div>
@@ -1367,13 +1381,13 @@
             </div>
             <div class="payment-summary-item">
                 <span><i class="fas fa-chart-line"></i> Remaining Balance:</span>
-                <strong class="remaining-balance-amount" style="color: ${remainingBalance > 0 ? '#ed8936' : '#48bb78'};">Php ${formatNumber(remainingBalance)}</strong>
+                <strong class="remaining-balance-amount" style="color: ${remainingBalance > 0.01 ? '#ed8936' : '#48bb78'};">Php ${formatNumber(remainingBalance)}</strong>
             </div>
             <div class="payment-summary-item">
                 <span><i class="fas fa-percent"></i> Payment Progress:</span>
                 <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
                     <div class="progress-bar-container" style="flex: 1; background: #e2e8f0; border-radius: 20px; height: 8px; overflow: hidden;">
-                        <div class="progress-bar-fill" style="width: ${progressPercent}%; height: 100%; background: linear-gradient(90deg, #48bb78, #38a169); border-radius: 20px;"></div>
+                        <div class="progress-bar-fill" style="width: ${Math.min(progressPercent, 100)}%; height: 100%; background: linear-gradient(90deg, #48bb78, #38a169); border-radius: 20px;"></div>
                     </div>
                     <span style="font-size: 0.75rem; font-weight: 600; color: #48bb78;">${Math.round(progressPercent)}%</span>
                 </div>
@@ -1395,7 +1409,12 @@
         }
 
         $('#paymentForm').on('submit', function(e){
-            e.preventDefault(); const term=$('#payInTerm').val(), amount=$('#paymentAmount').val(), date=$('#paymentDate').val(), method=$('#paymentMethod').val(), ref=$('#referenceNumber').val();
+            e.preventDefault();
+            const term=$('#payInTerm').val();
+            const amount=$('#paymentAmount').val();
+            const date=$('#paymentDate').val();
+            const method=$('#paymentMethod').val();
+            const ref=$('#referenceNumber').val();
             if(!term||!method||!ref||!date){ showModal('warning','Please fill in all payment details'); return; }
             $('#loadingOverlay').show();
             $.ajax({ url:'http://localhost:8080/groupsavings/api/v1/loan/payment', type:'POST', contentType:'application/json', data:JSON.stringify({ loanCode:currentLoanData.loan.loanCode, amount:amount, payInTerm:term, paymentDate:date, paymentMethod:method, referenceNumber:ref }),
@@ -1404,20 +1423,34 @@
                 complete:()=>$('#loadingOverlay').hide()
             });
         });
-        $('#payInTerm').on('change',function(){ const term=$(this).val(); if(term&&currentLoanData){ const s=currentLoanData.schedule.find(s=>s.term===parseInt(term)); if(s)$('#paymentAmount').val(s.amount); } });
+
+        $('#payInTerm').on('change',function(){
+            const term=$(this).val();
+            if(term && currentLoanData){
+                const s=currentLoanData.schedule.find(s=>s.term===parseInt(term));
+                if(s) $('#paymentAmount').val(s.amount);
+            }
+        });
 
         function loadLoans(){
             const name=$('#borrowerName').val().trim(), status=$('#loanStatus').val(), hasAction=(status==='PENDING'||status==='ACTIVE'||status==='APPROVED');
-            updateTableHeader(status); $('#tableBody').html(`}<td colspan="${hasAction?9:8}" class="empty-state"><div class="spinner-border-sm" style="border-color:#667eea;"></div> Loading loans...</td>`);
+            updateTableHeader(status);
+            $('#tableBody').html(`<tr><td colspan="${hasAction?9:8}" class="empty-state"><div class="spinner-border-sm" style="border-color:#667eea;"></div> Loading loans...</td></tr>`);
             $.ajax({ url:'http://localhost:8080/groupsavings/api/v1/loan/manage/member-loans', type:'POST', contentType:'application/json', data:JSON.stringify({ name:name, status:status }),
-                success:function(res){ const members=Array.isArray(res)?res:[res]; updateStats(members); renderTable(members,status); },
+                success:function(res){
+                    const members=Array.isArray(res)?res:[res];
+                    updateStats(members);
+                    renderTable(members,status);
+                },
                 error:()=>showModal('error','Failed to load loans')
             });
         }
 
         function resetFilters(){ $('#borrowerName').val(''); $('#loanStatus').val('ALL'); $('.status-filter-btn').removeClass('active'); $('.status-filter-btn[data-status="ALL"]').addClass('active'); loadLoans(); }
 
-        $('#applyFilterBtn').on('click',loadLoans); $('#resetFilterBtn').on('click',resetFilters); $('#borrowerName').on('keypress',e=>{if(e.which===13)loadLoans();});
+        $('#applyFilterBtn').on('click',loadLoans);
+        $('#resetFilterBtn').on('click',resetFilters);
+        $('#borrowerName').on('keypress',e=>{if(e.which===13)loadLoans();});
         $('.status-filter-btn').on('click',function(){ $('.status-filter-btn').removeClass('active'); $(this).addClass('active'); $('#loanStatus').val($(this).data('status')); loadLoans(); });
         loadLoans();
     });
