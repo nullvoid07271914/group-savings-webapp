@@ -34,9 +34,9 @@ FROM (
         TRUNCATE(-COALESCE(SUM(lma.contribution_amount), 0), 2) AS amount
     FROM loan_tbl l
     JOIN loan_member_allocation_tbl lma ON lma.loan_id = l.loan_id
-        AND l.loan_status IN ('APPROVED', 'ACTIVE')
+        -- AND l.loan_status IN ('APPROVED', 'ACTIVE')
     JOIN member_tbl m ON m.member_id = lma.member_id
-    WHERE l.date_fully_paid IS NULL
+    -- WHERE l.date_fully_paid IS NULL
     GROUP BY m.member_code
 ) combined
 GROUP BY code
